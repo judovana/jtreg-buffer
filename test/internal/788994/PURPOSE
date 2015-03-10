@@ -1,0 +1,10 @@
+PURPOSE of /CoreOS/java-1.6.0-openjdk/Security/bz788994-EMBARGOED-OpenJDK-AtomicReferenceArray
+Description: Test for bz788994 (EMBARGOED OpenJDK AtomicReferenceArray)
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: EMBARGOED OpenJDK: AtomicReferenceArray insufficient array type check (Concurrency, 7082299)
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=788994
+
+Runs reproducer,
+PACKAGE, JAVA, JAVAC are paramtrized
+by default PACKAGE=java-1.6.0-openjdk and
+JAVA, JAVAC are found in $PACKAGE{-devel}

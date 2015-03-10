@@ -1,0 +1,10 @@
+PURPOSE of /CoreOS/java-1.6.0-openjdk/Security/bz788976-EMBARGOED-OpenJDK-unrestricted-use-of
+Description: Test for bz788976 (EMBARGOED OpenJDK unrestricted use of)
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: EMBARGOED OpenJDK: unrestricted use of TimeZone.setDefault() (i18n, 7110687)
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=788976
+
+Runs reproducer,
+PACKAGE, JAVA, JAVAC are paramtrized
+by default PACKAGE=java-1.6.0-openjdk and
+JAVA, JAVAC are found in $PACKAGE{-devel}
