@@ -1,0 +1,7 @@
+grant {
+  permission java.lang.RuntimePermission "exitVM";
+ permission java.lang.RuntimePermission "accessClassInPackage.sun.org.mozilla.javascript";
+ permission java.lang.RuntimePermission "accessClassInPackage.sun.org.mozilla.javascript.optimizer";
+ permission java.lang.RuntimePermission "createClassLoader";
+};
+
