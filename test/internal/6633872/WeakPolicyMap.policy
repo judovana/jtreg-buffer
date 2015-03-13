@@ -1,0 +1,3 @@
+grant {
+    permission java.io.FilePermission "file:${user.dir}", "read";
+};
