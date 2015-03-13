@@ -10,37 +10,25 @@ if [[ $R -ne 0 ]] ; then
   echo "Compilation failed"
   exit $R
 fi
-cp -v $TESTSRC/splash.png . 
+cp -v $TESTSRC/test.png . 
 R=$?
 if [[ $R -ne 0 ]] ; then
   echo "Copy of resource failed"
   exit $R
 fi
 
-$JAVA -splash:splash.png -showversion Test > LOG
+$JAVA  Test 
 R=$?
 if [[ $R -ne 0 ]] ; then
   echo "run  failed"
   exit $R
 fi
 
-cat LOG
+
+ls test.png
 R=$?
 if [[ $R -ne 0 ]] ; then
-  echo "no log"
-  exit $R
-fi
-
-grep splash.png LOG
-if [[ $R -ne 0 ]] ; then
-  echo "no spalsh in log"
-  exit $R
-fi
-
-grep "done" LOG
-R=$?
-if [[ $R -ne 0 ]] ; then
-  echo "testnot done"
+  echo "no image here"
   exit $R
 fi
 

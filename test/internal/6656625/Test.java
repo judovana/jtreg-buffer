@@ -8,8 +8,8 @@ import javax.imageio.stream.ImageInputStream;
 
 /* @test
    @bug 6656625
-   @summary  unknown 
-   @run main Test
+   @summary  image stream manipulation 
+   @run shell Test.sh
 */
 public class Test {
 
