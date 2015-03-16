@@ -1,0 +1,7 @@
+PURPOSE of /CoreOS/java-1.6.0-openjdk/Regression/bz708201-OpenJDK-RPM-should-depend-on-fontconfig
+Description: Test for bz708201 (OpenJDK RPM should depend on fontconfig)
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: OpenJDK RPM should depend on fontconfig
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=708201
+
+Test checks whether the dependency of fontconfig is same as intended.

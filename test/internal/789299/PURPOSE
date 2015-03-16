@@ -1,0 +1,10 @@
+PURPOSE of /CoreOS/java-1.6.0-openjdk/Regression/bz789299-EMBARGOED-OpenJDK-Serialization-7110700
+Description: Test for bz789299 (EMBARGOED OpenJDK (Serialization, 7110700))
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: EMBARGOED OpenJDK: (Serialization, 7110700)
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=789299
+
+Runs reproducer,
+PACKAGE, JAVA, JAVAC are paramtrized
+by default PACKAGE=java-1.6.0-openjdk and
+JAVA, JAVAC are found in $PACKAGE{-devel}
