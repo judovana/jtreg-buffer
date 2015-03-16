@@ -5,7 +5,7 @@ import java.awt.GraphicsEnvironment;
  * dont forget to include 0708201 as whole bug id
  * @test
  * @bug 0708201
- * @summary  verify that fontconfig is insatlled and used
+ * @summary  this is RPM !depnending! tests - verify that fontconfig is insatlled and used
  * @run shell runtest.sh
  */
 
