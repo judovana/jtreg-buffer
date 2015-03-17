@@ -1,0 +1,10 @@
+PURPOSE of /CoreOS/java-1.6.0-openjdk/Regression/CVE-2011-0864-OpenJDK-JVM-memory-corruption-via-certain
+Description: Test for CVE-2011-0864 (OpenJDK JVM memory corruption via certain bytecode) - test is valid for 32bit architecure only (or so it seems)
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: OpenJDK: JVM memory corruption via certain bytecode (HotSpot, 7020373)
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2011-0864
+
+Runs reproducer,
+PACKAGE, JAVA, JAVAC are paramtrized
+by default PACKAGE=java-1.6.0-openjdk and
+JAVA, JAVAC are found in $PACKAGE{-devel}
