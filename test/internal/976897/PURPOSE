@@ -1,0 +1,8 @@
+PURPOSE of /CoreOS/java/Regression/bz976897-Excessive-Heap-Consumption-in-com-sun-imageio-plugins-jpeg-JPEGImageWriter
+Description: Excessive Heap Consumption in com.sun.imageio.plugins.jpeg.JPEGImageWriter
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: Excessive Heap Consumption in com.sun.imageio.plugins.jpeg.JPEGImageWriter
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=976897
+
+No OOM should happened.
+Expects variable PACKAGE or (JAVA, JAVAC, JAR) to be set.

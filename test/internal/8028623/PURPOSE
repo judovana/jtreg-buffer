@@ -1,0 +1,9 @@
+PURPOSE of /CoreOS/java-1.7.0-openjdk/Regression/-mismatching-java_lang_String-hash_code-for-extended-characters
+Description: Test for BZ#1168693 (SA hash codes in SymbolTable mismatching)
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: SA: hash codes in SymbolTable mismatching java_lang_String::hash_code for extended characters.
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1168693
+
+Using upstream reproducers from http://cr.openjdk.java.net/~kevinw/8028623/webrev.00/
+
+Define PACKAGE with java-*-* under test

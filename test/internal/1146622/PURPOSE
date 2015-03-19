@@ -1,0 +1,8 @@
+PURPOSE of /CoreOS/java-1.7.0-openjdk/Regression/bz1146622-print-api-does-not-print-Umlaut-chars-with-postscript-output-correctly
+Description: Test for BZ#1146622 (Java print api does not print Umlaut chars with)
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: Java print api does not print Umlaut chars with postscript output correctly
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1146622
+
+Good version contains <e4>
+Wrong contains <c3a4>
