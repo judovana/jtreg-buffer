@@ -1,0 +1,13 @@
+PURPOSE of /CoreOS/java/Security/CVE-2012-4681-Inject-any-unsigned-code-via-flaw-in-bean-s-statement
+Description: Test for CVE-2012-4681 (OpenJDK Java 7 0day vulnerability)
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: OpenJDK: Java 7 0day vulnerability
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2012-4681
+
+Required parameter: PACKAGE
+Optional (by default their values are detected): JAVA, JAVAC, APPLETVIEWER
+Required packages: PACKAGE, PACKAGE-devel
+
+Runs reproducer: 
+minimal testcase that covers both CVE-2012-4681 and CVE-2012-1682
+applet for the same
