@@ -1,0 +1,6 @@
+PURPOSE of /CoreOS/java/Security/CVE-2012-4416-JVM-heap-memory-disclosure
+Description: Test for CVE-2012-4416 (java-1.7.0-oracle JVM heap memory disclosure)
+Author: David Jorm   <djorm@redhat.com>
+Author: Lukas Zachar <lzachar@redhat.com>
+Bug summary: java-1.7.0-oracle: JVM heap memory disclosure
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2012-4416
