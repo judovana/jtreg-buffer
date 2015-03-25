@@ -13,6 +13,6 @@ fi
 
 # older JDK, here the reproducer must verify field is unaccessible
 
-$JAVA Test
+$JAVA -Djava.security.manager Test
 R=$?
 exit $R
