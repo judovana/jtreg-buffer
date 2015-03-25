@@ -1,0 +1,5 @@
+PURPOSE of /CoreOS/java/Security/CVE-2013-3174-java7-remote-arbitrary-code-execution-894934
+Description: Runs testcases for security vulnerabilities fixes.
+Author: Lukas Zachar <lzachar@redhat.com>
+
+Runs case from webrev.
