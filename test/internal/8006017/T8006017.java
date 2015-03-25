@@ -27,30 +27,33 @@
  * @summary Improve lookup resolutions
  * @author Andrew Gross
  */
-
 import java.lang.invoke.*;
 import java.net.*;
 
 public class T8006017 {
 
     public static void main(String[] args) throws Throwable {
+        String s = System.getProperty("java.version");
+        if (s.startsWith("1.6")){
+            return;
+        }
         try {
-			Class<?> c1  = null;
-//jdk8+
-try{
-            c1  = Class.forName("jdk.nashorn.api.scripting.AbstractJSObject");
-}catch (java.lang.ClassNotFoundException ex1){
-ex1.printStackTrace();
-//jdk7-
-try{
-            //openjdk
-            c1  = Class.forName("sun.org.mozilla.javascript.Context");
-}catch (java.lang.ClassNotFoundException ex2){
-ex2.printStackTrace();
-//so you are on oracle?
-            c1 =  Class.forName("sun.org.mozilla.javascript.internal.Context");
-}
-}
+            Class<?> c1 = null;
+            //jdk8+
+            try {
+                c1 = Class.forName("jdk.nashorn.api.scripting.AbstractJSObject");
+            } catch (java.lang.ClassNotFoundException ex1) {
+                ex1.printStackTrace();
+                //jdk7-
+                try {
+                    //openjdk
+                    c1 = Class.forName("sun.org.mozilla.javascript.Context");
+                } catch (java.lang.ClassNotFoundException ex2) {
+                    ex2.printStackTrace();
+                    //so you are on oracle?
+                    c1 = Class.forName("sun.org.mozilla.javascript.internal.Context");
+                }
+            }
 
             // set security manager
             System.setSecurityManager(new SecurityManager());
@@ -59,21 +62,19 @@ ex2.printStackTrace();
             MethodHandles.Lookup lookup = MethodHandles.publicLookup();
 
             MethodType mt1 = MethodType.methodType(MethodHandle.class, Class.class,
-            new Class[] { MethodType.class});
+                    new Class[]{MethodType.class});
             MethodHandle mh1 = lookup.findVirtual(MethodHandles.Lookup.class,
-                "findConstructor", mt1);
+                    "findConstructor", mt1);
             MethodType mt2;
 
             mt2 = MethodType.methodType(Void.TYPE);
 
-
             // NB: this should fail with java.security.AccessControlException
-            MethodHandle mh2 = (MethodHandle)
-
-            mh1.invokeWithArguments(new Object[] {lookup, c1, mt2} );
+            MethodHandle mh2 = (MethodHandle) mh1.invokeWithArguments(new Object[]{lookup, c1, mt2});
         } catch (java.security.AccessControlException e) {
             return;
         }
         throw new RuntimeException("AccessControlException not thrown");
     }
 }
+
