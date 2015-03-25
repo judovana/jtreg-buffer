@@ -1,0 +1,6 @@
+PURPOSE of /CoreOS/java/Security/CVE-2013-0422-java7-remote-arbitrary-code-execution-894172
+Description: Runs testcases for security vulnerabilities fixes.
+Author: Lukas Zachar <lzachar@redhat.com>
+
+MozJSCLTest.java is both terminal based (so it is wrapped in runtest.sh and executed) and an applet for manual execution
+in the browser appletviewer.
