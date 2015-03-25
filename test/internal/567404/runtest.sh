@@ -28,7 +28,7 @@ if [[ $R -ne 0 ]] ; then
   exit $R
 fi
 
-$JAVAC -cp $TESTSRC/rhino-1.5r5.jar $TESTSRC/UpstreamRhinoClassPathTest.java &> log2
+$JAVAC -d . -cp $TESTSRC/rhino-1.5r5.jar $TESTSRC/UpstreamRhinoClassPathTest.java &> log2
 R=$?
 cat log2
 if [[ $R -ne 0 ]] ; then
