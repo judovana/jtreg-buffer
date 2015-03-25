@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/java/Security/CVE-2013-5838-Vulnerability-in-Libraries-component-Libraries-7023639
+Description: runs reproducer
+Author: Lukas Zachar <lzachar@redhat.com>
+Author: Tomas Hoger <thoger@redhat.com>
