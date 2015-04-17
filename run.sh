@@ -10,7 +10,7 @@ fi;
 echo Running with $JAVA...
 
 mkdir -p test.${TIME}/jdk/JTwork test.${TIME}/jdk/JTreport
-java -jar jtreg.jar -v1 -a -ignore:quiet \
+java -cp javatest.jar:jh.jar -jar jtreg.jar -v1 -a -ignore:quiet \
 		-w:test.${TIME}/jdk/JTwork -r:test.${TIME}/jdk/JTreport \
 		-jdk:$JAVA \
 		$BUGID \
