@@ -24,7 +24,7 @@
 /*
  * @test
  * @bug 8006017
- * @requires jdk.version.major ~= 7
+ * @requires jdk.version.major > 6  & jdk.version.major < 8
  * @summary Improve lookup resolutions
  * @author Andrew Gross
  */
