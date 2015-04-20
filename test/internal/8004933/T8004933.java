@@ -25,6 +25,7 @@
  * @test
  * @bug 8004933
  * @summary Improve MethodHandle interaction with libraries
+ * @requires jdk.version.major >= 7
  * @author Andrew Gross
  */
 

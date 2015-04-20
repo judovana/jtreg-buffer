@@ -6,6 +6,7 @@
  * @bug 0894172
  * @summary sandbox bypas by MozJSCLTest
  * @author probably thoger
+ * @requires jdk.version.major >= 7
  * @run main/othervm MozJSCLTest
  */
 
