@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
  * @test
  * @bug 6862970
  * @summary something with icc. MAybe passing always
- *
+ * @requires jdk.version.major >= 7
  * @run main/othervm ICCTestIBM
  */
 
