@@ -4,7 +4,7 @@
  * @bug 8078490
  * @summary  [concurrency-interest] Missed submissions in latest versions of Java ForkJoinPool
  * @requires jdk.version.major >= 7
- * @run main/timeout=0.5/othervm ForkJoinPoolThrottling
+ * @run main/timeout=1/othervm ForkJoinPoolThrottling
  */
 
 
