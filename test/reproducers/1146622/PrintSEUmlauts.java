@@ -90,7 +90,9 @@ public class PrintSEUmlauts implements Printable {
     
     private static final boolean DEBUG = false ;
     private static void testPrintAndExit() {
-                
+
+        //simple check for <e4> ey be enough, but the regeex fails only o wird fonts, so while it works, lets keep this stricter version
+        //String expected = "<e4>";                
         String regex_expected = "<e4> [0-9]\\.[0-9]{2} 100\\.0 100\\.0 S";
         Pattern reg = Pattern.compile(regex_expected);
 
