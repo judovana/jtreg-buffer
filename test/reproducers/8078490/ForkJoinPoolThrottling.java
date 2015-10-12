@@ -21,7 +21,8 @@ public class ForkJoinPoolThrottling {
          for (int i = 0; i < 100000; i++) {
              b.set(true);
              e.execute(setFalse);
+             Thread.yield();
              do {} while (b.get()); // spins forever here
          }
      }
-} 
+}
