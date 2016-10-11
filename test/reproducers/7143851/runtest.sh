@@ -3,7 +3,23 @@
 # @summary CVE-2012-1719-OpenJDK-mutable-repository-identifiers-in-generated-stub-code-CORBA-7143851
 # @run shell  runtest.sh
 
-FS=/
+# set platform-dependent variables
+OS=`uname -s`
+case "$OS" in
+  SunOS | Linux )
+    PS=":"
+    FS="/"
+    ;;
+  Windows_* | CYGWIN_NT* )
+    PS=";"
+    FS="\\"
+    ;;
+  * )
+    echo "Unrecognized system!"
+    exit 1;
+    ;;
+esac
+
 JAVA=${TESTJAVA}${FS}bin${FS}java
 JAVAC=${TESTJAVA}${FS}bin${FS}javac
 RMIC=${TESTJAVA}${FS}bin${FS}rmic
@@ -20,8 +36,10 @@ TOOLS=${TESTJAVA}${FS}lib${FS}tools.jar
             done
         }
 
+
+
 echo 'Testing rmic generated code'
-$JAVAC -d .  ${TESTSRC}/RemoteInterfaceTest*.java
+$JAVAC -d .  ${TESTSRC}${FS}RemoteInterfaceTest*.java
         rv=0
         echo "- rmic -iiop"
 $RMIC -iiop -always -keep RemoteInterfaceTestImpl
@@ -36,8 +54,8 @@ $RMIC -iiop -always -keep RemoteInterfaceTestImpl
 
 
     echo "built with fixed rmic & StubGenerator"
-    $JAVAC -d . -cp $TOOLS -XDignore.symbol.file ${TESTSRC}/RmicIdCloneCheck.java
-    $JAVA -cp $TOOLS:. RmicIdCloneCheck | tee output.txt
+    $JAVAC -d . -cp $TOOLS -XDignore.symbol.file ${TESTSRC}${FS}RmicIdCloneCheck.java
+    $JAVA -cp $TOOLS${PS}. RmicIdCloneCheck | tee output.txt
         echo "Doing asserts on the output"
         for W in javax.management.remote.rmi._RMIServerImpl_Tie \
                  javax.management.remote.rmi._RMIConnectionImpl_Tie \

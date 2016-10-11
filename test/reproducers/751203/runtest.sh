@@ -1,5 +1,25 @@
 #/bin/sh
-FS="/"
+
+BIN=`mktemp -d `
+
+# set platform-dependent variables
+OS=`uname -s`
+case "$OS" in
+  SunOS | Linux )
+    NULL=/dev/null
+    FS="/"
+    ;;
+  Windows_* | CYGWIN_NT* )
+    NULL=NUL
+    FS="\\"
+    BIN=$( cygpath -pw $BIN )
+    ;;
+  * )
+    echo "Unrecognized system!"
+    exit 1;
+    ;;
+esac
+
 JAVAC=${TESTJAVA}${FS}bin${FS}javac
 JAVA=${TESTJAVA}${FS}bin${FS}java
 RMIREGISTRY=${TESTJAVA}${FS}bin${FS}rmiregistry
@@ -19,8 +39,8 @@ for p in $allOldProcesses ; do
    jp=`echo $j | sed "s/ .*$//"`
 # java pid
    jm=`echo $j | sed "s/^.* //"`
-     if [ $jp -eq $p  ] 2>/dev/null; then
-      if [ "$jm" = "HelloServer" -o "$jm" =  "RegistryImpl" ] 2>/dev/null; then
+     if [ $jp -eq $p  ] 2>${NULL}; then
+      if [ "$jm" = "HelloServer" -o "$jm" =  "RegistryImpl" ] 2>${NULL}; then
         t=`ps -p $p -o etime=`
         echo "$jp/$p named $jm is running $t. Killing"
 		kill -9 $p
@@ -41,7 +61,6 @@ cleanup(){
 
 
 killOldJavas
-BIN=`mktemp -d `
 CODEBASE=file://$BIN
 echo $BIN
 
