@@ -81,7 +81,7 @@ fi
    ps -o cmd= -p $RMIPID
    $JAVA -cp $BIN "-Djava.rmi.server.codebase=$CODEBASE" HelloServer &> server.out &
    SERVERPID=$!
-   sleep 5
+   sleep 10
    grep  'Exception' server.out
    R=$?
    cat client.out
