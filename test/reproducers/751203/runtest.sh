@@ -23,6 +23,7 @@ esac
 JAVAC=${TESTJAVA}${FS}bin${FS}javac
 JAVA=${TESTJAVA}${FS}bin${FS}java
 RMIREGISTRY=${TESTJAVA}${FS}bin${FS}rmiregistry
+JPS=${TESTJAVA}${FS}bin${FS}jps
 
 echo "It is recommanded to have jps to have this working smoothly"
 
@@ -32,7 +33,7 @@ IFS="
 "
 echo killOldJavas
 allOldProcesses=`find /proc -maxdepth 1  -type d -mmin +1 -exec basename {} \; `
-allJavaProcessesAndMainClasses=`jps`
+allJavaProcessesAndMainClasses=`${JPS}`
 for p in $allOldProcesses ; do
   for j in $allJavaProcessesAndMainClasses ; do
 # main class
@@ -130,6 +131,6 @@ fi
 
     cat server.out
     cleanup
-    jps
+    ${JPS}
     ps | grep java
 exit 0
