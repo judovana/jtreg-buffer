@@ -1,0 +1,7 @@
+This test is suppose dto test, that all offered crypto algorithms are really available.
+In aidtion it test that some expected/not expected algorithms/provider are/are not available.
+
+all this should prevent those bugs to reapear: 
+  https://bugzilla.redhat.com/show_bug.cgi?id=1422738
+  https://bugzilla.redhat.com/show_bug.cgi?id=1022017
+
