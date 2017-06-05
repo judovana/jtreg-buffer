@@ -1,8 +1,29 @@
 #/bin/sh
-FS="/"
+
+BIN=`mktemp -d `
+
+# set platform-dependent variables
+OS=`uname -s`
+case "$OS" in
+  SunOS | Linux )
+    NULL=/dev/null
+    FS="/"
+    ;;
+  Windows_* | CYGWIN_NT* )
+    NULL=NUL
+    FS="\\"
+    BIN=$( cygpath -pw $BIN )
+    ;;
+  * )
+    echo "Unrecognized system!"
+    exit 1;
+    ;;
+esac
+
 JAVAC=${TESTJAVA}${FS}bin${FS}javac
 JAVA=${TESTJAVA}${FS}bin${FS}java
 RMIREGISTRY=${TESTJAVA}${FS}bin${FS}rmiregistry
+JPS=${TESTJAVA}${FS}bin${FS}jps
 
 echo "It is recommanded to have jps to have this working smoothly"
 
@@ -12,15 +33,15 @@ IFS="
 "
 echo killOldJavas
 allOldProcesses=`find /proc -maxdepth 1  -type d -mmin +1 -exec basename {} \; `
-allJavaProcessesAndMainClasses=`jps`
+allJavaProcessesAndMainClasses=`${JPS}`
 for p in $allOldProcesses ; do
   for j in $allJavaProcessesAndMainClasses ; do
 # main class
    jp=`echo $j | sed "s/ .*$//"`
 # java pid
    jm=`echo $j | sed "s/^.* //"`
-     if [ $jp -eq $p  ] 2>/dev/null; then
-      if [ "$jm" = "HelloServer" -o "$jm" =  "RegistryImpl" ] 2>/dev/null; then
+     if [ $jp -eq $p  ] 2>${NULL}; then
+      if [ "$jm" = "HelloServer" -o "$jm" =  "RegistryImpl" ] 2>${NULL}; then
         t=`ps -p $p -o etime=`
         echo "$jp/$p named $jm is running $t. Killing"
 		kill -9 $p
@@ -41,7 +62,6 @@ cleanup(){
 
 
 killOldJavas
-BIN=`mktemp -d `
 CODEBASE=file://$BIN
 echo $BIN
 
@@ -62,7 +82,7 @@ fi
    ps -o cmd= -p $RMIPID
    $JAVA -cp $BIN "-Djava.rmi.server.codebase=$CODEBASE" HelloServer &> server.out &
    SERVERPID=$!
-   sleep 5
+   sleep 10
    grep  'Exception' server.out
    R=$?
    cat client.out
@@ -111,6 +131,6 @@ fi
 
     cat server.out
     cleanup
-    jps
+    ${JPS}
     ps | grep java
 exit 0

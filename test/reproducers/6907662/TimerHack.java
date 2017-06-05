@@ -3,7 +3,7 @@
  * @bug 6378709
  * @summary Verifies that SecurityManager can't be fooled with javax.swing.Timer
  * @author Alexander Potochkin
- * @library HackedFileChooser
+ * @build HackedFileChooser
  * @run main TimerHack
  */
 

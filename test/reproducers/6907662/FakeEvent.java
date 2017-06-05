@@ -3,7 +3,7 @@
  * @bug 6378709
  * @summary Verifies that SecurityManager can't be fooled with EventQueue.postEvent()
  * @author Alexander Potochkin
- * @library HackedFileChooser
+ * @build HackedFileChooser
  * @run main FakeEvent
  */
 
