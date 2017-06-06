@@ -47,77 +47,64 @@ import java.util.List;
 
 public abstract class AlgorithmTest {
 
-    protected List<Exception> failedInits = new ArrayList<>();
-    protected List<Exception> failedRuns = new ArrayList<>();
-    protected int algorithmsSeen = 0;
-    protected int testsCount = 0;
-    protected Provider provider;
-    protected Provider.Service service;
-    protected String currentAlias;
-    protected String currentTitle;
+    private List<Exception> failedInits = new ArrayList<>();
+    private List<Exception> failedRuns = new ArrayList<>();
+    private int algorithmsSeen = 0;
+    private int testsCount = 0;
     private boolean run;
 
-    public abstract String getTestedPart();
-
-    protected abstract void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException;
-
-    protected List<String> createNames() {
-        return Misc.createNames(service);
+    public String getTestedPart() {
+        return this.getClass().getSimpleName().substring(0, this.getClass().getSimpleName().indexOf("Tests"));
     }
 
-    protected String generateTitle() {
-        return Misc.generateTitle(testsCount, provider, service, currentAlias);
+    protected abstract void checkAlgorithm(Provider provider, Provider.Service service, String name) throws AlgorithmInstantiationException, AlgorithmRunException;
+
+    private String generateTitle(Provider provider, Provider.Service service, String alias) {
+        return Misc.generateTitle(testsCount, provider, service, alias);
 
     }
 
-    public TestResult doTest() {
+    public final TestResult doTest() {
         return mainLoop();
     }
 
-    protected TestResult mainLoop() {
+    protected final TestResult mainLoop() {
         if (run) {
-            throw new RuntimeException("Thsi test already run. Make new instance");
+            throw new RuntimeException("This test already run. Make new instance");
         }
         System.out.println("running: " + this.getClass().getName());
         run = true;
         Provider[] providers = Security.getProviders();
-        //dont convert to for loop, we need global field here
-        for (int i = 0; i < providers.length; i++) {
-            provider = providers[i];
-            List<Provider.Service> sevices = new ArrayList<>(provider.getServices());
-            //dont convert to for loop, we need global field here
-            for (int j = 0; j < sevices.size(); j++) {
-                service = sevices.get(j);
-                //we can test each instance by its name or by its alias. Stills etup is doen only by name, as from aliases it si very hard to be guessed
-                List<String> names = Misc.createNames(service);
-                //dont convert to for loop, we need global field here
-                for (int k = 0; k < names.size(); k++) {
+        for (Provider provider : providers) {
+            for (Provider.Service service : provider.getServices()) {
+                //we can test each instance by its name or by its alias. Still setup is done only by name, as from
+                // aliases it si very hard to be guessed
+                for (String alias : Misc.createNames(service)) {
                     algorithmsSeen++;
-                    currentAlias = names.get(k);
+                    String title = generateTitle(provider, service, alias);
                     try {
                         if (service.getType().equals(getTestedPart())) {
-                            currentTitle = generateTitle();
-                            System.out.println(currentTitle);
+                            System.out.println(title);
                             testsCount++;
-                            checkAlgorithm();
+                            checkAlgorithm(provider, service, alias);
                             System.out.println("Passed");
                         }
                     } catch (AlgorithmRunException ex) {
-                        failedRuns.add(new Exception(currentTitle, ex));
+                        failedRuns.add(new Exception(title, ex));
                         System.out.println(ex);
                         System.out.println("failed to init: " + service.getAlgorithm() + "from " + provider);
                         System.out.println("Failed");
                         if (Settings.VerbositySettings.printStacks) {
-                            System.err.println(currentTitle);
+                            System.err.println(title);
                             ex.printStackTrace();
                         }
                     } catch (AlgorithmInstantiationException ex) {
-                        failedInits.add(new Exception(currentTitle, ex));
+                        failedInits.add(new Exception(title, ex));
                         System.out.println(ex);
                         System.out.println("Failed to use: " + service.getAlgorithm() + " from " + provider);
                         System.out.println("Failed");
                         if (Settings.VerbositySettings.printStacks) {
-                            System.err.println(currentTitle);
+                            System.err.println(title);
                             ex.printStackTrace();
                         }
                     }
@@ -150,7 +137,7 @@ public abstract class AlgorithmTest {
         return r;
     }
 
-    public static void printResult(String s) {
+    protected static void printResult(String s) {
         if (Settings.VerbositySettings.printResults) {
             System.out.println(s);
         }

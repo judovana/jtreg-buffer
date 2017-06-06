@@ -40,10 +40,8 @@ import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.TestResult;
 import cryptotest.utils.Xml;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.ProviderException;
+
+import java.security.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.crypto.dom.DOMStructure;
@@ -53,6 +51,7 @@ import javax.xml.crypto.dsig.spec.XPathFilter2ParameterSpec;
 import javax.xml.crypto.dsig.spec.XPathFilterParameterSpec;
 import javax.xml.crypto.dsig.spec.XPathType;
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
+
 import org.w3c.dom.Node;
 
 /*
@@ -71,23 +70,22 @@ public class TransformServiceTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+            AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            TransformService ts = TransformService.getInstance(currentAlias, "DOM", provider);
-            TransformParameterSpec params = null;
+            TransformService ts = TransformService.getInstance(alias, "DOM", provider);
+            final TransformParameterSpec params;
             if (service.getAlgorithm().endsWith("/REC-xslt-19991116")) {
                 Node element = Xml.fakeXml();
                 DOMStructure stylesheet = new DOMStructure(element);
                 XSLTTransformParameterSpec spec = new XSLTTransformParameterSpec(stylesheet);
                 params = spec;
             } else if (service.getAlgorithm().endsWith("/xmldsig-filter2")) {
-                List list = new ArrayList();
+                List<XPathType> list = new ArrayList<>();
                 list.add(new XPathType("/", XPathType.Filter.UNION));
-                XPathFilter2ParameterSpec spec = new XPathFilter2ParameterSpec(list);
-                params = spec;
+                params = new XPathFilter2ParameterSpec(list);
             } else if (service.getAlgorithm().endsWith("/REC-xpath-19991116")) {
-                XPathFilterParameterSpec spec = new XPathFilterParameterSpec("/");
-                params = spec;
+                params = new XPathFilterParameterSpec("/");
             } else {
                 params = null;
             }

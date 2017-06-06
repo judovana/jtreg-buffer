@@ -42,13 +42,8 @@ import static cryptotest.utils.KeysNaiveGenerator.getDsaPrivateKey;
 import static cryptotest.utils.KeysNaiveGenerator.getEcPrivateKey;
 import static cryptotest.utils.KeysNaiveGenerator.getRsaPrivateKey;
 import cryptotest.utils.TestResult;
-import java.security.InvalidKeyException;
-import java.security.InvalidParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.ProviderException;
-import java.security.Signature;
-import java.security.SignatureException;
+
+import java.security.*;
 
 /*
  * IwishThisCouldBeAtTest
@@ -66,9 +61,9 @@ public class SignatureTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            Signature sig = Signature.getInstance(currentAlias, provider);
+            Signature sig = Signature.getInstance(alias, provider);
             //most of them are happy with rsa...
             PrivateKey key = getRsaPrivateKey();
             if (service.getAlgorithm().contains("EC")) {

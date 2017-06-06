@@ -41,10 +41,8 @@ import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.KeysNaiveGenerator;
 import static cryptotest.utils.KeysNaiveGenerator.getBlowfishKey;
 import cryptotest.utils.TestResult;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.Mac;
 import javax.crypto.spec.PBEParameterSpec;
@@ -65,9 +63,9 @@ public class MacTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            Mac md = Mac.getInstance(currentAlias, provider);
+            Mac md = Mac.getInstance(alias, provider);
             byte[] b = new byte[]{1, 2, 3};
 
             if (service.getAlgorithm().contains("PBE")) {

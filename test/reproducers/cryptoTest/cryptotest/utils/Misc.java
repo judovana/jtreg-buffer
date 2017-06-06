@@ -55,27 +55,23 @@ public class Misc {
         }
     }
 
-    public static List<String> getAliasesImpl(Provider.Service service) throws
+    private static List<String> getAliasesImpl(Provider.Service service) throws
             InvocationTargetException, ClassNotFoundException, IllegalArgumentException, NoSuchMethodException,
             SecurityException, IllegalAccessException {
         Class cls = Class.forName("java.security.Provider$Service");
         Method m = cls.getDeclaredMethod("getAliases");
         m.setAccessible(true);
-        List<String> aliases = (List<String>) m.invoke(service);
-        return aliases;
+        return (List<String>) m.invoke(service);
     }
 
     /*
      this method creates list of all names algorithm is known by. NAme is first, aliases follows
      */
-    public static List<String> createNames(Provider.Service service) {
-        List r = new ArrayList(0);
+    static List<String> createNames(Provider.Service service) {
+        List<String> r = new ArrayList<>(0);
         r.add(service.getAlgorithm());
         if (Settings.testAliases) {
-            List<String> als = getAliases(service);
-            for (String al : als) {
-                r.add(al);
-            }
+            r.addAll(getAliases(service));
         }
         return r;
     }
@@ -83,7 +79,7 @@ public class Misc {
     /*
     * geenrate name form counter, provider name, service name and service alias
     */
-    public static String generateTitle(int seen, Provider provider, Provider.Service service, String callName) {
+    static String generateTitle(int seen, Provider provider, Provider.Service service, String callName) {
         return seen + ")\t" + provider.getName() + ": \t" + service.getAlgorithm() + "~"
                 + callName + "\t (" + service.getType() + ")";
     }

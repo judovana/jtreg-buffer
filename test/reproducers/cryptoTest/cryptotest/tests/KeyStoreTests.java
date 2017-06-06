@@ -40,11 +40,7 @@ import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.TestResult;
 import java.io.IOException;
-import java.security.InvalidParameterException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.ProviderException;
+import java.security.*;
 import java.security.cert.CertificateException;
 
 /*
@@ -63,9 +59,9 @@ public class KeyStoreTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            KeyStore ks = KeyStore.getInstance(currentAlias, provider);
+            KeyStore ks = KeyStore.getInstance(alias, provider);
             ks.load(null, new char[]{'a', 'b'});
             printResult(ks.size());
             printResult(ks.getType());

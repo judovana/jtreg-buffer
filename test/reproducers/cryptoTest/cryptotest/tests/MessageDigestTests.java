@@ -39,10 +39,8 @@ import cryptotest.utils.AlgorithmInstantiationException;
 import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.TestResult;
-import java.security.InvalidParameterException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.ProviderException;
+
+import java.security.*;
 
 /*
  * IwishThisCouldBeAtTest
@@ -60,9 +58,10 @@ public class MessageDigestTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+            AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            MessageDigest md = MessageDigest.getInstance(currentAlias, provider);
+            MessageDigest md = MessageDigest.getInstance(alias, provider);
             byte[] b = new byte[]{1, 2, 3};
             printResult(md.digest(b));
             printResult(md.digest());

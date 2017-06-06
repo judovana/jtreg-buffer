@@ -39,27 +39,16 @@ import cryptotest.Settings;
 import cryptotest.utils.AlgorithmInstantiationException;
 import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
-import static cryptotest.utils.KeysNaiveGenerator.getAesKey;
-import static cryptotest.utils.KeysNaiveGenerator.getAesKey192;
-import static cryptotest.utils.KeysNaiveGenerator.getAesKey256;
-import static cryptotest.utils.KeysNaiveGenerator.getArcFourKey;
-import static cryptotest.utils.KeysNaiveGenerator.getBlowfishKey;
-import static cryptotest.utils.KeysNaiveGenerator.getDesKey;
-import static cryptotest.utils.KeysNaiveGenerator.getDesedeKey;
-import static cryptotest.utils.KeysNaiveGenerator.getPbeKey;
-import static cryptotest.utils.KeysNaiveGenerator.getRc2Key;
-import static cryptotest.utils.KeysNaiveGenerator.getRsaPrivateKey;
 import cryptotest.utils.TestResult;
-import java.security.InvalidKeyException;
-import java.security.InvalidParameterException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.ProviderException;
-import java.security.spec.InvalidKeySpecException;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+
+import static cryptotest.utils.KeysNaiveGenerator.*;
 
 /*
  * IwishThisCouldBeAtTest
@@ -77,9 +66,10 @@ public class CipherTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+            AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            Cipher c = Cipher.getInstance(currentAlias, provider);
+            Cipher c = Cipher.getInstance(alias, provider);
             byte[] b = new byte[]{1, 2, 3};
             Key key = null;
             if (service.getAlgorithm().contains("RSA")) {
@@ -116,7 +106,7 @@ public class CipherTests extends AlgorithmTest {
                 AlgorithmTest.printResult(c.wrap(key));
             } else {
                 c.init(Cipher.ENCRYPT_MODE, key);
-                if (!isNss() || Settings.runNss) {
+                if (!isNss(provider, service) || Settings.runNss) {
                     AlgorithmTest.printResult(c.doFinal(b));
                     if (!service.getAlgorithm().contains("AES")) {
                         AlgorithmTest.printResult(c.doFinal());
@@ -125,8 +115,8 @@ public class CipherTests extends AlgorithmTest {
             }
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException ex) {
             throw new AlgorithmInstantiationException(ex);
-
-        } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException | UnsupportedOperationException | InvalidParameterException | ProviderException ex) {
+        } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
+                UnsupportedOperationException | InvalidParameterException | ProviderException ex) {
             throw new AlgorithmRunException(ex);
         }
 
@@ -137,7 +127,7 @@ public class CipherTests extends AlgorithmTest {
         return "Cipher";
     }
 
-    private boolean isNss() {
+    private boolean isNss(Provider provider, Provider.Service service) {
         //ignoring some broken nssnss:
         return provider.getName().endsWith("-NSS")
                 && (service.getAlgorithm().equals("DESede/CBC/NoPadding")

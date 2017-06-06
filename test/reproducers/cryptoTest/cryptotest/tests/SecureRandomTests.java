@@ -39,8 +39,10 @@ import cryptotest.utils.AlgorithmInstantiationException;
 import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.TestResult;
+
 import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.security.ProviderException;
 
 /*
@@ -59,9 +61,10 @@ public class SecureRandomTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+            AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            java.security.SecureRandom sr = java.security.SecureRandom.getInstance(currentAlias, provider);
+            java.security.SecureRandom sr = java.security.SecureRandom.getInstance(alias, provider);
             //blocking may wait really long time on headless system, so lets live with init only
             if (!service.getAlgorithm().equals("NativePRNGBlocking")) {
                 int res = sr.nextInt();

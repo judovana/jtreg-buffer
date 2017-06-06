@@ -40,10 +40,8 @@ import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.KeysNaiveGenerator;
 import cryptotest.utils.TestResult;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.ProviderException;
+
+import java.security.*;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import sun.security.internal.spec.TlsKeyMaterialParameterSpec;
@@ -72,9 +70,9 @@ public class KeyGeneratorTests extends AlgorithmTest {
     int P_MIN = 0;
 
     @Override
-    protected void checkAlgorithm() throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            KeyGenerator kg = KeyGenerator.getInstance(currentAlias, provider);
+            KeyGenerator kg = KeyGenerator.getInstance(alias, provider);
             int keyLength = 256;
             SecretKey result = null;
             if (service.getAlgorithm().contains("DESede")) {
