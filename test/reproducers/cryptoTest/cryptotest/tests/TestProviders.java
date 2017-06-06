@@ -101,13 +101,13 @@ public class TestProviders {
         if (apearingbadProviders == 0) {
             result += "no bad provider appeared (from total of " + mustNotBeProviders.size() + ": " + Arrays.toString(mustNotBeProviders.toArray()) + ")\n";
         } else {
-            result += foundBadProviders.size() + " bad curves (namely: " + Arrays.toString(foundBadProviders.toArray()) + ") appeared (from total of " + mustNotBeProviders.size() + ": " + Arrays.toString(mustNotBeProviders.toArray()) + ")\n";
+            result += foundBadProviders.size() + " bad providers (namely: " + Arrays.toString(foundBadProviders.toArray()) + ") appeared (from total of " + mustNotBeProviders.size() + ": " + Arrays.toString(mustNotBeProviders.toArray()) + ")\n";
         }
         int missingExpectedProviders = removeableMustBeProviders.size();
         if (missingExpectedProviders == 0) {
             result += "all expected providers appeared (from total of " + mustBeProviders.length + ": " + Arrays.toString(mustBeProviders) + ")]n";
         } else {
-            result += removeableMustBeProviders.size() + " expected curves (namely: " + Arrays.toString(removeableMustBeProviders.toArray()) + ") did not appeared (from total of " + mustBeProviders.length + ": " + Arrays.toString(mustBeProviders) + ")\n";
+            result += removeableMustBeProviders.size() + " expected providers (namely: " + Arrays.toString(removeableMustBeProviders.toArray()) + ") did not appeared (from total of " + mustBeProviders.length + ": " + Arrays.toString(mustBeProviders) + ")\n";
         }
         int failures = apearingbadProviders + missingExpectedProviders;
         result += "failed: " + failures + " providers";
