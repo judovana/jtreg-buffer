@@ -92,7 +92,7 @@ public abstract class AlgorithmTest {
                     } catch (AlgorithmRunException ex) {
                         failedRuns.add(new Exception(title, ex));
                         System.out.println(ex);
-                        System.out.println("failed to init: " + service.getAlgorithm() + "from " + provider);
+                        System.out.println("failed to use: " + service.getAlgorithm() + "from " + provider);
                         System.out.println("Failed");
                         if (Settings.VerbositySettings.printStacks) {
                             System.err.println(title);
@@ -101,7 +101,7 @@ public abstract class AlgorithmTest {
                     } catch (AlgorithmInstantiationException ex) {
                         failedInits.add(new Exception(title, ex));
                         System.out.println(ex);
-                        System.out.println("Failed to use: " + service.getAlgorithm() + " from " + provider);
+                        System.out.println("Failed to init: " + service.getAlgorithm() + " from " + provider);
                         System.out.println("Failed");
                         if (Settings.VerbositySettings.printStacks) {
                             System.err.println(title);
