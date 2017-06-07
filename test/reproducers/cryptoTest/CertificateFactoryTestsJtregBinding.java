@@ -5,6 +5,6 @@
  * @run main/othervm cryptotest.tests.CertificateFactoryTests
  */
 
-public class CipherTestsJtregBinding {
+public class CertificateFactoryTestsJtregBinding {
 
     }
