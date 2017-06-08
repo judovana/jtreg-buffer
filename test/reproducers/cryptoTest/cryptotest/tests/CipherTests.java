@@ -66,10 +66,10 @@ public class CipherTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+    protected void checkAlgorithm(Provider.Service service, String alias) throws
             AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            Cipher c = Cipher.getInstance(alias, provider);
+            Cipher c = Cipher.getInstance(alias, service.getProvider());
             byte[] b = new byte[]{1, 2, 3};
             Key key = null;
             if (service.getAlgorithm().contains("RSA")) {
@@ -106,7 +106,7 @@ public class CipherTests extends AlgorithmTest {
                 AlgorithmTest.printResult(c.wrap(key));
             } else {
                 c.init(Cipher.ENCRYPT_MODE, key);
-                if (!isNss(provider, service) || Settings.runNss) {
+                if (!isNss(service.getProvider(), service) || Settings.runNss) {
                     AlgorithmTest.printResult(c.doFinal(b));
                     if (!service.getAlgorithm().contains("AES")) {
                         AlgorithmTest.printResult(c.doFinal());

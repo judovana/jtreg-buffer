@@ -70,10 +70,10 @@ public class TransformServiceTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+    protected void checkAlgorithm(Provider.Service service, String alias) throws
             AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            TransformService ts = TransformService.getInstance(alias, "DOM", provider);
+            TransformService ts = TransformService.getInstance(alias, "DOM", service.getProvider());
             final TransformParameterSpec params;
             if (service.getAlgorithm().endsWith("/REC-xslt-19991116")) {
                 Node element = Xml.fakeXml();

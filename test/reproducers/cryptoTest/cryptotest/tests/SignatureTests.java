@@ -61,9 +61,9 @@ public class SignatureTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            Signature sig = Signature.getInstance(alias, provider);
+            Signature sig = Signature.getInstance(alias, service.getProvider());
             //most of them are happy with rsa...
             PrivateKey key = getRsaPrivateKey();
             if (service.getAlgorithm().contains("EC")) {

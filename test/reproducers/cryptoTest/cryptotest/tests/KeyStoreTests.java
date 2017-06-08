@@ -59,9 +59,9 @@ public class KeyStoreTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            KeyStore ks = KeyStore.getInstance(alias, provider);
+            KeyStore ks = KeyStore.getInstance(alias, service.getProvider());
             ks.load(null, new char[]{'a', 'b'});
             printResult(ks.size());
             printResult(ks.getType());

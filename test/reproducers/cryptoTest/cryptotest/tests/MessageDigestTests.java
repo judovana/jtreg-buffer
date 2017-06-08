@@ -58,10 +58,10 @@ public class MessageDigestTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+    protected void checkAlgorithm(Provider.Service service, String alias) throws
             AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            MessageDigest md = MessageDigest.getInstance(alias, provider);
+            MessageDigest md = MessageDigest.getInstance(alias, service.getProvider());
             byte[] b = new byte[]{1, 2, 3};
             printResult(md.digest(b));
             printResult(md.digest());

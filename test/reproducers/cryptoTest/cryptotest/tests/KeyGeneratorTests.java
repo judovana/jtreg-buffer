@@ -70,9 +70,9 @@ public class KeyGeneratorTests extends AlgorithmTest {
     int P_MIN = 0;
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            KeyGenerator kg = KeyGenerator.getInstance(alias, provider);
+            KeyGenerator kg = KeyGenerator.getInstance(alias, service.getProvider());
             int keyLength = 256;
             SecretKey result = null;
             if (service.getAlgorithm().contains("DESede")) {
@@ -107,7 +107,7 @@ public class KeyGeneratorTests extends AlgorithmTest {
                 result = kg.generateKey();
             }
             if (result == null) {
-                throw new UnsupportedOperationException("Generated key is null for " + service.getAlgorithm() + " in" + provider.getName());
+                throw new UnsupportedOperationException("Generated key is null for " + service.getAlgorithm() + " in" + service.getProvider().getName());
             }
             printResult(result.getEncoded());
         } catch (NoSuchAlgorithmException ex) {

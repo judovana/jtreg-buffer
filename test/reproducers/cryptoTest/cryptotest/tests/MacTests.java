@@ -63,9 +63,9 @@ public class MacTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
-            Mac md = Mac.getInstance(alias, provider);
+            Mac md = Mac.getInstance(alias, service.getProvider());
             byte[] b = new byte[]{1, 2, 3};
 
             if (service.getAlgorithm().contains("PBE")) {

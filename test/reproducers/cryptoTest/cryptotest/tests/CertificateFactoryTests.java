@@ -40,14 +40,13 @@ import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.TestResult;
 
-import java.io.InputStream;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.charset.Charset;
-
 import java.security.Provider;
-import java.security.cert.CertificateFactory;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 
 /*
  * IwishThisCouldBeAtTest
@@ -105,11 +104,11 @@ public class CertificateFactoryTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider provider, Provider.Service service, String alias) throws
+    protected void checkAlgorithm(Provider.Service service, String alias) throws
             AlgorithmInstantiationException, AlgorithmRunException {
         CertificateFactory cf = null;
         try {
-            cf = CertificateFactory.getInstance(alias, provider);
+            cf = CertificateFactory.getInstance(alias, service.getProvider());
             //designed for(service.getAlgorithm().equals("X.509"))  but attmpting for all with hope to fail
             byte[] certBytes = certString.getBytes(Charset.forName("UTF-8"));
             InputStream is = new ByteArrayInputStream(certBytes);
