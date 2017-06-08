@@ -90,7 +90,7 @@ public class CryptoTest {
             if (r instanceof TestResult.AlgorithmTestResult) {
                 maxSeen = Math.max(maxSeen, ((TestResult.AlgorithmTestResult) r).getSeen());
                 minSeen = Math.min(minSeen, ((TestResult.AlgorithmTestResult) r).getSeen());
-                totalAlghoritmsChecked += ((TestResult.AlgorithmTestResult) r).getSubtests();
+                totalAlghoritmsChecked += r.getSubtests();
             }
         }
         if (maxSeen != minSeen) {

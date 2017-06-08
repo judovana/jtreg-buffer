@@ -86,26 +86,22 @@ public class KeyGeneratorTests extends AlgorithmTest {
                 SecretKey key = KeysNaiveGenerator.getTlsRsaPremasterSecret(ProtocolVersion.valueOf(P_MAJ, P_MIN));
                 TlsPrfParameterSpec params = new TlsPrfParameterSpec(key, "SomeLabel", new byte[]{1, 2, 3}, 10, "sha1", 20, 64);
                 kg.init(params);
-                result = kg.generateKey();
             } else if (service.getAlgorithm().contains("TlsMasterSecret")) {
                 SecretKey key = KeysNaiveGenerator.getTlsRsaPremasterSecret(ProtocolVersion.valueOf(P_MAJ, P_MIN));
                 TlsMasterSecretParameterSpec params = new TlsMasterSecretParameterSpec(key, P_MAJ, P_MIN, new byte[]{1, 2, 3}, new byte[]{1, 2, 3}, "sha1", 16, 64);
                 kg.init(params);
-                result = kg.generateKey();
             } else if (service.getAlgorithm().contains("TlsKeyMaterial")) {
                 SecretKey key = KeysNaiveGenerator.getTlsMasterSecret();
                 TlsKeyMaterialParameterSpec params = new TlsKeyMaterialParameterSpec(key, P_MAJ, P_MIN, new byte[]{1, 2, 3}, new byte[]{1, 2, 3},
                         "TlsMasterSecret", 4, 4, 4, 4, "md5", 4, 4);
                 kg.init(params);
-                result = kg.generateKey();
             } else if (service.getAlgorithm().contains("TlsRsaPremaster")) {
                 kg.init(new TlsRsaPremasterSecretParameterSpec(1, 1));
-                result = kg.generateKey();
             } else {
                 //simple init
                 kg.init(keyLength);
-                result = kg.generateKey();
             }
+            result = kg.generateKey();
             if (result == null) {
                 throw new UnsupportedOperationException("Generated key is null for " + service.getAlgorithm() + " in" + service.getProvider().getName());
             }
