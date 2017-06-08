@@ -47,6 +47,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static cryptotest.utils.KeysNaiveGenerator.*;
 
@@ -54,6 +56,14 @@ import static cryptotest.utils.KeysNaiveGenerator.*;
  * IwishThisCouldBeAtTest
  */
 public class CipherTests extends AlgorithmTest {
+
+    private static Map<String, Integer> blockLengthMap;
+
+    static {
+        blockLengthMap = new HashMap<>();
+        blockLengthMap.put("DES", 8);
+        blockLengthMap.put("DESede", 8);
+    }
 
     /**
      * @param args the command line arguments
@@ -70,7 +80,17 @@ public class CipherTests extends AlgorithmTest {
             AlgorithmInstantiationException, AlgorithmRunException {
         try {
             Cipher c = Cipher.getInstance(alias, service.getProvider());
-            byte[] b = new byte[]{1, 2, 3};
+            byte[] b = null;
+            final String[] aliasComponents = alias.split("/");
+            if (aliasComponents.length == 3 && 
+                    blockLengthMap.containsKey(aliasComponents[0]) && 
+                    aliasComponents[2].equals("NoPadding")) { 
+                // If we use no padding, input length has to be equal to the
+                // cipher block length.
+                b = generateBlock(blockLengthMap.get(aliasComponents[0]));
+            } else {
+                b = new byte[]{1, 2, 3};
+            }
             Key key = null;
             if (service.getAlgorithm().contains("RSA")) {
                 key = getRsaPrivateKey();
@@ -144,6 +164,14 @@ public class CipherTests extends AlgorithmTest {
                 || service.getAlgorithm().equals("AES_128/ECB/NoPadding")
                 || service.getAlgorithm().equals("AES_192/ECB/NoPadding")
                 || service.getAlgorithm().equals("AES_256/CBC/NoPadding"));
+    }
+    
+    private static byte[] generateBlock(int blockLength) {
+        byte[] block = new byte[blockLength];
+        for (int i = 0; i < blockLength; i++) {
+            block[i] = i + 1;
+        }
+        return block;
     }
 
 }
