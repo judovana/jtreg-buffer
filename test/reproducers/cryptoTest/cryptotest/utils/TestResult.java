@@ -75,7 +75,7 @@ public class TestResult {
     }
 
     public String getExplanation() {
-        return "Total checks: " + subtests + ", fialed: " + failures + "\n"
+        return "Total checks: " + subtests + ", failed: " + failures + "\n"
                 + explanation;
     }
 

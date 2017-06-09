@@ -57,7 +57,7 @@ public abstract class AlgorithmTest {
         return this.getClass().getSimpleName().substring(0, this.getClass().getSimpleName().indexOf("Tests"));
     }
 
-    protected abstract void checkAlgorithm(Provider.Service service, String name) throws AlgorithmInstantiationException, AlgorithmRunException;
+    protected abstract void checkAlgorithm(Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException;
 
     private String generateTitle(Provider provider, Provider.Service service, String alias) {
         return Misc.generateTitle(testsCount, provider, service, alias);
