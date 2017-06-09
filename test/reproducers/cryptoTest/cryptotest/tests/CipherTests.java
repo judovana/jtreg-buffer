@@ -57,12 +57,12 @@ import static cryptotest.utils.KeysNaiveGenerator.*;
  */
 public class CipherTests extends AlgorithmTest {
 
-    private static Map<String, Integer> blockLengthMap;
+    private static final Map<String, Byte> blockLengthMap;
 
     static {
         blockLengthMap = new HashMap<>();
-        blockLengthMap.put("DES", 8);
-        blockLengthMap.put("DESede", 8);
+        blockLengthMap.put("DES", (byte) 8);
+        blockLengthMap.put("DESede", (byte) 8);
     }
 
     /**
@@ -82,9 +82,9 @@ public class CipherTests extends AlgorithmTest {
             Cipher c = Cipher.getInstance(alias, service.getProvider());
             byte[] b = null;
             final String[] aliasComponents = alias.split("/");
-            if (aliasComponents.length == 3 && 
-                    blockLengthMap.containsKey(aliasComponents[0]) && 
-                    aliasComponents[2].equals("NoPadding")) { 
+            if (aliasComponents.length == 3
+                    && blockLengthMap.containsKey(aliasComponents[0])
+                    && aliasComponents[2].equals("NoPadding")) {
                 // If we use no padding, input length has to be equal to the
                 // cipher block length.
                 b = generateBlock(blockLengthMap.get(aliasComponents[0]));
@@ -165,11 +165,12 @@ public class CipherTests extends AlgorithmTest {
                 || service.getAlgorithm().equals("AES_192/ECB/NoPadding")
                 || service.getAlgorithm().equals("AES_256/CBC/NoPadding"));
     }
-    
-    private static byte[] generateBlock(int blockLength) {
+
+    private static byte[] generateBlock(byte blockLength) {
         byte[] block = new byte[blockLength];
-        for (int i = 0; i < blockLength; i++) {
-            block[i] = i + 1;
+        for (byte i = 0; i < blockLength; i++) {
+            //block[i] = i + 1;
+            block[i] = 1;
         }
         return block;
     }
