@@ -80,14 +80,11 @@ public class CipherTests extends AlgorithmTest {
             AlgorithmInstantiationException, AlgorithmRunException {
         try {
             Cipher c = Cipher.getInstance(alias, service.getProvider());
-            byte[] b = null;
-            final String[] aliasComponents = alias.split("/");
-            if (aliasComponents.length == 3
-                    && blockLengthMap.containsKey(aliasComponents[0])
-                    && aliasComponents[2].equals("NoPadding")) {
+            byte[] b;
+            if (isPadding(service.getAlgorithm()) || isPadding(alias)) {
                 // If we use no padding, input length has to be equal to the
                 // cipher block length.
-                b = generateBlock(blockLengthMap.get(aliasComponents[0]));
+                b = generateBlock(getPaddingLength(service.getAlgorithm(), alias));
             } else {
                 b = new byte[]{1, 2, 3};
             }
@@ -173,6 +170,29 @@ public class CipherTests extends AlgorithmTest {
             block[i] = 1;
         }
         return block;
+    }
+
+    private byte getPaddingLength(String name, String alias) {
+        String[] aliasComponents = splitNssName(name);
+        Byte b = blockLengthMap.get(aliasComponents[0]);
+        if (b == null) {
+            aliasComponents = splitNssName(alias);
+            b = blockLengthMap.get(aliasComponents[0]);
+
+        }
+        return b;
+
+    }
+
+    private boolean isPadding(String s) {
+        final String[] aliasComponents = splitNssName(s);
+        return (aliasComponents.length == 3
+                && blockLengthMap.containsKey(aliasComponents[0])
+                && aliasComponents[2].equals("NoPadding"));
+    }
+
+    private String[] splitNssName(String s) {
+        return s.split("/");
     }
 
 }
