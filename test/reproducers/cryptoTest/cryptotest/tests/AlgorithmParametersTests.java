@@ -46,9 +46,14 @@ import java.math.BigInteger;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.DSAParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
+import java.security.spec.MGF1ParameterSpec;
 import javax.crypto.spec.DHParameterSpec;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PBEParameterSpec;
+import javax.crypto.spec.PSource;
+import javax.crypto.spec.RC2ParameterSpec;
 
 /*
  * IwishThisCouldBeAtTest
@@ -68,8 +73,11 @@ public class AlgorithmParametersTests extends AlgorithmTest {
         try {
             AlgorithmParameters c = AlgorithmParameters.getInstance(alias, service.getProvider());
             AlgorithmParameterSpec params = null;
+            //order important!
             if (service.getAlgorithm().contains("DSA")) {
                 params = new DSAParameterSpec(BigInteger.ONE, BigInteger.ONE, BigInteger.ONE);
+            } else if (service.getAlgorithm().contains("PBES2")) {
+                params = new PBEParameterSpec(new byte[]{1, 2, 3, 4}, 10);
             } else if (service.getAlgorithm().contains("PBEWithHmacSHA") && service.getAlgorithm().contains("AES")) {
                 //nedsbooth?!?!?
                 //params = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
@@ -78,16 +86,28 @@ public class AlgorithmParametersTests extends AlgorithmTest {
                 params = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
             } else if (service.getAlgorithm().contains("DiffieHellman")) {
                 params = new DHParameterSpec(BigInteger.ONE, BigInteger.ONE);
+            } else if (service.getAlgorithm().contains("GCM")) {
+                //thjis construtor takes all, but when dec getEncoding, first number metters
+                params = new GCMParameterSpec(110, new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
             } else if (service.getAlgorithm().contains("PBE")) {
                 params = new PBEParameterSpec(new byte[]{1, 2, 3, 4}, 10);
+            } else if (service.getAlgorithm().contains("AES")) {
+                params = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16});
+            } else if (service.getAlgorithm().contains("RC2")) {
+                //why does this constructor exists?!?!?! throws npe later..
+                //params = new RC2ParameterSpec(1);
+                params = new RC2ParameterSpec(1, new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
             } else if (service.getAlgorithm().contains("Blowfish") || service.getAlgorithm().contains("DES")) {
                 params = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
+            } else if (service.getAlgorithm().contains("OAEP")) {
+                params = new OAEPParameterSpec("sha1", "MGF1", new MGF1ParameterSpec("sha1"), new PSource.PSpecified(new byte[]{1, 2, 3}));
             }
 
             c.init(params);
             printResult(c.getEncoded());
             AlgorithmParameters c2 = AlgorithmParameters.getInstance(alias, service.getProvider());
-            c2.init(c.getEncoded());
+            byte[] encodedParams = c.getEncoded();
+            c2.init(encodedParams);
 
         } catch (IOException | InvalidParameterSpecException ex) {
             throw new AlgorithmInstantiationException(ex);
