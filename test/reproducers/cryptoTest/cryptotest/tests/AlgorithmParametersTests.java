@@ -46,6 +46,7 @@ import java.math.BigInteger;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.DSAParameterSpec;
 import java.security.spec.ECFieldF2m;
+import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
@@ -108,12 +109,7 @@ public class AlgorithmParametersTests extends AlgorithmTest {
             } else if (service.getAlgorithm().contains("OAEP")) {
                 params = new OAEPParameterSpec("sha1", "MGF1", new MGF1ParameterSpec("sha1"), new PSource.PSpecified(new byte[]{1, 2, 3}));
             } else if (service.getAlgorithm().contains("EC")) {
-                //1.2.840.10045.2.1	
-                params = new ECParameterSpec(
-                        new EllipticCurve(new ECFieldF2m(1), BigInteger.ONE, BigInteger.ONE),
-                        new ECPoint(BigInteger.ONE, BigInteger.ONE),
-                        BigInteger.ONE,
-                        1);
+                params = new ECGenParameterSpec("1.2.840.10045.3.1.7");
             }
 
             c.init(params);
