@@ -45,6 +45,10 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.DSAParameterSpec;
+import java.security.spec.ECFieldF2m;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.ECPoint;
+import java.security.spec.EllipticCurve;
 import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.MGF1ParameterSpec;
 import javax.crypto.spec.DHParameterSpec;
@@ -77,11 +81,13 @@ public class AlgorithmParametersTests extends AlgorithmTest {
             if (service.getAlgorithm().contains("DSA")) {
                 params = new DSAParameterSpec(BigInteger.ONE, BigInteger.ONE, BigInteger.ONE);
             } else if (service.getAlgorithm().contains("PBES2")) {
+                //it looks like bug, PBES2 in its internal except name like PBES2WithHmacSHAxyzAES_abc
                 params = new PBEParameterSpec(new byte[]{1, 2, 3, 4}, 10);
             } else if (service.getAlgorithm().contains("PBEWithHmacSHA") && service.getAlgorithm().contains("AES")) {
-                //nedsbooth?!?!?
-                //params = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
-                params = new PBEParameterSpec(new byte[]{1, 2, 3, 4}, 10);
+                // this constructoris useles, we ened the second params anyway
+                //params = new PBEParameterSpec(new byte[]{1, 2, 3, 4}, 10);
+                IvParameterSpec interParams = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
+                params = new PBEParameterSpec(new byte[]{1, 2, 3, 4}, 10, interParams);
             } else if (service.getAlgorithm().contains("PBEWithHmacSHA")) {
                 params = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
             } else if (service.getAlgorithm().contains("DiffieHellman")) {
@@ -101,6 +107,13 @@ public class AlgorithmParametersTests extends AlgorithmTest {
                 params = new IvParameterSpec(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
             } else if (service.getAlgorithm().contains("OAEP")) {
                 params = new OAEPParameterSpec("sha1", "MGF1", new MGF1ParameterSpec("sha1"), new PSource.PSpecified(new byte[]{1, 2, 3}));
+            } else if (service.getAlgorithm().contains("EC")) {
+                //1.2.840.10045.2.1	
+                params = new ECParameterSpec(
+                        new EllipticCurve(new ECFieldF2m(1), BigInteger.ONE, BigInteger.ONE),
+                        new ECPoint(BigInteger.ONE, BigInteger.ONE),
+                        BigInteger.ONE,
+                        1);
             }
 
             c.init(params);
