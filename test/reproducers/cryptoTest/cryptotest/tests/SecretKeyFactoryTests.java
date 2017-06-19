@@ -10,6 +10,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
@@ -44,7 +45,11 @@ public class SecretKeyFactoryTests extends AlgorithmTest {
                 keySpec = new DESKeySpec(generateBytes(8));
             } else if (service.getAlgorithm().contains("PBKDF2")) {
                 keySpec = new PBEKeySpec(new char[]{'h', 'e', 's', 'l', 'o'}, generateBytes(8), 1, 1);
-            } else {
+            } else if (service.getAlgorithm().contains("AES")) {
+                keySpec = new SecretKeySpec(generateBytes(16), service.getAlgorithm());
+            } else if (service.getAlgorithm().contains("ARCFOUR")) {
+                keySpec = new SecretKeySpec(generateBytes(8), service.getAlgorithm());
+            } else  {
                 keySpec = null;
             }
 
