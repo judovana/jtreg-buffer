@@ -14,6 +14,7 @@ import java.security.PermissionCollection;
 import java.security.Policy;
 import java.security.ProtectionDomain;
 import java.security.Provider;
+import java.util.PropertyPermission;
 
 public class PolicyTests extends AlgorithmTest {
 
@@ -33,11 +34,12 @@ public class PolicyTests extends AlgorithmTest {
 
             policy.refresh();
             PermissionCollection permissions = policy.getPermissions(codeSource);
-            if (permissions == null) {
+            boolean versionPolicy = policy.implies(new ProtectionDomain(codeSource, null),
+                    new PropertyPermission("java.version", "read"));
+            if (permissions == null || !versionPolicy) {
                 throw new UnsupportedOperationException("Permission cant be reached for " + service.getAlgorithm() +
                         " in" + service.getProvider().getName());
             }
-            policy.implies(new ProtectionDomain(codeSource, null), new RuntimePermission("blabol"));
         } catch (NoSuchAlgorithmException e) {
             throw new AlgorithmInstantiationException(e);
         } catch (UnsupportedOperationException | MalformedURLException e) {
