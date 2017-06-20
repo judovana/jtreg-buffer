@@ -9,14 +9,12 @@ import cryptotest.utils.TestResult;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DHPrivateKeySpec;
 import javax.crypto.spec.DHPublicKeySpec;
-import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
-import java.security.SecureRandom;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.DSAPrivateKeySpec;
@@ -27,12 +25,10 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
-import java.util.Random;
 
 import static java.math.BigInteger.ONE;
 
 public class KeyFactoryTests extends AlgorithmTest {
-    private final Random random = new SecureRandom(new byte[]{6, 6, 6});
 
     public static void main(String[] args) {
         TestResult r = new KeyFactoryTests().mainLoop();
