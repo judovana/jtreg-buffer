@@ -3,11 +3,14 @@ package cryptotest.tests;
 import cryptotest.utils.AlgorithmInstantiationException;
 import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
+import cryptotest.utils.KeysNaiveGenerator;
 import cryptotest.utils.TestResult;
 
+import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DHPrivateKeySpec;
 import javax.crypto.spec.DHPublicKeySpec;
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -47,11 +50,13 @@ public class KeyFactoryTests extends AlgorithmTest {
             KeySpec publicKeySpec;
 
             if (service.getAlgorithm().contains("DSA")) {
-                privateKeySpec = new DSAPrivateKeySpec(ONE, ONE, ONE, ONE);
-                publicKeySpec = new DSAPublicKeySpec(ONE, ONE, ONE, ONE);
+                KeyPair kp = KeysNaiveGenerator.getDsaKeyPair();
+                privateKeySpec = keyFactory.getKeySpec(kp.getPrivate(), DSAPrivateKeySpec.class);
+                publicKeySpec = keyFactory.getKeySpec(kp.getPublic(), DSAPublicKeySpec.class);
             } else if (service.getAlgorithm().contains("RSA")) {
-                privateKeySpec = new RSAPrivateKeySpec(BigInteger.probablePrime(512, random), ONE);
-                publicKeySpec = new RSAPublicKeySpec(BigInteger.probablePrime(512, random), ONE);
+                KeyPair kp = KeysNaiveGenerator.getRsaKeyPair();
+                privateKeySpec = keyFactory.getKeySpec(kp.getPrivate(), RSAPrivateKeySpec.class);
+                publicKeySpec = keyFactory.getKeySpec(kp.getPublic(), RSAPublicKeySpec.class);
             } else if (service.getAlgorithm().contains("EC")) {
                 KeyPair keyPair = KeyPairGenerator.getInstance("EC").genKeyPair();
 
@@ -60,9 +65,13 @@ public class KeyFactoryTests extends AlgorithmTest {
 
                 privateKeySpec = new ECPrivateKeySpec(ONE, ecPrivateKey.getParams());
                 publicKeySpec = new ECPublicKeySpec(ecPublicKey.getW(), ecPublicKey.getParams());
-            } else if (service.getAlgorithm().contains("DiffieHellman")) {
-                privateKeySpec = new DHPrivateKeySpec(ONE, ONE, ONE);
-                publicKeySpec = new DHPublicKeySpec(ONE, ONE, ONE);
+            } else if (service.getAlgorithm().contains("DiffieHellman") || service.getAlgorithm().contains("DH")) {
+                KeyPair kp = KeyPairGenerator.getInstance("DiffieHellman").genKeyPair();
+                privateKeySpec = keyFactory.getKeySpec(kp.getPrivate(), DHPrivateKeySpec.class);
+                publicKeySpec = keyFactory.getKeySpec(kp.getPublic(), DHPublicKeySpec.class);
+            } else if (service.getAlgorithm().contains("DES")) {
+                privateKeySpec = new DESKeySpec(new byte[]{1, 2, 3});
+                publicKeySpec = new DESKeySpec(new byte[]{1, 2, 3});
             } else {
                 privateKeySpec = null;
                 publicKeySpec = null;
@@ -75,7 +84,7 @@ public class KeyFactoryTests extends AlgorithmTest {
             }
         } catch (NoSuchAlgorithmException e) {
             throw new AlgorithmInstantiationException(e);
-        } catch (UnsupportedOperationException | InvalidKeySpecException e) {
+        } catch (UnsupportedOperationException | InvalidKeySpecException | InvalidKeyException e) {
             throw new AlgorithmRunException(e);
         }
     }
