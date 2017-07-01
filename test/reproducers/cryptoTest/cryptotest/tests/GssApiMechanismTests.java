@@ -79,7 +79,7 @@ public class GssApiMechanismTests extends AlgorithmTest {
     }
 
     @Override
-    protected void checkAlgorithm(Provider.Service service, String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
+    protected void checkAlgorithm(final Provider.Service service, final String alias) throws AlgorithmInstantiationException, AlgorithmRunException {
         try {
             //first get TCK tgt
             ///see  http://icedtea.classpath.org/wiki/JCKDistilled#kerberos_prep for agent's setup
@@ -116,7 +116,7 @@ public class GssApiMechanismTests extends AlgorithmTest {
             //this one is currently empty
             subject.getPublicCredentials();
 
-            GSSManager instance = GSSManager.getInstance();
+            final GSSManager instance = GSSManager.getInstance();
             //surprisingly getMechsbyName did nto found a thing....
             //see names formechs in bellow
             final Oid[] b = instance.getMechs();
