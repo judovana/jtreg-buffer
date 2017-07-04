@@ -150,5 +150,9 @@ public abstract class AlgorithmTest {
     public static void printResult(byte[] res) {
         printResult(Arrays.toString(res));
     }
+    
+    public static void printResult(boolean res) {
+        printResult(""+res);
+    }
 
 }
