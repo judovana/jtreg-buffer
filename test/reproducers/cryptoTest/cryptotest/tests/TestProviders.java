@@ -50,8 +50,20 @@ import java.util.Set;
  */
 public class TestProviders {
 
-    private static String[] mustBeProviders = new String[]{"SunPKCS11-NSS"};
-    private static List<String> mustNotBeProviders = Arrays.asList(new String[]{});
+    private static String[] mustBeProviders;
+    private static List<String> mustNotBeProviders;
+
+    static {
+        String v = System.getProperty("java.version");
+        //currently we have it on on jdk7 on rhels only
+        if (v.startsWith("1.7")) {
+            mustBeProviders = new String[]{"SunPKCS11-NSS"};
+            mustNotBeProviders = Arrays.asList(new String[]{});
+        } else {
+            mustBeProviders = new String[]{};
+            mustNotBeProviders = Arrays.asList(new String[]{"SunPKCS11-NSS"});
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -71,7 +83,7 @@ public class TestProviders {
         removeableMustBeProviders.addAll(Arrays.asList(mustBeProviders));
         //for storing of failures
         List<String> foundBadProviders = new ArrayList<>(0);
-        System.out.println("running: "+this.getClass().getName());
+        System.out.println("running: " + this.getClass().getName());
         System.out.println("provider\tatts");
         System.out.println("--------------------------------------------");
         for (Provider provider : Security.getProviders()) {
