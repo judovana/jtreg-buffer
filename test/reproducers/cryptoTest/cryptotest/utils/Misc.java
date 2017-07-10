@@ -36,6 +36,9 @@
 package cryptotest.utils;
 
 import cryptotest.Settings;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Provider;
@@ -82,5 +85,48 @@ public class Misc {
     static String generateTitle(int seen, Provider provider, Provider.Service service, String callName) {
         return seen + ")\t" + provider.getName() + ": \t" + service.getAlgorithm() + "~"
                 + callName + "\t (" + service.getType() + ")";
+    }
+    
+    public static File createTmpKrb5File() {
+        File f = null;
+        try {
+            f = File.createTempFile("krb5", ".conf");
+            f.deleteOnExit();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        try (FileWriter fw = new FileWriter(f)) {
+            //the domain_realm record is serving instead of finish hacking method
+            String s = "[libdefaults]\n"
+                    + "default_realm = JCKTEST\n"
+                    + "ticket_lifetime = 36000\n"
+                    + "dns_lookup_realm = false\n"
+                    + "dns_lookup_kdc = false\n"
+                    + "ticket_lifetime = 24h\n"
+                    + "renew_lifetime = 7d\n"
+                    + "forwardable = true\n"
+                    + "allow_weak_crypto = true"
+                    + "\n"
+                    + "[realms]\n"
+                    + "JCKTEST = {\n"
+                    + "kdc = agent.brq.redhat.com\n"
+                    + "admin_server = agent.brq.redhat.com\n"
+                    + "default_domain = JCKTEST\n"
+                    + "}\n"
+                    + "\n"
+                    + "[domain_realm]\n"
+                    + ".redhat.com = JCKTEST\n"
+                    + "\n"
+                    + "[appdefaults]\n"
+                    + "autologin = true\n"
+                    + "forward = true\n"
+                    + "forwardable = true\n"
+                    + "encrypt = true\n";
+            fw.write(s);
+            fw.flush();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        return f;
     }
 }

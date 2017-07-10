@@ -38,6 +38,7 @@ package cryptotest.tests;
 import cryptotest.utils.AlgorithmInstantiationException;
 import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
+import cryptotest.utils.Misc;
 import cryptotest.utils.TestResult;
 import java.io.File;
 import java.io.FileWriter;
@@ -106,7 +107,7 @@ public class GssApiMechanismTests extends AlgorithmTest {
             //System.setProperty("java.security.krb5.kdc", "agent.brq.redhat.com");
             //setting the proeprties diable cross-realm authentication.
             //we must set krb5.cfg file
-            File f = createTmpKrb5File();
+            File f = Misc.createTmpKrb5File();
             System.setProperty("java.security.krb5.conf", f.getAbsolutePath());
             final LoginContext lc = new LoginContext("user1", new Subject(), new CallbackHandler() {
                 @Override
@@ -233,47 +234,5 @@ public class GssApiMechanismTests extends AlgorithmTest {
         return "GssApiMechanism";
     }
 
-    private File createTmpKrb5File() {
-        File f = null;
-        try {
-            f = File.createTempFile("krb5", ".conf");
-            f.deleteOnExit();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        try (FileWriter fw = new FileWriter(f)) {
-            //the domain_realm record is serving instead of finish hacking method
-            String s = "[libdefaults]\n"
-                    + "default_realm = JCKTEST\n"
-                    + "ticket_lifetime = 36000\n"
-                    + "dns_lookup_realm = false\n"
-                    + "dns_lookup_kdc = false\n"
-                    + "ticket_lifetime = 24h\n"
-                    + "renew_lifetime = 7d\n"
-                    + "forwardable = true\n"
-                    + "allow_weak_crypto = true"
-                    + "\n"
-                    + "[realms]\n"
-                    + "JCKTEST = {\n"
-                    + "kdc = agent.brq.redhat.com\n"
-                    + "admin_server = agent.brq.redhat.com\n"
-                    + "default_domain = JCKTEST\n"
-                    + "}\n"
-                    + "\n"
-                    + "[domain_realm]\n"
-                    + ".redhat.com = JCKTEST\n"
-                    + "\n"
-                    + "[appdefaults]\n"
-                    + "autologin = true\n"
-                    + "forward = true\n"
-                    + "forwardable = true\n"
-                    + "encrypt = true\n";
-            fw.write(s);
-            fw.flush();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        return f;
-    }
 
 }
