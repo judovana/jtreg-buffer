@@ -3,6 +3,7 @@ package cryptotest.tests;
 import cryptotest.utils.AlgorithmInstantiationException;
 import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
+import cryptotest.utils.Misc;
 import cryptotest.utils.TestResult;
 import java.security.Provider;
 import java.util.HashMap;
@@ -20,6 +21,8 @@ import javax.security.sasl.SaslException;
 public class SaslClientFactoryTests extends AlgorithmTest {
 
     public static void main(String[] args) {
+        System.setProperty("java.security.krb5.conf", 
+                Misc.createTmpKrb5File().getPath());
         TestResult r = new SaslClientFactoryTests().mainLoop();
         System.out.println(r.getExplanation());
         System.out.println(r.toString());
