@@ -43,8 +43,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Provider;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.login.AppConfigurationEntry;
+import javax.security.auth.login.Configuration;
+import javax.security.sasl.RealmCallback;
 
 public class Misc {
 
@@ -86,7 +94,7 @@ public class Misc {
         return seen + ")\t" + provider.getName() + ": \t" + service.getAlgorithm() + "~"
                 + callName + "\t (" + service.getType() + ")";
     }
-    
+
     public static File createTmpKrb5File() {
         File f = null;
         try {
@@ -128,5 +136,41 @@ public class Misc {
             throw new RuntimeException(ex);
         }
         return f;
+    }
+
+    public static Configuration getKrb5Configuration() {
+        return new Configuration() {
+            @Override
+            public AppConfigurationEntry[] getAppConfigurationEntry(String name) {
+                return new AppConfigurationEntry[]{
+                    new AppConfigurationEntry(
+                    "com.sun.security.auth.module.Krb5LoginModule",
+                    AppConfigurationEntry.LoginModuleControlFlag.REQUIRED,
+                    new HashMap()
+                    )
+                };
+            }
+        };
+    }
+
+    public static CallbackHandler getNamePasswdRealmHandler() {
+        final String credentials = "user1";
+        return new CallbackHandler() {
+            @Override
+            public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
+                for (Callback callback : callbacks) {
+                    if (callback instanceof NameCallback) {
+                        ((NameCallback) callback).setName(credentials);
+                    } else if (callback instanceof PasswordCallback) {
+                        ((PasswordCallback) callback).setPassword(credentials.toCharArray());
+                    } else if (callback instanceof RealmCallback) {
+                        RealmCallback rc = (RealmCallback) callback;
+                        rc.setText(rc.getDefaultText());
+                    } else {
+                        throw new UnsupportedCallbackException(callback, "Unrecognized SASL Callback");
+                    }
+                }
+            }
+        };
     }
 }

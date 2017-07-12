@@ -121,18 +121,7 @@ public class GssApiMechanismTests extends AlgorithmTest {
                         }
                     }
                 }
-            }, new Configuration() {
-                @Override
-                public AppConfigurationEntry[] getAppConfigurationEntry(String name) {
-                    return new AppConfigurationEntry[]{
-                        new AppConfigurationEntry(
-                        "com.sun.security.auth.module.Krb5LoginModule",
-                        AppConfigurationEntry.LoginModuleControlFlag.OPTIONAL,
-                        new HashMap()
-                        )
-                    };
-                }
-            });
+            }, Misc.getKrb5Configuration());
             lc.login();
             final Subject subject = lc.getSubject();
             final Principal p = new ArrayList<>(subject.getPrincipals()).get(0);
