@@ -33,11 +33,12 @@ else
 fi
 
 JSVC_VERSION=commons-daemon-1.0.15
+JSVC_JAR=${JSVC_VERSION}.jar
 JSVC_SRC=${JSVC_VERSION}-src
 JSVC_SRC_TARBALL=${TESTSRC}/${JSVC_VERSION}-src.tar.gz
 JSVC_NATIVE_DIR=${JSVC_SRC}/src/native/unix
 JSVC_NATIVE_BIN=${JSVC_SRC}/src/native/unix/jsvc
-JSVC_DAEMON_JAR=${TESTSRC}/commons-daemon-1.0.15.jar
+JSVC_DAEMON_JAR=${TESTSRC}/${JSVC_JAR}
 PIDFILE=$( pwd )/jsvc.pid
 
 tar -xf ${JSVC_SRC_TARBALL}
@@ -46,7 +47,7 @@ pushd ${JSVC_NATIVE_DIR}
 make
 popd
 
-${JSVC_NATIVE_BIN} -java-home ${TESTJAVA} -debug -outfile /dev/stdout -errfile /dev/stderr -pidfile ${PIDFILE} -cp ${TESTSRCPATH}:${TESTCLASSES} HelloWorld
+${JSVC_NATIVE_BIN} -java-home ${TESTJAVA} -debug -outfile /dev/stdout -errfile /dev/stderr -pidfile ${PIDFILE} -cp ${TESTSRCPATH}/${JSVC_JAR}:${TESTCLASSES} HelloWorld
 
 sleep 5
 
