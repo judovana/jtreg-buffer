@@ -39,11 +39,16 @@ import cryptotest.utils.AlgorithmInstantiationException;
 import cryptotest.utils.AlgorithmRunException;
 import cryptotest.utils.AlgorithmTest;
 import cryptotest.utils.TestResult;
-import cryptotest.utils.Xml;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import java.security.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import javax.xml.crypto.Data;
+import javax.xml.crypto.OctetStreamData;
 import javax.xml.crypto.dom.DOMStructure;
 import javax.xml.crypto.dsig.TransformService;
 import javax.xml.crypto.dsig.spec.TransformParameterSpec;
@@ -51,8 +56,9 @@ import javax.xml.crypto.dsig.spec.XPathFilter2ParameterSpec;
 import javax.xml.crypto.dsig.spec.XPathFilterParameterSpec;
 import javax.xml.crypto.dsig.spec.XPathType;
 import javax.xml.crypto.dsig.spec.XSLTTransformParameterSpec;
-
-import org.w3c.dom.Node;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
 
 /*
  * IwishThisCouldBeAtTest
@@ -73,28 +79,71 @@ public class TransformServiceTests extends AlgorithmTest {
     protected void checkAlgorithm(Provider.Service service, String alias) throws
             AlgorithmInstantiationException, AlgorithmRunException {
         try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            String xslt
+                    = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                    + "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">"
+                    + "   <xsl:template match=\"/\">"
+                    + "      <html>"
+                    + "         <body>"
+                    + "            <p><xsl:value-of select=\"root/child/name\"/></p>"
+                    + "            <p><xsl:value-of select=\"root/child/age\"/></p>"
+                    + "         </body>"
+                    + "      </html>"
+                    + "   </xsl:template>"
+                    + "</xsl:stylesheet>";
+            InputStream xsltStream = new ByteArrayInputStream(xslt.getBytes(StandardCharsets.UTF_8));
+            Document document = documentBuilder.parse(xsltStream);
+
             TransformService ts = TransformService.getInstance(alias, "DOM", service.getProvider());
             final TransformParameterSpec params;
             if (service.getAlgorithm().endsWith("/REC-xslt-19991116")) {
-                Node element = Xml.fakeXml();
-                DOMStructure stylesheet = new DOMStructure(element);
+                //Node element = Xml.fakeXml();
+                DOMStructure stylesheet = new DOMStructure(document.getDocumentElement());
                 XSLTTransformParameterSpec spec = new XSLTTransformParameterSpec(stylesheet);
                 params = spec;
             } else if (service.getAlgorithm().endsWith("/xmldsig-filter2")) {
                 List<XPathType> list = new ArrayList<>();
                 list.add(new XPathType("/", XPathType.Filter.UNION));
                 params = new XPathFilter2ParameterSpec(list);
+                return;
             } else if (service.getAlgorithm().endsWith("/REC-xpath-19991116")) {
                 params = new XPathFilterParameterSpec("/");
+                return;
             } else {
                 params = null;
+                return;
             }
             ts.init(params);
-            //blah,to lazy todo,and was never buggy
-            //ts.transform(null, null)
+
+            String xml
+                    = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                    + "<root>"
+                    + "   <child>"
+                    + "      <name>name1</name>"
+                    + "      <age>23</age>"
+                    + "   </child>"
+                    + "   <child>"
+                    + "      <name>name2</name>"
+                    + "      <age>25</age>"
+                    + "   </child>"
+                    + "</root>";
+
+            InputStream stream = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8));
+            Data data = new OctetStreamData(stream);
+            DOMStructure s = new DOMStructure(document.getDocumentElement());
+
+            ts.marshalParams(s, null);
+            OctetStreamData output = (OctetStreamData) ts.transform(data, null);
+            Scanner scan = new Scanner(output.getOctetStream()).useDelimiter("\\A");
+            String result = scan.hasNext() ? scan.next() : "";
+            System.out.println("output: " + result);
+
         } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException ex) {
             throw new AlgorithmInstantiationException(ex);
-        } catch (UnsupportedOperationException | InvalidParameterException | ProviderException ex) {
+        } catch (Exception ex) {
             throw new AlgorithmRunException(ex);
         }
 
