@@ -80,10 +80,10 @@ public class XMLSignatureFactoryTest extends AlgorithmTest {
             
             XMLSignature xmlSignature = factory.newXMLSignature(si, ki);
             Document document = createXMLDocument();
-            System.out.println(printDoc(document));
+            printResult(printDoc(document));
             DOMSignContext context = new DOMSignContext(kp.getPrivate(), document.getDocumentElement());
             xmlSignature.sign(context);
-            System.out.println(printDoc(document));
+            printResult(printDoc(document));
                       
             
         } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | KeyException | ParserConfigurationException | MarshalException | XMLSignatureException e) {
