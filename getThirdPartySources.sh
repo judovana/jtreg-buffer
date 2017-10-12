@@ -13,7 +13,7 @@ readonly SCRIPT_DIR="$( cd -P "$( dirname "$SCRIPT_SOURCE" )" && pwd )"
 pushd $SCRIPT_DIR/test/reproducers
 if [ -e cryptoTest/cryptotest ] ; then 
   cd cryptoTest 
-  git pull
+  git pull -v
 else
   git clone https://github.com/judovana/CryptoTest.git
   mv -vf CryptoTest/* CryptoTest/.git* cryptoTest
