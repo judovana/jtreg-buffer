@@ -12,8 +12,8 @@ import java.util.Random;
  * @test
  * @bug 1112806
  * @summary  heck that LineBreakMeasurer.nextLayout does not throw ArrayIndexOutOfBoundsException
+ * @run main/timeout=600     GlyphBug4
  */
-
 public class GlyphBug4 {
 
   private static final String[] FONT_NAMES = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
