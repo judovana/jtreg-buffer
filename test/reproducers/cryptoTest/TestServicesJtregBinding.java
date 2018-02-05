@@ -2,6 +2,16 @@
  * WARNING build path must be regenerated with each test added:(
  * 
  * @test
+ * @modules java.base/com.sun.crypto.provider
+ *          java.base/sun.security.internal.spec
+ *          java.base/sun.security.ssl
+ *          java.base/sun.security.x509
+ *          java.security.jgss/sun.security.jgss
+ *          java.security.jgss/sun.security.jgss.krb5
+ *          java.security.jgss/sun.security.krb5
+ *          java.smartcardio/javax.smartcardio
+ *          java.xml.crypto/org.jcp.xml.dsig.internal.dom
+ *          jdk.crypto.ec/sun.security.ec
  * @bug 6666666
  * @build cryptotest.CryptoTest
  *        cryptotest.Settings

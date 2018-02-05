@@ -1,5 +1,9 @@
 /*
  * @test
+ * @modules java.base/com.sun.crypto.provider
+ *          java.base/sun.security.internal.spec
+ *          java.base/sun.security.ssl
+ *          java.xml.crypto/org.jcp.xml.dsig.internal.dom
  * @bug 6666666
  * @build cryptotest.tests.KeyInfoFactoryTests
  *        cryptotest.Settings

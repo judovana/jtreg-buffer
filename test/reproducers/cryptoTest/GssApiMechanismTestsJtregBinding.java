@@ -1,5 +1,8 @@
 /*
  * @test
+ * @modules java.security.jgss/sun.security.jgss
+ *          java.security.jgss/sun.security.jgss.krb5
+ *          java.security.jgss/sun.security.krb5
  * @bug 6666666
  * @build cryptotest.tests.GssApiMechanismTests
  *        cryptotest.Settings
