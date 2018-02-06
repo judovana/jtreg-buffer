@@ -3,7 +3,7 @@
  * @test
  * @bug 1513989
  * @summary  verify that cacerts are set right and jdk can suceed in https connection
- * @run main/timeout=1/othervm AttemptHttps
+ * @run main/timeout=5/othervm AttemptHttps
  */
 
 
