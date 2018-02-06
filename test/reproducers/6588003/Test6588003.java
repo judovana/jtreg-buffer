@@ -22,6 +22,7 @@
  */
 
 /* @test
+ * @modules java.desktop/sun.awt
    @bug 6588003
    @summary LayoutQueue should not share its DefaultQueue across AppContexts
    @author Peter Zhelezniakov

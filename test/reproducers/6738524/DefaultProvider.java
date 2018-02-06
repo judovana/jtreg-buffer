@@ -1,4 +1,5 @@
 /* @test
+ * @modules java.desktop/com.sun.media.sound
    @bug 6738524
    @summary Tests that com.sun.media.sound.JDK13Services.getDefaultProvider does not allow to get system properties
    @author Alex Menkov

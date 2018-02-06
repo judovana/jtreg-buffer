@@ -23,6 +23,7 @@
 
 /*
  * @test MemoryAllocatorTest.java
+ * @modules jdk.jartool/sun.tools.jar
  * @bug 6755943 6792554
  * @summary Checks any memory overruns in archive length.
  * @run main/timeout=1200 MemoryAllocatorTest

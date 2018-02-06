@@ -23,6 +23,7 @@
 
 /*
  * @test
+ * @modules java.base/sun.security.util
  * @bug 6864911
  * @summary ASN.1/DER input stream parser needs more work
  * @run  main/othervm BadValue 

@@ -3,6 +3,7 @@
  * dont forget to include 0894172 as whole bug id
  *
  * @test
+ * @modules java.management/com.sun.jmx.mbeanserver
  * @bug 0894172
  * @summary sandbox bypas by MozJSCLTest
  * @author probably thoger

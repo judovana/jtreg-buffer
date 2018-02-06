@@ -42,6 +42,8 @@ import com.sun.org.apache.bcel.internal.generic.Type;
 
 /*
  * @test
+ * @modules java.xml/com.sun.org.apache.bcel.internal
+ *          java.xml/com.sun.org.apache.bcel.internal.generic
  * @bug 7020373
  * @summary OpenJDK: JVM memory corruption via certain bytecode (HotSpot, 7020373)
  * @run shell runtest.sh

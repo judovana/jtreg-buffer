@@ -24,6 +24,7 @@
 
 /*
  * @test
+ * @modules jdk.crypto.cryptoki/sun.security.pkcs11
  * @bug 6913047
  * @summary Native memory exhaustion using SunPKCS11 on 32 bits JVM.
  * @run main/othervm/timeout=120 -XX:+UseParallelGC -Xmx3500m Bug6913047

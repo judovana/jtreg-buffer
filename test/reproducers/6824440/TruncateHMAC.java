@@ -23,6 +23,10 @@
 
 /**
  * @test %I% %E%
+ * @modules java.xml.crypto/com.sun.org.apache.xml.internal.security
+ *          java.xml.crypto/com.sun.org.apache.xml.internal.security.c14n
+ *          java.xml.crypto/com.sun.org.apache.xml.internal.security.signature
+ *          java.xml.crypto/com.sun.org.apache.xml.internal.security.utils
  * @bug 6824440
  * @summary Check that Apache XMLSec APIs will not accept HMAC truncation 
  *    lengths less than minimum bound

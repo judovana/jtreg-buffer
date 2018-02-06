@@ -1,5 +1,6 @@
 /*
  * @test
+ * @modules java.desktop/sun.awt
  * @bug 6351654
  * @summary Make sure that TimeZone.get/setDefault methods uses
  *          AppContext if no permission is given for global setting.
