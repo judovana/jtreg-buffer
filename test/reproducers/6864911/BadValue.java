@@ -24,6 +24,7 @@
 /*
  * @test
  * @modules java.base/sun.security.util
+ *          jdk.unsupported/sun.misc
  * @bug 6864911
  * @summary ASN.1/DER input stream parser needs more work
  * @run  main/othervm BadValue 
@@ -31,7 +32,9 @@
 
 import java.io.*;
 import sun.security.util.*;
-import sun.misc.IOUtils;
+/* Changed to sun.misc.*, since IOUtils was moved from sun.misc to
+   sun.security.util in JDK9. This way it should work for both JDK8 and JDK9. */
+import sun.misc.*;
 
 public class BadValue {
 
