@@ -1,14 +1,14 @@
 #!/bin/sh
 
-# This tool can be used to generate @modules jtreg tag ( which is required when
+# This tool can be used to generate modules jtreg tag ( which is required when
 # accessing private apis on JDK9. It requires results of failed run on JDK9
 # (with .jtr files) as input. It also requires JDK9 forest, where it searches
 # for modules.
-# It automatically modifies source files of tests as required (adds @modules tag
+# It automatically modifies source files of tests as required (adds modules tag
 # where necessary) and prints info about modified files.
 # When this tool cannot make modifications by itself it at least prints info
 # about modules, which are required by test. ( Script is carefull, it only
-# modifies java jtregs (not shell ones), and only tests, where @modules tag is
+# modifies java jtregs (not shell ones), and only tests, where modules tag is
 # not already present. )
 
 set -eu

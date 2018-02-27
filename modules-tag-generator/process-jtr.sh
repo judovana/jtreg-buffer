@@ -94,7 +94,7 @@ if cat "$jtrFile" | grep -q "test result: Failed" ; then
 		)"
 		# if some modules were found
 		if [ -n "${requiredModules}" ] ; then
-			# only process files, which do not have @modules tag yet
+			# only process files, which do not have modules tag yet
 			if ! cat "${testFileLocal}" | grep -q "^[[:space:]]*[/]*\\**[[:space:]]*@modules" ; then
 				# generate module tag (with modules)
 				moduleJtregTag="$(
@@ -105,19 +105,19 @@ if cat "$jtrFile" | grep -q "test result: Failed" ; then
 						tag="        "
 					done
 				)"
-				# add tage after @test tag
+				# add tage after test tag
 				testTagPattern="^[[:space:]]*[/]*\\*\\+[[:space:]]*@test[[:space:]]*.*\$"
 				if cat "${testFileLocal}" | grep -q "${testTagPattern}" ; then
 					sed -i -e "s|${testTagPattern}|&${moduleJtregTag}|" "${testFileLocal}"
 					printf "INFO: automatically modified file: %s\\n" "${testFileLocal}"
 				else
-					# test was not able to find expected patern with @test tag
+					# test was not able to find expected patern with test tag
 					# manual fix is needed
 					# so at least print test file and required modules
 					printf "INFO: manual fix needed:\\nfile: %s\\n%s\\n\\n" "${testFileLocal}" "${requiredModules}"
 				fi
 			else
-				# test already contains @modules tag
+				# test already contains modules tag
 				# manual fix is needed
 				# so at least print test file and required modules
 				printf "INFO: manual fix needed:\\nfile: %s\\n%s\\n\\n" "${testFileLocal}" "${requiredModules}"
