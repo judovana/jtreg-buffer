@@ -40,6 +40,7 @@ import java.security.Key;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -51,9 +52,23 @@ public class Bug6913047 {
     public static void main(String[] args) throws Exception {
         
         Security.setProperty("crypto.policy", "unlimited");
-        
+
+        /* Use correct library path on both 32bit or 64bit systems.
+           Even though reproducer is for 32bit JVM, it is inconvinient if it
+           throws exception because of wrong library dir on 64-bit. */
+        String nssLibDir = null;
+        for (String libDir : System.getProperty("java.library.path").split(":")) {
+            if (Pattern.matches("^/usr/lib[0-9]*$", libDir)) {
+                nssLibDir = libDir;
+                break;
+            }
+        }
+        if (nssLibDir == null) {
+            nssLibDir = "/usr/lib";
+        }
+
         String nSSConfigString = "name = NSS\n" +
-                                 "nssLibraryDirectory = /usr/lib\n" +
+                                 "nssLibraryDirectory = " + nssLibDir + "\n" +
                                  "nssDbMode = noDb\n" +
                                  "attributes = compatibility\n";
         InputStream nSSConfigStream = new ByteArrayInputStream(nSSConfigString.getBytes(StandardCharsets.UTF_8));      
