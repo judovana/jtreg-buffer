@@ -23,8 +23,8 @@
  * @test
  * @bug 8075942
  * @summary test there is no exception rendering a dashed stroke
- * @run DashStrokeTest
- * @run -Dsun.java2d.renderer=sun.java2d.pisces.PiscesRenderingEngine DashStrokeTest
+ * @run main/othervm DashStrokeTest
+ * @run main/othervm -Dsun.java2d.renderer=sun.java2d.pisces.PiscesRenderingEngine DashStrokeTest
  */
 
 import java.awt.BasicStroke;
