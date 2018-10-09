@@ -2,7 +2,7 @@
 # @test
 # @bug 1566890
 # @summary test for 1566890
-# @run shell/timeout=100 runtest.sh
+# @run shell/timeout=100 speculative-store-bypass.sh
 
 set -eu
 

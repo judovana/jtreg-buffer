@@ -1,6 +1,6 @@
 #!/bin/sh
 # @test
-# @requires ( os.arch = "x86" ) | ( os.arch == "i386" ) | ( os.arch == "i486" ) | ( os.arch == "i586" ) | ( os.arch == "i686" )
+# @requires ( os.arch == "x86" ) | ( os.arch == "i386" ) | ( os.arch == "i486" ) | ( os.arch == "i586" ) | ( os.arch == "i686" )
 # @bug 1536623
 # @summary 32 bit java app started via JNI crashes with larger stack sizes
 # @run shell/timeout=100 32-bit-JNI-crash-larger-stack.sh
