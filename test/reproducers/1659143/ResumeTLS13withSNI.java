@@ -29,7 +29,7 @@
  * @bug 8211806 1659143
  * @summary TLS 1.3 handshake server name indication is missing on a session resume
  * @run main/othervm ResumeTLS13withSNI
- * @requires jdk.version.major >= 8
+ * @requires jdk.version.major >= 11
  */
 
 import javax.net.ssl.*;
