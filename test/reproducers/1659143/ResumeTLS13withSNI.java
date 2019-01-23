@@ -65,7 +65,7 @@ public class ResumeTLS13withSNI {
     /*
      * The following is to set up the keystores.
      */
-    private static final String pathToStores = "../etc";
+    private static final String pathToStores = "";
     private static final String keyStoreFile = "keystore";
     private static final String trustStoreFile = "truststore";
     private static final char[] passphrase = "passphrase".toCharArray();
