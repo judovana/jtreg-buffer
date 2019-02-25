@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2017, Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -35,8 +35,10 @@
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.Provider;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,12 +73,25 @@ public class Bug6913047 {
                                  "nssLibraryDirectory = " + nssLibDir + "\n" +
                                  "nssDbMode = noDb\n" +
                                  "attributes = compatibility\n";
-        InputStream nSSConfigStream = new ByteArrayInputStream(nSSConfigString.getBytes(StandardCharsets.UTF_8));      
+        InputStream nSSConfigStream = new ByteArrayInputStream(nSSConfigString.getBytes(StandardCharsets.UTF_8));
+        Provider pkcs11provider;
 
-        SunPKCS11 p = new SunPKCS11(nSSConfigStream);
-        
         try {
-            Security.addProvider(p);
+            // configure does not seem to support ByteArrayInputStream config files
+            // double hyphen is an undocumented feature, so it might change
+            Method configure = Provider.class.getMethod("configure", String.class);
+            Provider pkcs11 = Security.getProvider("SunPKCS11");
+            pkcs11provider = (Provider) configure.invoke(pkcs11, "--" + nSSConfigString);
+
+        } catch (NoSuchMethodException e) {
+            // for java versions lower than 9
+            java.lang.reflect.Constructor<SunPKCS11> pkcs11;
+            pkcs11 = SunPKCS11.class.getConstructor(InputStream.class);
+            pkcs11provider = pkcs11.newInstance(nSSConfigStream);
+        }
+
+        try {
+            Security.addProvider(pkcs11provider);
         } catch (java.security.ProviderException e) {
         }
 
@@ -99,8 +114,8 @@ public class Bug6913047 {
             
             // DEBUG (uncomment to enable)
             //System.out.println("Iteration: " + i);
-            
-            Cipher c = Cipher.getInstance("AES/CBC/NoPadding", p);
+
+            Cipher c = Cipher.getInstance("AES/CBC/NoPadding", pkcs11provider);
 
             // Generate leak with unique keys
             
