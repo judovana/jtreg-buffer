@@ -42,6 +42,10 @@ public class BadValue {
 
         // Test IOUtils.readFully
 
+        // Integer.MAX does not work in jdk 9+ in this paticular case, instead it throws Exception with EOF
+        String[] nb = System.getProperty("java.version").split("\\.");
+        boolean isModularJdk = Integer.valueOf(nb[0]) > 1;
+
         // We have 4 bytes
         InputStream in = new ByteArrayInputStream(new byte[10]);
         byte[] bs = IOUtils.readFully(in, 4, true);
@@ -55,13 +59,22 @@ public class BadValue {
         }
         // MAX read as much as it can
         in = new ByteArrayInputStream(new byte[10]);
-        bs = IOUtils.readFully(in, Integer.MAX_VALUE, true);
+        if (isModularJdk)
+            bs = IOUtils.readFully(in, 10, true);
+        else {
+            bs = IOUtils.readFully(in, Integer.MAX_VALUE, true);
+        }
         if (bs.length != 10 || in.available() != 0) {
             throw new Exception("Second read error");
         }
         // MAX ignore readAll
         in = new ByteArrayInputStream(new byte[10]);
-        bs = IOUtils.readFully(in, Integer.MAX_VALUE, false);
+        if (isModularJdk)
+            bs = IOUtils.readFully(in, 10, false);
+        else {
+            bs = IOUtils.readFully(in, Integer.MAX_VALUE, false);
+        }
+
         if (bs.length != 10 || in.available() != 0) {
             throw new Exception("Second read error");
         }
@@ -74,11 +87,16 @@ public class BadValue {
             // OK
         }
         int bignum = 10 * 1024 * 1024;
-        bs = IOUtils.readFully(new SuperSlowStream(bignum), -1, true);
-        if (bs.length != bignum) {
-            throw new Exception("Fourth read error");
+        try{
+            bs = IOUtils.readFully(new SuperSlowStream(bignum), -1, true);
+            if (bs.length != bignum) {
+                throw new Exception("Fourth read error");
+            }} catch (IOException ex){
+            if (!ex.getMessage().equals("Invalid length")){
+                throw new Exception("Fourth read error");
+            }
+            // else ok, jdk9+ does not allow negative integer and throws this exception
         }
-
         // Test DerValue
         byte[] input = {0x04, (byte)0x84, 0x40, 0x00, 0x42, 0x46, 0x4b};
         try {
