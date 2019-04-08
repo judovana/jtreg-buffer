@@ -4,7 +4,12 @@ JAVAC=${TESTJAVA}${FS}bin${FS}javac
 JAVA=${TESTJAVA}${FS}bin${FS}java
 
 
-$JAVAC  -d . $TESTSRC/GenOOMCrashClass.java
+if $JAVA --version ; then
+    $JAVAC --add-exports java.xml/com.sun.org.apache.bcel.internal.generic=ALL-UNNAMED --add-exports java.xml/com.sun.org.apache.bcel.internal.classfile=ALL-UNNAMED -d . $TESTSRC/GenOOMCrashClass.java
+else
+    $JAVAC -d . $TESTSRC/GenOOMCrashClass.java
+fi
+
 R=$?
 if [[ $R -ne 0 ]] ; then
   echo "Compilation1 failed"

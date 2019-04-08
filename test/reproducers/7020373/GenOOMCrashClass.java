@@ -20,7 +20,6 @@
 import java.applet.Applet;
 import java.io.IOException;
 
-import com.sun.org.apache.bcel.internal.Constants;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import com.sun.org.apache.bcel.internal.generic.ALOAD;
@@ -42,8 +41,6 @@ import com.sun.org.apache.bcel.internal.generic.Type;
 
 /*
  * @test
- * @modules java.xml/com.sun.org.apache.bcel.internal
- *          java.xml/com.sun.org.apache.bcel.internal.generic
  * @bug 7020373
  * @summary OpenJDK: JVM memory corruption via certain bytecode (HotSpot, 7020373)
  * @run shell runtest.sh
@@ -52,8 +49,22 @@ public class GenOOMCrashClass {
 
     public static  String genOOMCrashClass(int maxmeth, int nums/*String[] a*/) throws Exception {
         String theClassFile = "OOMCrashClass"+nums+"_"+maxmeth;
+        Class <?> cls;
+        try{
+            cls = Class.forName("com.sun.org.apache.bcel.internal.Constants");
+
+
+        }catch (ClassNotFoundException ex){
+            cls = Class.forName("com.sun.org.apache.bcel.internal.Const");
+
+
+        }
+        short accPub  = (short)cls.getDeclaredField("ACC_PUBLIC").get(short.class);
+        short accSuper = (short)cls.getDeclaredField("ACC_SUPER").get(short.class);
+        short accStatic = (short)cls.getDeclaredField("ACC_STATIC").get(short.class);
+
         ClassGen cg = new ClassGen(theClassFile, "java.applet.Applet",
-                "<generated>", Constants.ACC_PUBLIC | Constants.ACC_SUPER, null);
+                "<generated>", accPub | accSuper, null);
         ConstantPoolGen cp = cg.getConstantPool(); // cg creates constant pool
 
         //      int br0 = cp.addClass("marc.schoenefeld.2008");
@@ -70,8 +81,8 @@ public class GenOOMCrashClass {
             InstructionList il = new InstructionList();
 
             String methodName = maxmeth == 1 ? "main" : "main" + j;
-            MethodGen mg = new MethodGen(Constants.ACC_STATIC
-                    | Constants.ACC_PUBLIC,// access flags
+            MethodGen mg = new MethodGen(accStatic
+                    | accPub,// access flags
                     Type.VOID, // return type
                     argtype, new String[] { "argv" }, // arg
                     // names
@@ -121,8 +132,7 @@ public class GenOOMCrashClass {
             cg.addMethod(mg.getMethod());
         }
         /* Add public <init> method, i.e. empty constructor */
-        cg.addEmptyConstructor(Constants.ACC_PUBLIC);
-
+        cg.addEmptyConstructor(accPub);
         /* Get JavaClass object and dump it to file. */
         try {
             System.out.println("dumping:"+theClassFile);
