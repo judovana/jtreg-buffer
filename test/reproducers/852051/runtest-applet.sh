@@ -4,6 +4,7 @@
 # @test
 # @bug 0852051
 # @summary  CVE-2012-4681-Inject-any-unsigned-code-via-flaw-in-bean-s-statement
+# @requires  jdk.version.major < 9
 # @run shell runtest-applet.sh
 
 
