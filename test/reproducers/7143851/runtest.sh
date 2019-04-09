@@ -1,6 +1,7 @@
 # @test
 # @bug 7143851
 # @summary CVE-2012-1719-OpenJDK-mutable-repository-identifiers-in-generated-stub-code-CORBA-7143851
+# @requires jdk.version.major <= 10
 # @run shell  runtest.sh
 
 # set platform-dependent variables
@@ -9,7 +10,7 @@ case "$OS" in
   SunOS | Linux )
     PS=":"
     FS="/"
-    ;;
+    ;;J
   Windows_* | CYGWIN_NT* )
     PS=";"
     FS="\\"
