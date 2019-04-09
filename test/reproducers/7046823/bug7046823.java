@@ -3,6 +3,7 @@
   @bug       7046823 
   @summary   Problem with scripting/javascript
   @build     bug7046823
+  @requires  jdk.version.major < 9
   @run shell bug7046823.sh
 */
 
