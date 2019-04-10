@@ -10,7 +10,7 @@ case "$OS" in
   SunOS | Linux )
     PS=":"
     FS="/"
-    ;;J
+    ;;
   Windows_* | CYGWIN_NT* )
     PS=";"
     FS="\\"
