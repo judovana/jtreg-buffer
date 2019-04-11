@@ -4,10 +4,16 @@
 # @summary test for 1566890
 # @run shell/timeout=100 speculative-store-bypass.sh
 
+if which dnf ; then
+    sudo dnf install strace -y
+elif which yum ; then
+    sudo yum install strace -y
+fi
+
 set -eu
 
 FS="/"
-JAVA=${TESTJAVA}${FS}jre${FS}bin${FS}java
+JAVA=${TESTJAVA}${FS}bin${FS}java
 
 if ! type strace &> /dev/null ; then
 	echo "ERROR: Missing strace!" 1>&2
