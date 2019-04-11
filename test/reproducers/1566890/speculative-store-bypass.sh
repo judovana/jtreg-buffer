@@ -12,8 +12,6 @@ if ! type strace &> /dev/null ; then
   fi
 fi
 
-set -eu
-
 FS="/"
 JAVA=${TESTJAVA}${FS}bin${FS}java
 
