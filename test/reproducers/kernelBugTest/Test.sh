@@ -16,7 +16,7 @@
 #                 3.10.0-514.21.2 <tel:3.10.0-514.21.2>.el7
 #                 3.10.0-514.26.1 <tel:3.10.0-514.26.1>.el7
 # @requires os.family != "windows"
-# @library commons-daemon-1.0.15.jar
+# @library commons-daemon-1.1.0.jar
 # @compile  HelloWorld.java
 # @run shell/timeout=30 Test.sh
 
@@ -32,7 +32,7 @@ else
   exit 1
 fi
 
-JSVC_VERSION=commons-daemon-1.0.15
+JSVC_VERSION=commons-daemon-1.1.0
 JSVC_JAR=${JSVC_VERSION}.jar
 JSVC_SRC=${JSVC_VERSION}-src
 JSVC_SRC_TARBALL=${TESTSRC}/${JSVC_VERSION}-src.tar.gz
