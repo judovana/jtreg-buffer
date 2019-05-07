@@ -1,6 +1,7 @@
 /*
  * @test
  * @modules java.desktop/sun.applet
+ * @requires jdk.version.major < 12
  * @bug 6378709
  * @summary Verifies that SecurityManager can't be fooled with javax.swing.Timer
  * @author Alexander Potochkin

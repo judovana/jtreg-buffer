@@ -2,6 +2,7 @@
  * @test
  * @modules java.desktop/sun.applet
  * @bug 6378709
+ * @requires jdk.version.major < 12
  * @summary Verifies that SecurityManager can't be fooled with EventQueue.postEvent()
  * @author Alexander Potochkin
  * @build HackedFileChooser
