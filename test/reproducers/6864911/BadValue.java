@@ -43,9 +43,14 @@ public class BadValue {
         // Test IOUtils.readFully
 
         // Integer.MAX does not work in jdk 9+ in this paticular case, instead it throws Exception with EOF
-        String[] nb = System.getProperty("java.version").split("\\.");
-        boolean isModularJdk = Integer.valueOf(nb[0]) > 1;
-
+        boolean isModularJdk = true;
+        try {
+            // check if Runtime.Version class is present (jdk9+ only)
+            Class<?> cls = Class.forName("java.lang.Runtime$Version");
+        } catch (ClassNotFoundException e){
+            // if not, it means version of jdk is 8 or lower
+            isModularJdk = false;
+        }
         // We have 4 bytes
         InputStream in = new ByteArrayInputStream(new byte[10]);
         byte[] bs = IOUtils.readFully(in, 4, true);
