@@ -26,6 +26,7 @@
  * @bug 9999999
  * @summary JDK-8218854 FontMetrics.getMaxAdvance may be less than the maximum FontMetrics.charWidth
  * @requires jdk.version.major >= 8
+ * @requires os.arch != "aarch64"
  * @run main/othervm Main
  */
 

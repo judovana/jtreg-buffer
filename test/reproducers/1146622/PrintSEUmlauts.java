@@ -50,6 +50,7 @@ import java.util.regex.Pattern;
 /*
  * @test
  * @bug 8047729
+ * @requires os.arch != "aarch64"
  * @summary German 'Umlaut' not supported
  * @author Mario Torre
  */

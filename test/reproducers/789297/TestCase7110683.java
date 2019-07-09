@@ -1,6 +1,7 @@
 
 /**
  * @test
+ * @requires os.arch != "aarch64"
  * @run main/othervm TestCase7110683
  */
 

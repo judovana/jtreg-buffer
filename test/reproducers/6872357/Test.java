@@ -13,6 +13,7 @@ import java.awt.image.Raster;
 /*
  * @test
  * @bug 6872357
+ * @requires os.arch != "aarch64"
  * @summary iamge producer/observer generic error
  * @run  main/othervm Test 
  */

@@ -10,6 +10,7 @@ import java.util.Arrays;
 /*
  * @test
  * @bug 6914823
+ * @requires os.arch != "aarch64"
  * @summary image consumer producer issue
  * @run  main/othervm Test
  */

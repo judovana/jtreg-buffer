@@ -13,6 +13,7 @@ import java.awt.image.Raster;
 /*
  * @test
  * @bug 6872358
+ * @requires os.arch != "aarch64"
  * @summary iamge producer/observer generic error with catched ArrayIndexOutOfBoundsException
  * @run  main/othervm Test 
  */

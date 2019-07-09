@@ -10,6 +10,7 @@ import java.util.Random;
 /*
  * @test
  * @bug 1112806
+ * @requires os.arch != "aarch64"
  * @summary  heck that LineBreakMeasurer.nextLayout does not throw ArrayIndexOutOfBoundsException
  */
 

@@ -12,6 +12,7 @@ import java.util.Random;
 /*
  * @test
  * @bug 1098399
+ * @requires os.arch != "aarch64"
  * @summary   - Unsynchronized HashMap access causes endless loop
  * @run main/timeout=600/othervm     GlyphBug
  */

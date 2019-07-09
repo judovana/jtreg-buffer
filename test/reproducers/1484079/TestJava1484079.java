@@ -5,6 +5,7 @@ import java.awt.font.*;
 /*
  * @test
  * @bug 1484079
+ * @requires os.arch != "aarch64"
  * @summary   - when only stixfonts are installed, there is fail
  * @run main/timeout=600/othervm     TestJava1484079
  */
