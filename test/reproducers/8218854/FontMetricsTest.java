@@ -23,17 +23,17 @@
 
 /*
  * @test
- * @bug 9999999
+ * @bug 8218854
  * @summary JDK-8218854 FontMetrics.getMaxAdvance may be less than the maximum FontMetrics.charWidth
  * @requires jdk.version.major >= 8
  * @requires os.arch != "aarch64"
- * @run main/othervm Main
+ * @run main/othervm FontMetricsTest
  */
 
 import java.awt.*;
 import java.io.File;
 
-public class Main {
+public class FontMetricsTest {
 
     public static void main(String[] args) throws Exception {
         FontMetrics fm;
