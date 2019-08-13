@@ -45,7 +45,7 @@ public class ReiwaNewEraTest {
                 fail = true;
             }
             String firstReiwaDateStringShort = shortFormat.format(firstReiwaDate).toString();
-            if (!firstReiwaDateStringShort.equals("R01.05.01") && !lastHeiseiDateStringShort.equals("令和01.05.01")) {
+            if (!firstReiwaDateStringShort.equals("R01.05.01") && !firstReiwaDateStringShort.equals("令和01.05.01")) {
                 System.err.printf("%s: expected %s, got %s\n", apiName, "R01.05.01", firstReiwaDateStringShort);
                 fail = true;
             }
