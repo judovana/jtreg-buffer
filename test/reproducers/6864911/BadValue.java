@@ -26,6 +26,7 @@
  * @modules java.base/sun.security.util
  *          jdk.unsupported/sun.misc
  * @bug 6864911
+ * @requires jdk.version.major < 13
  * @summary ASN.1/DER input stream parser needs more work
  * @run  main/othervm BadValue 
  */
