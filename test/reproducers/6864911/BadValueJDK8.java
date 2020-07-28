@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Sun Microsystems, Inc.  All Rights Reserved.
+ * Copyright (c) 2009, 2019, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -16,93 +16,71 @@
  * 2 along with this work; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * Please contact Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
- * CA 95054 USA or visit www.sun.com if you need additional information or
- * have any questions.
+ * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
+ * or visit www.oracle.com if you need additional information or have any
+ * questions.
  */
 
 /*
  * @test
- * @modules java.base/sun.security.util
- *          jdk.unsupported/sun.misc
  * @bug 6864911
- * @requires jdk.version.major < 13
+ * @requires jdk.version.major < 9
  * @summary ASN.1/DER input stream parser needs more work
- * @run  main/othervm BadValue 
+ * @run  main/othervm BadValueJDK8
  */
 
 import java.io.*;
 import sun.security.util.*;
-/* Changed to sun.misc.*, since IOUtils was moved from sun.misc to
-   sun.security.util in JDK9. This way it should work for both JDK8 and JDK9. */
-import sun.misc.*;
+import sun.misc.IOUtils;
 
-public class BadValue {
+public class BadValueJDK8 {
 
     public static void main(String[] args) throws Exception {
 
-        // Test IOUtils.readFully
+        // Test IOUtils.
 
-        // Integer.MAX does not work in jdk 9+ in this paticular case, instead it throws Exception with EOF
-        boolean isModularJdk = true;
-        try {
-            // check if Runtime.Version class is present (jdk9+ only)
-            Class<?> cls = Class.forName("java.lang.Runtime$Version");
-        } catch (ClassNotFoundException e){
-            // if not, it means version of jdk is 8 or lower
-            isModularJdk = false;
-        }
         // We have 4 bytes
         InputStream in = new ByteArrayInputStream(new byte[10]);
-        byte[] bs = IOUtils.readFully(in, 4, true);
+        byte[] bs = IOUtils.readExactlyNBytes(in, 4);
         if (bs.length != 4 || in.available() != 6) {
             throw new Exception("First read error");
         }
         // But only 6 left
-        bs = IOUtils.readFully(in, 10, false);
+        bs = IOUtils.readNBytes(in, 10);
         if (bs.length != 6 || in.available() != 0) {
             throw new Exception("Second read error");
         }
-        // MAX read as much as it can
+        // MAX length results in exception
         in = new ByteArrayInputStream(new byte[10]);
-        if (isModularJdk)
-            bs = IOUtils.readFully(in, 10, true);
-        else {
-            bs = IOUtils.readFully(in, Integer.MAX_VALUE, true);
+        try {
+            bs = IOUtils.readExactlyNBytes(in, Integer.MAX_VALUE);
+            throw new Exception("No exception on MAX_VALUE length");
+        } catch (EOFException ex) {
+            // this is expected
         }
-        if (bs.length != 10 || in.available() != 0) {
-            throw new Exception("Second read error");
-        }
-        // MAX ignore readAll
+        // -1 length results in exception
         in = new ByteArrayInputStream(new byte[10]);
-        if (isModularJdk)
-            bs = IOUtils.readFully(in, 10, false);
-        else {
-            bs = IOUtils.readFully(in, Integer.MAX_VALUE, false);
+        try {
+            bs = IOUtils.readExactlyNBytes(in, -1);
+            throw new Exception("No exception on -1 length");
+        } catch (IOException ex) {
+            // this is expected
         }
 
-        if (bs.length != 10 || in.available() != 0) {
-            throw new Exception("Second read error");
-        }
         // 20>10, readAll means failure
         in = new ByteArrayInputStream(new byte[10]);
         try {
-            bs = IOUtils.readFully(in, 20, true);
-            throw new Exception("Third read error");
+            bs = IOUtils.readExactlyNBytes(in, 20);
+            throw new Exception("No exception on EOF");
         } catch (EOFException e) {
             // OK
         }
         int bignum = 10 * 1024 * 1024;
-        try{
-            bs = IOUtils.readFully(new SuperSlowStream(bignum), -1, true);
-            if (bs.length != bignum) {
-                throw new Exception("Fourth read error");
-            }} catch (IOException ex){
-            if (!ex.getMessage().equals("Invalid length")){
-                throw new Exception("Fourth read error");
-            }
-            // else ok, jdk9+ does not allow negative integer and throws this exception
+        bs = IOUtils.readExactlyNBytes(new SuperSlowStreamJDK8(bignum), bignum);
+        if (bs.length != bignum) {
+            throw new Exception("Read returned small array");
         }
+
         // Test DerValue
         byte[] input = {0x04, (byte)0x84, 0x40, 0x00, 0x42, 0x46, 0x4b};
         try {
@@ -117,12 +95,12 @@ public class BadValue {
  * An InputStream contains a given number of bytes, but only returns one byte
  * per read.
  */
-class SuperSlowStream extends InputStream {
+class SuperSlowStreamJDK8 extends InputStream {
     private int p;
     /**
      * @param Initial capacity
      */
-    public SuperSlowStream(int capacity) {
+    public SuperSlowStreamJDK8(int capacity) {
         p = capacity;
     }
     @Override
