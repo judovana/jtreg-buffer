@@ -11,8 +11,8 @@ done
 readonly SCRIPT_DIR="$( cd -P "$( dirname "$SCRIPT_SOURCE" )" && pwd )"
 
 pushd $SCRIPT_DIR/test/reproducers
-if [ -e cryptoTest/cryptotest ] ; then 
-  cd cryptoTest 
+if [ -e cryptoTest/cryptotest ] ; then
+  cd cryptoTest
   git pull -v
 else
   git clone https://github.com/judovana/CryptoTest.git
@@ -21,3 +21,11 @@ else
 fi
 popd
 
+pushd $SCRIPT_DIR/test/reproducers/ssl-tests
+if [ -e ssl-tests ] ; then
+    cd ssl-tests
+    git pull -v
+else
+    git clone "https://github.com/zzambers/ssl-tests.git"
+fi
+popd

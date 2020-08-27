@@ -1,3 +1,14 @@
 syntax: glob
 test.*
 .git
+
+# ssl-tests
+test/reproducers/ssl-tests/ssl-tests
+
+# cryptotest
+test/reproducers/cryptoTest/.gitignore
+test/reproducers/cryptoTest/.github
+test/reproducers/cryptoTest/Makefile
+test/reproducers/cryptoTest/LICENSE
+test/reproducers/cryptoTest/README.md
+test/reproducers/cryptoTest/cryptotest
