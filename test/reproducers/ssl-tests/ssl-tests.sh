@@ -6,10 +6,10 @@
 
 set -eu
 
+fipsParam=""
 # skip if running in fips mode
 if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_enabled )" ] ; then
-    printf '%s\n' "FIPS mode not supported yet, skipping!" 1>&2
-    exit 0
+    fipsParam="TEST_PKCS11_FIPS=1"
 fi
 
 if [ -n "${TESTJAVA:-}" ]; then
@@ -25,4 +25,4 @@ if ! [ -d "ssl-tests" ] ; then
 fi
 
 cd "ssl-tests"
-make clean && make
+make clean && make ${fipsParam}
