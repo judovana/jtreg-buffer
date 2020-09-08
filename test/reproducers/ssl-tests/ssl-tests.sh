@@ -7,7 +7,6 @@
 set -eu
 
 fipsParam=""
-# skip if running in fips mode
 if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_enabled )" ] ; then
     fipsParam="TEST_PKCS11_FIPS=1"
 fi
