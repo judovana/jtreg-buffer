@@ -2,7 +2,7 @@
 # @test
 # @bug 6666666
 # @summary ssl-test
-# @run shell/timeout=500 ssl-tests.sh
+# @run shell/timeout=1000 ssl-tests.sh
 
 set -eu
 
