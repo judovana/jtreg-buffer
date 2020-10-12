@@ -54,7 +54,7 @@
  *        cryptotest.utils.Misc
  *        cryptotest.utils.TestResult
  *        cryptotest.utils.Xml
- * @run main/othervm cryptotest.tests.TestServices
+ * @run main/othervm/timeout=240 cryptotest.tests.TestServices
  */
 public class TestServicesJtregBinding {
 
