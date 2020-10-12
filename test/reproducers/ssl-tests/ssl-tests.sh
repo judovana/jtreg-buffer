@@ -8,7 +8,7 @@ set -eu
 
 fipsParam=""
 if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_enabled )" ] ; then
-    fipsParam="TEST_PKCS11_FIPS=1"
+    fipsParam="TEST_PKCS11_FIPS=1 SSLTESTS_CUSTOM_JAVA_PARAMS=-Djdk.tls.ephemeralDHKeySize=2048"
 fi
 
 if [ -n "${TESTJAVA:-}" ]; then
