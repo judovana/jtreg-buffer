@@ -1,8 +1,11 @@
 /*
  * @test
  * @bug 1883849
- * @run main/othervm -Djava.security.manager IllegalAccessByPkcs11ProviderWithSecurityManager
+ * @run main/othervm/secure=default/java.security.policy=empty.policy IllegalAccessByPkcs11ProviderWithSecurityManager
  */
+
+// ^^ If no policy is used jtreg itself generates access denied.
+// see: http://mail.openjdk.java.net/pipermail/jtreg-use/2018-March/000603.html
 
 import java.security.*;
 
