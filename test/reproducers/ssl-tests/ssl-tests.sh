@@ -23,5 +23,9 @@ if ! [ -d "ssl-tests" ] ; then
     fi
 fi
 
+# kerberos seems to need more complicated setup, not yet implemented (ignore for now):
+# https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/d5c320d784e5/test/sun/security/krb5/auto/SSL.java
+krbIgnoreParam="SSLTESTS_IGNORE_CIPHERS=TLS_KRB5.*"
+
 cd "ssl-tests"
-make clean && make ${fipsParam}
+make clean && make ${krbIgnoreParam} ${fipsParam}
