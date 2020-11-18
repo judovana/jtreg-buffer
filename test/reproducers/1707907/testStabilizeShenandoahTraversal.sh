@@ -1,4 +1,5 @@
 #
+# @ignore
 # @test
 # @bug 1707907
 # @requires jdk.version.major >= 8
