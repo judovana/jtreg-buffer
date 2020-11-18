@@ -39,7 +39,7 @@ fi
 cat log2
 ls -l
 
-if [[ !  -z `cat log2` ]] ; then
+if [[ !  -z `cat log2 | grep -v "^Picked up JAVA_TOOL_OPTIONS:" ` ]] ; then
   echo "Empty output"
   exit 100
 fi
