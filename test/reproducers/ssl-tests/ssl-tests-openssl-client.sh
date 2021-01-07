@@ -51,4 +51,4 @@ fi
 krbIgnoreParam="SSLTESTS_IGNORE_CIPHERS=TLS_KRB5.*"
 
 cd "ssl-tests"
-make clean && make ${krbIgnoreParam} ${fipsParam} SSLTESTS_USE_OPENSSL_CLIENT=1
+make clean && make ${krbIgnoreParam} ${fipsParam} SSLTESTS_USE_OPENSSL_CLIENT=1 SSLTESTS_IGNORE_PROTOCOLS=SSLv3
