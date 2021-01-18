@@ -30,8 +30,16 @@ if ! osSupported ; then
 fi
 
 fipsParam=""
+ignoredProtoParam="SSLTESTS_IGNORE_PROTOCOLS=SSLv3"
 if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_enabled )" ] ; then
     fipsParam="TEST_PKCS11_FIPS=1 SSLTESTS_CUSTOM_JAVA_PARAMS=-Djdk.tls.ephemeralDHKeySize=2048"
+    # ignore protocols not supported in fips mode
+    ignoredProtoParam="${ignoredProtoParam}|TLSv1|TLSv1.1"
+    if printf '%s' "${TESTJAVA:-}" | grep 'upstream' ; then
+        # upstream misses the patch to disable TLSv1.3 in fips mode
+        # (not supported by pkcs11 provider)
+        ignoredProtoParam="${ignoredProtoParam}|TLSv1.3"
+    fi
 fi
 
 if [ -n "${TESTJAVA:-}" ]; then
@@ -51,4 +59,4 @@ fi
 krbIgnoreParam="SSLTESTS_IGNORE_CIPHERS=TLS_KRB5.*"
 
 cd "ssl-tests"
-make clean && make ${krbIgnoreParam} ${fipsParam} SSLTESTS_USE_OPENSSL_CLIENT=1 SSLTESTS_IGNORE_PROTOCOLS=SSLv3
+make clean && make ${krbIgnoreParam} ${fipsParam} ${ignoredProtoParam} SSLTESTS_USE_OPENSSL_CLIENT=1
