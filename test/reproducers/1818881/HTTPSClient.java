@@ -10,6 +10,7 @@ public class HTTPSClient {
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String s, SSLSession sslSession) {
+                System.out.println("setDefaultHostnameVerifier : "+s);
                 return true;
             }
         });
