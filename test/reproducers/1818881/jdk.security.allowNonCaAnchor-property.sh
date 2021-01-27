@@ -64,18 +64,21 @@ if [ "x$GEN_KEYS" == "x" ] ; then
   GEN_KEYS="true"
 fi
 
+CA="false"
+EXT="-ext BC=ca:$CA,pathlen:3"
+
 if [ "x$GEN_KEYS" == "xtrue" ] ; then
-  $TESTJAVA/bin/keytool -genkeypair -alias ca    -keystore ca.jks             -storepass secret -keypass secret -dname cn=ca,dc=redhat,dc=com -keysize 2048 -keyalg RSA -validity 365 -ext                   "BC=ca:true,pathlen:3"
+  $TESTJAVA/bin/keytool -genkeypair -alias ca    -keystore ca.jks             -storepass secret -keypass secret -dname cn=ca,dc=redhat,dc=com -keysize 2048 -keyalg RSA -validity 365 $EXT
   $TESTJAVA/bin/keytool -exportcert -alias ca    -keystore ca.jks             -storepass secret -file ca.cer
-  $TESTJAVA/bin/keytool -genkeypair -alias jboss -keystore jboss.keystore.jks -storepass secret -keypass secret -dname "cn=jboss.usersys.redhat.com, ou=GSS,dc=redhat,dc=com" -keysize 2048 -keyalg RSA -ext "BC=ca:true,pathlen:3"
+  $TESTJAVA/bin/keytool -genkeypair -alias jboss -keystore jboss.keystore.jks -storepass secret -keypass secret -dname "cn=jboss.usersys.redhat.com, ou=GSS,dc=redhat,dc=com" -keysize 2048 -keyalg RSA $EXT
   $TESTJAVA/bin/keytool -certreq    -alias jboss -keystore jboss.keystore.jks -storepass secret -file jboss.csr
-  $TESTJAVA/bin/keytool -gencert    -alias ca    -keystore ca.jks             -storepass secret -keypass secret -infile jboss.csr -outfile jboss.cer -validity 365 -ext                                      "BC=ca:true,pathlen:3"
+  $TESTJAVA/bin/keytool -gencert    -alias ca    -keystore ca.jks             -storepass secret -keypass secret -infile jboss.csr -outfile jboss.cer -validity 365 $EXT
   $TESTJAVA/bin/keytool -importcert -alias ca    -keystore jboss.keystore.jks -storepass secret -trustcacerts -file ca.cer -noprompt
   $TESTJAVA/bin/keytool -importcert -alias jboss -keystore jboss.keystore.jks -storepass secret -file jboss.cer -noprompt
 fi
 
 $TESTJAVA/bin/keytool  -list  -keystore jboss.keystore.jks  -storepass secret  -v | grep -e "CA:" -A 5 -B 5
-$TESTJAVA/bin/keytool  -list  -keystore jboss.keystore.jks  -storepass secret  -v | grep -e "CA:true"
+$TESTJAVA/bin/keytool  -list  -keystore jboss.keystore.jks  -storepass secret  -v | grep -e "CA:$CA"
 
 OPTS="-Djavax.net.ssl.keyStore=jboss.keystore.jks 
       -Djavax.net.ssl.keyStorePassword=secret 
