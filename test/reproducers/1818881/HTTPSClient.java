@@ -16,14 +16,10 @@ public class HTTPSClient {
         });
     }
      
-    public static void main(String[] args){
-        try{
-            int port = Integer.valueOf(System.getProperty("test.port", "9999"));
-            URL url = new URL("https://127.0.0.1:"+port);
-            HttpsURLConnection client = (HttpsURLConnection) url.openConnection();
-            System.out.println("RETURN : "+client.getResponseCode());
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+    public static void main(String[] args) throws Exception {
+        int port = Integer.valueOf(System.getProperty("test.port", "9999"));
+        URL url = new URL("https://127.0.0.1:"+port);
+        HttpsURLConnection client = (HttpsURLConnection) url.openConnection();
+        System.out.println("RETURN : "+client.getResponseCode());
     }
 }

@@ -35,7 +35,11 @@ esac
 
 set -exo pipefail
 
-garbage="ca.cer
+SERVER_STORE=jboss.server.keystore.jks
+CLIENT_STORE=jboss.client.keystore.jks
+CACERT=ca.cer
+
+garbage="$CACERT
 ca.jks
 clientLog1
 clientLog2
@@ -45,7 +49,8 @@ HTTPSServer\$ServerThread.class
 HTTPSServer.class
 jboss.cer
 jboss.csr
-jboss.keystore.jks
+$CLIENT_STORE
+$SERVER_STORE
 serverLog"
 function clean() {
   if [ "x$CLEAN" == "xtrue" ] ; then
@@ -68,29 +73,33 @@ CA="false"
 EXT="-ext BC=ca:$CA,pathlen:3"
 
 if [ "x$GEN_KEYS" == "xtrue" ] ; then
-  $TESTJAVA/bin/keytool -genkeypair -alias ca    -keystore ca.jks             -storepass secret -keypass secret -dname cn=ca,dc=redhat,dc=com -keysize 2048 -keyalg RSA -validity 365 $EXT
-  $TESTJAVA/bin/keytool -exportcert -alias ca    -keystore ca.jks             -storepass secret -file ca.cer
-  $TESTJAVA/bin/keytool -genkeypair -alias jboss -keystore jboss.keystore.jks -storepass secret -keypass secret -dname "cn=jboss.usersys.redhat.com, ou=GSS,dc=redhat,dc=com" -keysize 2048 -keyalg RSA $EXT
-  $TESTJAVA/bin/keytool -certreq    -alias jboss -keystore jboss.keystore.jks -storepass secret -file jboss.csr
-  $TESTJAVA/bin/keytool -gencert    -alias ca    -keystore ca.jks             -storepass secret -keypass secret -infile jboss.csr -outfile jboss.cer -validity 365 $EXT
-  $TESTJAVA/bin/keytool -importcert -alias ca    -keystore jboss.keystore.jks -storepass secret -trustcacerts -file ca.cer -noprompt
-  $TESTJAVA/bin/keytool -importcert -alias jboss -keystore jboss.keystore.jks -storepass secret -file jboss.cer -noprompt
+  $TESTJAVA/bin/keytool -genkeypair -alias ca    -keystore $CLIENT_STORE -storepass secret -keypass secret -dname cn=ca,dc=redhat,dc=com -keysize 2048 -keyalg RSA -validity 365 $EXT
+  $TESTJAVA/bin/keytool -exportcert -alias ca    -keystore $CLIENT_STORE -storepass secret -file $CACERT
+  $TESTJAVA/bin/keytool -genkeypair -alias jboss -keystore $SERVER_STORE -storepass secret -keypass secret -dname "cn=jboss.usersys.redhat.com, ou=GSS,dc=redhat,dc=com" -keysize 2048 -keyalg RSA $EXT
+  $TESTJAVA/bin/keytool -certreq    -alias jboss -keystore $SERVER_STORE -storepass secret -file jboss.csr
+  $TESTJAVA/bin/keytool -gencert    -alias ca    -keystore $CLIENT_STORE -storepass secret -keypass secret -infile jboss.csr -outfile jboss.cer -validity 365 $EXT
+  $TESTJAVA/bin/keytool -importcert -alias ca    -keystore $SERVER_STORE -storepass secret -trustcacerts -file $CACERT -noprompt
+  $TESTJAVA/bin/keytool -importcert -alias jboss -keystore $SERVER_STORE -storepass secret -file jboss.cer -noprompt
 fi
 
-$TESTJAVA/bin/keytool  -list  -keystore jboss.keystore.jks  -storepass secret  -v | grep -e "CA:" -A 5 -B 5
-$TESTJAVA/bin/keytool  -list  -keystore jboss.keystore.jks  -storepass secret  -v | grep -e "CA:$CA"
+$TESTJAVA/bin/keytool  -list  -keystore $SERVER_STORE  -storepass secret  -v | grep -e "CA:" -A 5 -B 5
+$TESTJAVA/bin/keytool  -list  -keystore $SERVER_STORE  -storepass secret  -v | grep -e "CA:$CA"
 
-OPTS="-Djavax.net.ssl.keyStore=jboss.keystore.jks 
-      -Djavax.net.ssl.keyStorePassword=secret 
-      -Djavax.net.ssl.trustStore=jboss.keystore.jks
-      -Djavax.net.ssl.trustStorePassword=secret
-      -Djavax.net.ssl.trustStoreType=jks
-      -Dtest.port=9999"
+SOPTS="-Djavax.net.ssl.keyStore=$SERVER_STORE 
+       -Djavax.net.ssl.keyStorePassword=secret 
+       -Djavax.net.ssl.trustStore=$SERVER_STORE
+       -Djavax.net.ssl.trustStorePassword=secret
+       -Djavax.net.ssl.trustStoreType=jks
+       -Dtest.port=9999"
+COPTS="-Djavax.net.ssl.trustStore=$CLIENT_STORE
+       -Djavax.net.ssl.trustStorePassword=secret
+       -Djavax.net.ssl.trustStoreType=jks
+       -Dtest.port=9999"
 ANCHOR="-Djdk.security.allowNonCaAnchor"
 
 serverLog=serverLog
 rm -f pid
-(set -eo pipefail ; $TESTJAVA/bin/java $OPTS  HTTPSServer 2>&1 & echo $! > pid ) | tee $serverLog &
+(set -eo pipefail ; $TESTJAVA/bin/java $SOPTS  HTTPSServer 2>&1 & echo $! > pid ) | tee $serverLog &
 SERVER_PID=$(cat pid)
 rm -f pid
 
@@ -111,6 +120,23 @@ while ! cat $serverLog | grep "SSL server started"; do
   sleep 1
 done
 
-$TESTJAVA/bin/java $OPTS "$ANCHOR=false" HTTPSClient 2>&1 | tee clientLog1
-$TESTJAVA/bin/java $OPTS "$ANCHOR=true"  HTTPSClient 2>&1 | tee clientLog2
+p1=0;
+$TESTJAVA/bin/java $COPTS "$ANCHOR=false" HTTPSClient > clientLog1 2>&1 || p1=$?
+p2=0;
+$TESTJAVA/bin/java $COPTS "$ANCHOR=true"  HTTPSClient > clientLog2 2>&1 || p2=$?
+
+set +x
+echo "with  anchor=false => $p1"
+echo "with  anchor=true  => $p2"
+set -x
+test  $p2 -eq 0
+test  $p1 -gt 0
+cat clientLog2 | grep "RETURN : 200"
+cat clientLog1 | grep "RETURN : 200" && exit 1
+cat clientLog2 | grep "SSLHandshakeException" && exit 1
+cat clientLog1 | grep "SSLHandshakeException"
+set +x
+echo "if nto failed until now, PASSED"
+echo "will kill server now and clean if allowed($CLEAN)"
+set -x
 
