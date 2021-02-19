@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# @test jdk.security.allowNonCaAnchor-property
+# @test allowNonCaAnchor-property
 # @bug 1818881
-# @summary security property jdk.security.allowNonCaAnchor works
-# @run shell jdk.security.allowNonCaAnchor-property.sh
+# @summary Add security property (i.e. java.security file) version of jdk.security.allowNonCaAnchor
+# @run shell allowNonCaAnchor-javaSecurity.sh
 
 if [ "${TESTSRC}" = "" ] ; then
   TESTSRC=.
@@ -14,6 +14,10 @@ if [ "${TESTJAVA}" = "" ] ; then
   TESTJAVA=$(dirname $(dirname ${PATH_JAVA}))
   echo "TESTJAVA not set, selecting " ${TESTJAVA}
   echo "If this is incorrect, try setting the variable manually."
+fi
+
+if [ "${TESTSRC}" = "" ] ; then
+  TESTSRC="."
 fi
 
 # set platform-dependent variables
@@ -35,6 +39,24 @@ esac
 
 set -exo pipefail
 
+JAVA_SECURITY=`find -L $TESTJAVA -name java.security`
+JAVA_SECURITY_BACKUP=`mktemp`
+cp -v $JAVA_SECURITY $JAVA_SECURITY_BACKUP
+
+function restoreJavaSecurity() {
+  sudo cp -v $JAVA_SECURITY_BACKUP $JAVA_SECURITY
+}
+
+function setAnchor() {
+  local VALUE="$1"
+  local ANCHOR="jdk.security.allowNonCaAnchor"
+  local modifiedJavaSec=`mktemp`
+  cat $JAVA_SECURITY_BACKUP  > $modifiedJavaSec
+  echo "" >> $modifiedJavaSec
+  echo "$ANCHOR=$VALUE" >> $modifiedJavaSec
+  sudo cp -v $modifiedJavaSec $JAVA_SECURITY
+}
+
 SERVER_STORE=jboss.server.keystore.jks
 CLIENT_STORE=jboss.client.keystore.jks
 CACERT=ca.cer
@@ -53,14 +75,15 @@ $CLIENT_STORE
 $SERVER_STORE
 serverLog"
 function clean() {
+  restoreJavaSecurity
   if [ "x$CLEAN" == "xtrue" ] ; then
     rm -fv $garbage
   fi
 }
 trap clean EXIT # will be overwritten later if server starts
 
-$TESTJAVA/bin/javac HTTPSClient.java
-$TESTJAVA/bin/javac HTTPSServer.java
+$TESTJAVA/bin/javac -d . $TESTSRC/HTTPSClient.java
+$TESTJAVA/bin/javac -d . $TESTSRC/HTTPSServer.java
 
 if [ "x$CLEAN" == "x" ] ; then
   CLEAN="true"
@@ -95,7 +118,6 @@ COPTS="-Djavax.net.ssl.trustStore=$CLIENT_STORE
        -Djavax.net.ssl.trustStorePassword=secret
        -Djavax.net.ssl.trustStoreType=jks
        -Dtest.port=9999"
-ANCHOR="-Djdk.security.allowNonCaAnchor"
 
 serverLog=serverLog
 rm -f pid
@@ -120,10 +142,12 @@ while ! cat $serverLog | grep "SSL server started"; do
   sleep 1
 done
 
+setAnchor "false"
 p1=0;
-$TESTJAVA/bin/java $COPTS "$ANCHOR=false" HTTPSClient > clientLog1 2>&1 || p1=$?
+$TESTJAVA/bin/java $COPTS HTTPSClient > clientLog1 2>&1 || p1=$?
+setAnchor "true"
 p2=0;
-$TESTJAVA/bin/java $COPTS "$ANCHOR=true"  HTTPSClient > clientLog2 2>&1 || p2=$?
+$TESTJAVA/bin/java $COPTS HTTPSClient > clientLog2 2>&1 || p2=$?
 
 set +x
 echo "with  anchor=false => $p1"
