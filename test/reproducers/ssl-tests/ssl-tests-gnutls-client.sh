@@ -6,29 +6,6 @@
 
 set -eu
 
-osSupported() {
-    if ! [ -f /etc/redhat-release ] ; then
-        return 1
-    fi
-    rhelPattern='^Red Hat Enterprise Linux release ([0-9]+)\..*$'
-    if cat /etc/redhat-release | grep -E -q "${rhelPattern}" ; then
-        version="$(  cat /etc/redhat-release | grep -E "${rhelPattern}" \
-        | head -n 1  | sed -E "s/${rhelPattern}/\\1/g" )"
-        if [ "${version}" -ge 8 ] ; then
-            return 0
-        fi
-    fi
-    if cat /etc/redhat-release | grep -q "Fedora" ; then
-        return 0
-    fi
-    return 1
-}
-
-if ! osSupported ; then
-    echo "ssl-tests with openssl client are not supported on this os yet!" 1>&2
-    exit 0
-fi
-
 fipsParam=""
 ignoredProtoParam="SSLTESTS_IGNORE_PROTOCOLS=SSLv3"
 if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_enabled )" ] ; then
