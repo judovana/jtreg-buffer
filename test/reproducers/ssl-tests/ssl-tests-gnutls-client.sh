@@ -1,5 +1,6 @@
 #!/bin/sh
 # @test
+# @requires os.family != "windows"
 # @bug 6666666
 # @summary ssl-test with gnutls client
 # @run shell/timeout=1000 ssl-tests-gnutls-client.sh
