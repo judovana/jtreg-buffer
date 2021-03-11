@@ -43,18 +43,14 @@ JAVA_SECURITY=`find -L $TESTJAVA -name java.security`
 JAVA_SECURITY_BACKUP=`mktemp`
 cp -v $JAVA_SECURITY $JAVA_SECURITY_BACKUP
 
-function restoreJavaSecurity() {
-  sudo cp -v $JAVA_SECURITY_BACKUP $JAVA_SECURITY
-}
 
 function setAnchor() {
   local VALUE="$1"
   local ANCHOR="jdk.security.allowNonCaAnchor"
-  local modifiedJavaSec=`mktemp`
+  modifiedJavaSec=`mktemp`
   cat $JAVA_SECURITY_BACKUP  > $modifiedJavaSec
   echo "" >> $modifiedJavaSec
   echo "$ANCHOR=$VALUE" >> $modifiedJavaSec
-  sudo cp -v $modifiedJavaSec $JAVA_SECURITY
 }
 
 SERVER_STORE=jboss.server.keystore.jks
@@ -75,7 +71,6 @@ $CLIENT_STORE
 $SERVER_STORE
 serverLog"
 function clean() {
-  restoreJavaSecurity
   if [ "x$CLEAN" == "xtrue" ] ; then
     rm -fv $garbage
   fi
@@ -144,10 +139,10 @@ done
 
 setAnchor "false"
 p1=0;
-$TESTJAVA/bin/java $COPTS HTTPSClient > clientLog1 2>&1 || p1=$?
+$TESTJAVA/bin/java $COPTS -Djava.security.properties==$modifiedJavaSec HTTPSClient > clientLog1 2>&1 || p1=$?
 setAnchor "true"
 p2=0;
-$TESTJAVA/bin/java $COPTS HTTPSClient > clientLog2 2>&1 || p2=$?
+$TESTJAVA/bin/java $COPTS -Djava.security.properties==$modifiedJavaSec HTTPSClient > clientLog2 2>&1 || p2=$?
 
 set +x
 echo "with  anchor=false => $p1"
