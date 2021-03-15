@@ -5,6 +5,13 @@
 # @summary security property jdk.security.allowNonCaAnchor works
 # @run shell allowNonCaAnchor-property.sh
 
+if [ "x$OTOOL_cryptosetup" == "xfips" -o "x`update-crypto-policies --show`" == "xFIPS"  ] ; then
+  echo "fips detected, skipping 1818881 allowNonCaAnchor-property"
+  exit 0
+else
+  echo "probably non-fips environment"
+fi
+
 if [ "${TESTSRC}" = "" ] ; then
   TESTSRC=.
 fi
