@@ -2,6 +2,7 @@
 # if you are porting tests to jdk9 there is automatic @modules tag generator in reproducers regular:
 # hg clone ssh://to-openjdk1.usersys.redhat.com//mirrored/internal/regular
 # ( in modules-tag-generator directory )
+# test
 
 JAVA=$1
 TIME=`date +%s`
