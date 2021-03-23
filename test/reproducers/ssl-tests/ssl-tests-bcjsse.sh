@@ -1,7 +1,7 @@
 #!/bin/sh
 # @test
 # @bug 6666666
-# @summary ssl-test
+# @summary ssl-test-bcjsse
 # @run shell/timeout=1000 ssl-tests-bcjsse.sh
 
 set -eu
