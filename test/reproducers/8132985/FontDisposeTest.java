@@ -41,7 +41,7 @@ import sun.font.Type1Font;
  * @bug 8132985
  * @requires jdk.version.major >= 8
  * @summary Tests to verify Type1 Font scaler dispose crashes
- * @modules java.desktop/sun.font
+ * @modules java.desktop/sun.font:+open java.desktop/java.awt:+open
  * @run main/othervm FontDisposeTest fonts/bchb.pfa
  * @run main/othervm FontDisposeTest fonts/bchbi.pfa
  * @run main/othervm FontDisposeTest fonts/bchb.pfa
