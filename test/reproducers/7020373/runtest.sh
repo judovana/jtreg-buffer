@@ -2,26 +2,27 @@
 FS="/"
 JAVAC=${TESTJAVA}${FS}bin${FS}javac
 JAVA=${TESTJAVA}${FS}bin${FS}java
-
+set -x
 
 if $JAVA --version ; then
-    $JAVAC --add-exports java.xml/com.sun.org.apache.bcel.internal.generic=ALL-UNNAMED --add-exports java.xml/com.sun.org.apache.bcel.internal.classfile=ALL-UNNAMED -d . $TESTSRC/GenOOMCrashClass.java
-else
-    $JAVAC -d . $TESTSRC/GenOOMCrashClass.java
+    EXFLAGS="--add-exports java.xml/com.sun.org.apache.bcel.internal=ALL-UNNAMED --add-exports java.xml/com.sun.org.apache.bcel.internal.generic=ALL-UNNAMED --add-exports java.xml/com.sun.org.apache.bcel.internal.classfile=ALL-UNNAMED"
 fi
 
+$JAVAC $EXFLAGS -d . $TESTSRC/GenOOMCrashClass.java
 R=$?
 if [[ $R -ne 0 ]] ; then
   echo "Compilation1 failed"
   exit $R
 fi
-$JAVA GenOOMCrashClass 1 4000
+
+$JAVA $EXFLAGS GenOOMCrashClass 1 4000
 R=$?
 if [[ $R -ne 0 ]] ; then
   echo "generation failed"
   exit $R
 fi
-$JAVA OOMCrashClass4000_1 > output 2>&1
+
+$JAVA $EXFLAGS OOMCrashClass4000_1 > output 2>&1
 R=$?
 echo "***out*put***"
 cat output
