@@ -20,6 +20,14 @@ if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_e
     fi
 fi
 
+# There is some kind of issue with TLSv1.3 which is el7+aarch64 specific,
+# but that os is RHEL-ALT which is no longer updated and unsupported
+# and has old nss pkg, so just exclude TLSv1.3 there
+if cat /etc/redhat-release | grep -q "Red Hat Enterprise Linux Server release 7" \
+&& [ "aarch64" = "$( uname -m )" ] ; then
+    ignoredProtoParam="${ignoredProtoParam}|TLSv1.3"
+fi
+
 if [ -n "${TESTJAVA:-}" ]; then
     export JAVA_HOME="${TESTJAVA}"
 fi
