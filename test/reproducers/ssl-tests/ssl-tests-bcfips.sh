@@ -3,7 +3,7 @@
 # @bug 6666666
 # @requires jdk.version.major <= 11
 # @summary ssl-test-bcfips
-# @run shell/timeout=1000 ssl-tests-bcfips.sh
+# @run shell/timeout=2000 ssl-tests-bcfips.sh
 
 set -eu
 
