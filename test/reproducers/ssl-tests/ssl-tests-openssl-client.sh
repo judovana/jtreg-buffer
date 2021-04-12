@@ -10,7 +10,7 @@ set -eu
 fipsParam=""
 ignoredProtoParam="SSLTESTS_IGNORE_PROTOCOLS=SSLv3"
 if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_enabled )" ] ; then
-    fipsParam="TEST_PKCS11_FIPS=1 SSLTESTS_CUSTOM_JAVA_PARAMS=-Djdk.tls.ephemeralDHKeySize=2048"
+    fipsParam="TEST_PKCS11_FIPS=1"
     # ignore protocols not supported in fips mode
     ignoredProtoParam="${ignoredProtoParam}|TLSv1|TLSv1.1"
     if printf '%s' "${TESTJAVA:-}" | grep -q 'upstream' ; then
@@ -36,5 +36,8 @@ fi
 # https://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/d5c320d784e5/test/sun/security/krb5/auto/SSL.java
 krbIgnoreParam="SSLTESTS_IGNORE_CIPHERS=TLS_KRB5.*"
 
+# 2048 bit keys use also for non-fips as RHEL-9 no longer accepts smaller keys
+dhkeyParam="SSLTESTS_CUSTOM_JAVA_PARAMS=-Djdk.tls.ephemeralDHKeySize=2048"
+
 cd "ssl-tests"
-make clean && make ${krbIgnoreParam} ${fipsParam} ${ignoredProtoParam} SSLTESTS_USE_OPENSSL_CLIENT=1
+make clean && make ${krbIgnoreParam} ${fipsParam} ${ignoredProtoParam} ${dhkeyParam} SSLTESTS_USE_OPENSSL_CLIENT=1
