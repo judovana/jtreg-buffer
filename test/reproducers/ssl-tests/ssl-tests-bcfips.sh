@@ -20,4 +20,4 @@ if ! [ -d "ssl-tests" ] ; then
 fi
 
 cd "ssl-tests"
-make clean && make TEST_BCFIPS=1
+make clean && make TEST_BCFIPS=1 USE_URANDOM=1
