@@ -4,6 +4,7 @@
 # @test
 # @bug 1897602
 # @summary Warnings when using ManagementFactory.getPlatformMBeanServer with -Xcheck:jni VM argument
+# @requires jdk.version.major > 8
 # @run shell TestDiagnosticCommandImpl.sh
 
 if [ "x${TESTSRC}" = "x" ] ; then
