@@ -55,6 +55,11 @@ function setAnchor() {
   local VALUE="$1"
   local ANCHOR="jdk.security.allowNonCaAnchor"
   modifiedJavaSec=`mktemp`
+  case $OS in
+    Windows_* | CYGWIN_NT* )
+      modifiedJavaSec=`cygpath -a -m "$modifiedJavaSec"`
+    ;;
+  esac
   cat $JAVA_SECURITY_BACKUP  > $modifiedJavaSec
   echo "" >> $modifiedJavaSec
   echo "$ANCHOR=$VALUE" >> $modifiedJavaSec
