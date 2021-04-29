@@ -90,7 +90,7 @@ public class GlyphBug implements Runnable {
 
 		for (int r = 0; r < _runs; r++) {
 			
-			System.out.println("Thread【" + Thread.currentThread().getName() + "】　run _runs  ★【" + String.valueOf(r) + "】" );
+			System.out.println("Thread[" + Thread.currentThread().getName() + "]　run _runs  ★[" + String.valueOf(r) + "]" );
 			
 			AttributedString formattedString = new AttributedString(_stringFactory.getRandomUnicodeString(255));
 			formattedString.addAttribute(TextAttribute.FONT, new Font(FONT_NAMES[r % FONT_NAMES.length], Font.BOLD, 12));
