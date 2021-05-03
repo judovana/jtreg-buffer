@@ -1,6 +1,7 @@
 /*
  * @test
- * @modules java.base/com.sun.crypto.provider
+ * @modules java.base/java.security:open
+ *          java.base/com.sun.crypto.provider
  *          java.base/sun.security.internal.spec
  *          jdk.crypto.ec/sun.security.ec
  * @bug 6666666

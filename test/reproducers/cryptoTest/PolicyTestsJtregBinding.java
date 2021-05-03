@@ -1,5 +1,6 @@
 /*
  * @test
+ * @modules java.base/java.security:open
  * @bug 6666666
  * @build cryptotest.tests.PolicyTests
  *        cryptotest.Settings

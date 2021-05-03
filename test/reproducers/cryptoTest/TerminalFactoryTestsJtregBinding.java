@@ -1,6 +1,7 @@
 /*
  * @test
- * @modules java.smartcardio/javax.smartcardio
+ * @modules java.base/java.security:open
+ *          java.smartcardio/javax.smartcardio
  * @bug 6666666
  * @build cryptotest.tests.TerminalFactoryTests
  *        cryptotest.Settings
