@@ -4,7 +4,7 @@
 // for x in `ls | grep .java` ; do sed -i "s/@build.*/@build $b/" $x ; done
 /*
  * @test
- * @modules java.base/java.security
+ * @modules java.base/java.security:open
  *          java.base/com.sun.crypto.provider
  *          java.base/sun.security.internal.spec
  *          java.base/sun.security.ssl
