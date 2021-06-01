@@ -5,6 +5,19 @@
 # @summary security property jdk.security.allowNonCaAnchor works
 # @run shell allowNonCaAnchor-property.sh
 
+function findFreePort() {
+  local BASE_PORT=9999
+  local INCREMENT=1
+  local port=$BASE_PORT
+  local isfree=$(netstat -taln | grep $port)
+
+  while [[ -n "$isfree" ]]; do
+      port=$[port+INCREMENT]
+      isfree=$(netstat -taln | grep $port)
+  done
+  echo $port
+}
+
 if [ "x$OTOOL_cryptosetup" == "xfips" -o "x`update-crypto-policies --show`" == "xFIPS"  ] ; then
   echo "fips detected, skipping 1818881 allowNonCaAnchor-property"
   exit 0
@@ -92,16 +105,18 @@ fi
 $TESTJAVA/bin/keytool  -list  -keystore $SERVER_STORE  -storepass secret  -v | grep -e "CA:" -A 5 -B 5
 $TESTJAVA/bin/keytool  -list  -keystore $SERVER_STORE  -storepass secret  -v | grep -e "CA:$CA"
 
+FOUND_PORT=`findFreePort`
+
 SOPTS="-Djavax.net.ssl.keyStore=$SERVER_STORE 
        -Djavax.net.ssl.keyStorePassword=secret 
        -Djavax.net.ssl.trustStore=$SERVER_STORE
        -Djavax.net.ssl.trustStorePassword=secret
        -Djavax.net.ssl.trustStoreType=jks
-       -Dtest.port=9999"
+       -Dtest.port=$FOUND_PORT"
 COPTS="-Djavax.net.ssl.trustStore=$CLIENT_STORE
        -Djavax.net.ssl.trustStorePassword=secret
        -Djavax.net.ssl.trustStoreType=jks
-       -Dtest.port=9999"
+       -Dtest.port=$FOUND_PORT"
 ANCHOR="-Djdk.security.allowNonCaAnchor"
 
 serverLog=serverLog
