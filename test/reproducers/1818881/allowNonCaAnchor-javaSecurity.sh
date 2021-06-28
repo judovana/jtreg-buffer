@@ -13,7 +13,7 @@ function findFreePort() {
 
   while [[ -n "$isfree" ]]; do
       port=$[port+INCREMENT]
-      isfree=$(netstat -taln | grep $port)
+      isfree=$(netstat -taln | grep $port) || echo $port
   done
   echo $port
 }
