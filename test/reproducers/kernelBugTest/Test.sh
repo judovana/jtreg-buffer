@@ -41,9 +41,15 @@ JSVC_NATIVE_BIN=${JSVC_SRC}/src/native/unix/jsvc
 JSVC_DAEMON_JAR=${TESTSRC}/${JSVC_JAR}
 PIDFILE=$( pwd )/jsvc.pid
 
+OS_TYPE_ARG=""
+# workarounded broken os detection on fedora
+if cat /etc/redhat-release | grep -iq fedora ; then
+  OS_TYPE_ARG="--with-os-type=linux"
+fi
+
 tar -xf ${JSVC_SRC_TARBALL}
 pushd ${JSVC_NATIVE_DIR}
-./configure --with-java=${TESTJAVA}
+./configure --with-java=${TESTJAVA} ${OS_TYPE_ARG}
 make
 popd
 
