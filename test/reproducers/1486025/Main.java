@@ -35,10 +35,11 @@ import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.Signature;
-import java.security.interfaces.ECPrivateKey;
+import java.security.PrivateKey;
 import java.security.spec.ECFieldFp;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
+
 
 import sun.security.ec.SunEC;
 
@@ -48,7 +49,7 @@ public class Main {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
         keyGen.initialize(getNistP256Params());
         KeyPair keyPair = keyGen.generateKeyPair();
-        ECPrivateKey priv = (ECPrivateKey) keyPair.getPrivate();
+        PrivateKey priv = (PrivateKey) keyPair.getPrivate();
 
         byte[] messageBytes = "Hello".getBytes("UTF-8");        
         for (int i = 0; i < 10000; i++) {
