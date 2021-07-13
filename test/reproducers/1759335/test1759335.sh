@@ -1,5 +1,6 @@
 #!/bin/sh
 # @test
+# @ignore
 # @bug 1759335
 # @summary OpenJDK keytool is broken in FIPS mode
 # @run shell test1759335.sh
