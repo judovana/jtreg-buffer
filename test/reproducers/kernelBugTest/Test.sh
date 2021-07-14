@@ -44,7 +44,7 @@ PIDFILE=$( pwd )/jsvc.pid
 OS_TYPE_ARG=""
 # workarounded broken os detection on fedora
 if cat /etc/redhat-release | grep -iq fedora ; then
-  OS_TYPE_ARG="--with-os-type=linux"
+  OS_TYPE_ARG="--with-os-type=include/linux"
 fi
 
 tar -xf ${JSVC_SRC_TARBALL}
