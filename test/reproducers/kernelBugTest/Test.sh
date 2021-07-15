@@ -41,15 +41,12 @@ JSVC_NATIVE_BIN=${JSVC_SRC}/src/native/unix/jsvc
 JSVC_DAEMON_JAR=${TESTSRC}/${JSVC_JAR}
 PIDFILE=$( pwd )/jsvc.pid
 
-OS_TYPE_ARG=""
-# workarounded broken os detection on fedora
-if cat /etc/redhat-release | grep -iq fedora ; then
-  OS_TYPE_ARG="--with-os-type=include/linux"
-fi
-
 tar -xf ${JSVC_SRC_TARBALL}
 pushd ${JSVC_NATIVE_DIR}
-./configure --with-java=${TESTJAVA} ${OS_TYPE_ARG}
+# fix for problem with wrong include dir on aarch64
+sed -i 's;supported_os="aarch64";# supported_os="aarch64";g' ./configure
+
+./configure --with-java=${TESTJAVA}
 make
 popd
 
