@@ -156,7 +156,7 @@ trap killServer EXIT
 
 i=0
 while ! cat $serverLog | grep "SSL server started"; do
-  if [ $i -gt 5 ] ; then
+  if [ $i -gt 30 ] ; then
     echo "server not started"
     exit 1
   fi
