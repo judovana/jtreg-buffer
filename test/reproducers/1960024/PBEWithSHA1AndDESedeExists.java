@@ -12,10 +12,14 @@
 
 
 import javax.crypto.EncryptedPrivateKeyInfo;
+import java.lang.System;
 import org.bouncycastle.asn1.x500.X500Name;
 
 public class PBEWithSHA1AndDESedeExists {
     public static void main(String[] args) throws Exception {
+        if ("fips".equals(System.getenv("OTOOL_cryptosetup"))) {
+          return;
+        }
         new X500Name("CN=Test");
         new EncryptedPrivateKeyInfo("PBEWithSHA1AndDESede", new byte[] { 0 });
     }
