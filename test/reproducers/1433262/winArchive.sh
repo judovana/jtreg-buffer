@@ -1,7 +1,7 @@
 ##
 ## @test winArchive.sh
 ## @bug 1433262
-## @summary windows archiove of inoput >4gb fails
+## @summary windows archive of input >4gb fails
 
 set -ex
 

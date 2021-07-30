@@ -1,7 +1,7 @@
 ##
 ## @test genericArchive.sh
 ## @bug 1433262
-## @summary generic archiove of inoput >4gb fails
+## @summary generic archive of input >4gb fails
 
 set -ex
 
