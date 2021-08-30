@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 ##
 ## @test Power10SupportEnabled.sh
 ## @bug 1870625
@@ -9,4 +11,4 @@
 ## @requires os.family != "windows"
 ##
 
-${TESTJAVA} -version -XX:+UseByteReverseInstructions
+${TESTJAVA}/bin/java -version -XX:+UseByteReverseInstructions
