@@ -82,7 +82,7 @@ else
 fi
 
 # prepare nssdb
-pass="nss.SECret.123.xyz"
+pass=""
 mkdir "${nssDir}"
 echo "${pass}" > "${nssDir}/password.txt"
 certutil -N -d "${nssDir}" -f "${nssDir}/password.txt"
