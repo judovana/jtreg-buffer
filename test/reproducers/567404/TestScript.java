@@ -1,4 +1,5 @@
 import javax.script.*;
+import java.io.*;
 import java.util.*;
 /*
  * 567404 is real id, but jtreg needs 7 numbers bugs.... Howewer, trick with zero works....
@@ -10,18 +11,30 @@ import java.util.*;
  */
 
 public class TestScript{
-    public static void main(String[] args) {
-        System.out.println("Testing for RHQ CLI required components:"); 
+    //log without garbage from jvm
+    private static final File f=new File("realLog");  //Creation of File Descriptor for output file
+
+    public static void realLog(String s, BufferedWriter br) throws Exception{
+      System.out.println(s);
+      br.write(s);
+      br.newLine();
+    }
+
+    public static void main(String[] args) throws Exception {
+    try (BufferedWriter br =
+                   new BufferedWriter(new FileWriter(f))) {
+        realLog("Testing for RHQ CLI required components:", br); 
     ScriptEngineManager sem = new ScriptEngineManager();
-    System.out.println("ScriptingEnginManager detected : "+(sem!=null)+" :"+sem+":");
+    realLog("ScriptingEnginManager detected : "+(sem!=null)+" :"+sem+":", br);
         ScriptEngine se = sem.getEngineByName("JavaScript");
-        System.out.println("ScriptingEngin detected: "+(se!=null)+" :"+se+":");
+        realLog("ScriptingEngin detected: "+(se!=null)+" :"+se+":", br);
     List<ScriptEngineFactory> list = sem.getEngineFactories();
-    System.out.println("Scripting Factories detected: "+(list.size()>0)+list+":");
+    realLog("Scripting Factories detected: "+(list.size()>0)+list+":", br);
         if((sem!=null)&&(se!=null)){
-        System.out.println("\n\n Scripting components FOUND successfully. ");
+        realLog("\n\n Scripting components FOUND successfully. ", br);
     }else{
-        System.out.println("\n\n Scripting components NOT found. ");
+        realLog("\n\n Scripting components NOT found. ", br);
         }
+    }
     }
 }

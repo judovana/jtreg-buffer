@@ -3,7 +3,9 @@ FS="/"
 JAVAC=${TESTJAVA}${FS}bin${FS}javac
 JAVA=${TESTJAVA}${FS}bin${FS}java
 
-
+if [ "x$TESTSRC" == x ] ; then
+  TESTSRC=.
+fi
 
 $JAVAC -d . $TESTSRC/TestScript.java
 R=$?
@@ -39,7 +41,11 @@ fi
 cat log2
 ls -l
 
-if [[ !  -z `cat log2 | grep -v "^Picked up JAVA_TOOL_OPTIONS:" ` ]] ; then
+if [[ !  -z `cat log2 | grep -v \
+                             -e "^Picked up JAVA_TOOL_OPTIONS:" \
+                             -e "^Started recording"  \
+                             -e "myrecording.jfr$" `
+   ]] ; then
   echo "Empty output"
   exit 100
 fi
