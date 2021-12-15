@@ -2,6 +2,7 @@
  * @test
  * @bug 1688571
  * @summary Tests new jap era, based on test from 1677511
+ * @compile -encoding UTF-8 ReiwaNewEraTest.java
  * @run main/othervm ReiwaNewEraTest
  * @requires jdk.version.major >= 8
  */
