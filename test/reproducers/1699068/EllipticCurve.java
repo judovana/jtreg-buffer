@@ -1,7 +1,7 @@
 /*
    @test
    @bug 1699068
-   @requires jdk.version.major >= 8
+   @requires jdk.version.major >= 8 & jdk.version.major <= 11
    @summary Elliptic Curve secp256k1 is missing in jdk
    @run main/othervm EllipticCurve
 */
