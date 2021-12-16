@@ -50,6 +50,7 @@ import java.util.regex.Pattern;
 /*
  * @test
  * @bug 8047729
+ * @compile -encoding UTF-8 PrintSEUmlauts.java
  * @requires os.arch != "aarch64"
  * @summary German 'Umlaut' not supported
  * @author Mario Torre
