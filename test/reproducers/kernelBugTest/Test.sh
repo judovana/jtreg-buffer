@@ -18,7 +18,7 @@
 # @requires os.family != "windows"
 # @library commons-daemon-1.1.0.jar
 # @compile  HelloWorld.java
-# @run shell/timeout=30 Test.sh
+# @run shell/timeout=120 Test.sh
 
 set -x
 set -e
