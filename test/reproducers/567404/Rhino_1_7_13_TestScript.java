@@ -14,5 +14,6 @@ public class Rhino_1_7_13_TestScript {
     public static void main(String[] args) throws Exception {
         MainJavaScriptEngineRunner.main("js");
         MainJavaScriptEngineRunner.main("rhino");
+        MainJavaScriptEngineRunner.main("JavaScript");
     }
 }
