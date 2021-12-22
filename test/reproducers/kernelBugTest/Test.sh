@@ -23,7 +23,7 @@
 set -x
 set -e
 
-if [ "$TESTJAVA" ]; then
+if ! [ -z "$TESTJAVA" ]; then
   JAVA=${TESTJAVA}/bin/java
   JAVAC=${COMPILEJAVA}/bin/javac
   JAR=${TESTJAVA}/bin/jar
