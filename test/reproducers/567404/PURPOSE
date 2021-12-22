@@ -8,3 +8,7 @@ Runs reproducer,
 PACKAGE, JAVA, JAVAC are paramtrized
 by default PACKAGE=java-1.6.0-openjdk and
 JAVA, JAVAC are found in $PACKAGE{-devel}
+
+
+Additional info
+This family of tests is testing different scripting engines and its basic functionallity.
