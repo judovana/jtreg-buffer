@@ -51,29 +51,41 @@ import javax.crypto.spec.SecretKeySpec;
 import sun.security.pkcs11.SunPKCS11;
 
 public class Bug6913047 {
-    
+
     public static void main(String[] args) throws Exception {
-        
+
         Security.setProperty("crypto.policy", "unlimited");
 
-        /* Use correct library path on both 32bit or 64bit systems.
+        Boolean isWindows = false;
+
+        String name = System.getProperty("os.name");
+        if (name.startsWith("Windows")) {
+            isWindows = true;
+        }
+
+        String nssLibDir = null;
+
+        if (isWindows) {
+            nssLibDir =  "C:\\Program Files\\Mozilla Firefox";
+        } else {
+           /* Use correct library path on both 32bit or 64bit systems.
            Even though reproducer is for 32bit JVM, it is inconvinient if it
            throws exception because of wrong library dir on 64-bit. */
-        String nssLibDir = null;
-        for (String libDir : System.getProperty("java.library.path").split(":")) {
-            if (Pattern.matches("^/usr/lib[0-9]*$", libDir)) {
-                nssLibDir = libDir;
-                break;
+            for (String libDir : System.getProperty("java.library.path").split(":")) {
+                if (Pattern.matches("^/usr/lib[0-9]*$", libDir)) {
+                    nssLibDir = libDir;
+                    break;
+                }
             }
-        }
-        if (nssLibDir == null) {
-            nssLibDir = "/usr/lib";
+            if (nssLibDir == null) {
+                nssLibDir = "/usr/lib";
+            }
         }
 
         String nSSConfigString = "name = NSS\n" +
-                                 "nssLibraryDirectory = " + nssLibDir + "\n" +
-                                 "nssDbMode = noDb\n" +
-                                 "attributes = compatibility\n";
+                "nssLibraryDirectory = " + nssLibDir + "\n" +
+                "nssDbMode = noDb\n" +
+                "attributes = compatibility\n";
         InputStream nSSConfigStream = new ByteArrayInputStream(nSSConfigString.getBytes(StandardCharsets.UTF_8));
         Provider pkcs11provider;
 
@@ -101,46 +113,46 @@ public class Bug6913047 {
         Key commonkey = new SecretKeySpec(rawKey, "AES");
 
         List<Object> keysHolderList = new ArrayList<>();
-        
+
         Class<?> cipherClass = Class.forName("javax.crypto.Cipher");
         Class<?> p11CipherClass = Class.forName("sun.security.pkcs11.P11Cipher");
-        
+
         Field spiField = cipherClass.getDeclaredField("spi");
         spiField.setAccessible(true);
         Field p11KeyField = p11CipherClass.getDeclaredField("p11Key");
-        p11KeyField.setAccessible(true); 
-        
+        p11KeyField.setAccessible(true);
+
         int i = 0;
-        while (i++ < 100000) {  
-            
+        while (i++ < 100000) {
+
             // DEBUG (uncomment to enable)
             //System.out.println("Iteration: " + i);
 
             Cipher c = Cipher.getInstance("AES/CBC/NoPadding", pkcs11provider);
 
             // Generate leak with unique keys
-            
+
             // We need to generate a unique key so the key is not cached and we can
             // create multiple native key objects. Key is unique based on object id.
-            
+
             try {
                 c.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(rawKey, "AES"));
-            } catch (Exception e) { 
+            } catch (Exception e) {
                 // Unfortunately, this code is not always executed. Under heavy
                 // native heap pressure, a different JVM thread may fail before
                 // trying to allocate memory in the native heap. In example,
                 // InterpreterRuntime::exception_handler_for_exception fails when
                 // calling JvmtiExport::post_exception_throw.
-                System.out.println("=== Exception when initializing Cipher ===");                
+                System.out.println("=== Exception when initializing Cipher ===");
                 throw e;
             }
-            
+
             // DEBUG (uncomment to enable)
             // Do not generate leaks using a cached-key 
             //c.init(Cipher.ENCRYPT_MODE, commonkey);
-            
+
             c.update(plaintext);
-                        
+
             // Hold references to the P11Key objects, so the native key is not destroyed.
             // This is artificial to speed-up the test reproduction. However, memory exhaustion 
             // will not be caused by holding these Java objects in memory (and will not occur in 
@@ -149,10 +161,10 @@ public class Bug6913047 {
             Object cSpi = spiField.get(c);
             Object p11Key = p11KeyField.get(cSpi);
             keysHolderList.add(p11Key);
-            
+
             c.doFinal();
         }
-        
+
         System.out.println("TEST PASS - OK");
     }
 
