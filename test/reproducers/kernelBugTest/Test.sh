@@ -23,6 +23,9 @@
 set -x
 set -e
 
+#for some reason the build of the native code below pops to "/". Then the jfr cannot write. Movingit to scratch (pwd) while in it
+export JAVA_TOOL_OPTIONS=`echo $JAVA_TOOL_OPTIONS | sed "s;filename=myrecording.jfr;filename=$PWD/myrecording.jfr;"`
+
 if ! [ -z "$TESTJAVA" ]; then
   JAVA=${TESTJAVA}/bin/java
   JAVAC=${COMPILEJAVA}/bin/javac
