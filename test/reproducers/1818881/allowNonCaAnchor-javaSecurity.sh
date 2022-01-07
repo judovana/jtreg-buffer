@@ -30,7 +30,7 @@ if [ "${TESTSRC}" = "" ] ; then
 fi
 
 if [ "${TESTJAVA}" = "" ] ; then
-  PATH_JAVA=$(readlink -f $(which java))
+  PATH_JAVA=$(readlink -f $(which javac))
   TESTJAVA=$(dirname $(dirname ${PATH_JAVA}))
   echo "TESTJAVA not set, selecting " ${TESTJAVA}
   echo "If this is incorrect, try setting the variable manually."
