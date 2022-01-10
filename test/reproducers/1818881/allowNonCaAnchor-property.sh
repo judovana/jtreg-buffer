@@ -9,11 +9,11 @@ function findFreePort() {
   local BASE_PORT=9999
   local INCREMENT=1
   local port=$BASE_PORT
-  local isfree=$(netstat -taln | grep $port)
+  local isfree=$(netstat -taln | grep $port >&2)
 
   while [[ -n "$isfree" ]]; do
       port=$[port+INCREMENT]
-      isfree=$(netstat -taln | grep $port) || echo $port
+      isfree=$(netstat -taln | grep $port >&2) || echo $port >&2
   done
   echo $port
 }
