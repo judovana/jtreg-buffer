@@ -13,7 +13,7 @@ fi
 
 echo Running with $JAVA...
 
-envVarArg="-e:CUSTOM_DUMMY_VARIABLE=true"
+envVarArg="-e:CUSTOM_DUMMY_VARIABLE=true,JAVA_TOOL_OPTIONS"
 keys=$(env | grep OTOOL_ | sed "s/=.*//")
 for key in $keys; do
   envVarArg="$envVarArg,$key"
