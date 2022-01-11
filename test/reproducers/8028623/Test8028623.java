@@ -23,13 +23,16 @@
 
 public class Test8028623 {
 
-  public static int Ã = 1;
+    public static int Ã = 1;
 
-  public static void main (String[] args) {
-    
-    System.out.println(Ã);
-    while (true) {
-        try { Thread.sleep(1000); } catch (Exception e) { }
+    public static void main(String[] args) {
+
+        System.out.println(Ã);
+        while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
     }
-  }
 }
