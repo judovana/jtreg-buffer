@@ -66,17 +66,25 @@ public class Bug6913047 {
         if (isWindows) {
             nssLibDir =  "C:\\Program Files\\Mozilla Firefox";
         } else {
-           /* Use correct library path on both 32bit or 64bit systems.
-           Even though reproducer is for 32bit JVM, it is inconvinient if it
-           throws exception because of wrong library dir on 64-bit. */
-            for (String libDir : System.getProperty("java.library.path").split(":")) {
+            boolean x64 = "64".equals(System.getProperty("sun.arch.data.model"));
+            boolean aarch64 = "aarch64".equals(System.getProperty("os.arch"));
+            String ldPath = System.getProperty("java.library.path");
+            if (x64 && aarch64) {
+                //there is bug on aarch64 missing /usr/lib64 on library path; which is crucial
+                ldPath="/usr/lib64"+":"+ldPath;
+            }
+            for (String libDir : ldPath.split(":")) {
                 if (Pattern.matches("^/usr/lib[0-9]*$", libDir)) {
                     nssLibDir = libDir;
                     break;
                 }
             }
             if (nssLibDir == null) {
-                nssLibDir = "/usr/lib";
+                if (x64) {
+                    nssLibDir = "/usr/lib64";
+                } else {
+                    nssLibDir = "/usr/lib";
+                }
             }
         }
 
