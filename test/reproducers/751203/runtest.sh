@@ -8,11 +8,13 @@ case "$OS" in
   SunOS | Linux )
     NULL=/dev/null
     FS="/"
+    CODEBASE=file://$BIN
     ;;
   Windows_* | CYGWIN_NT* )
     NULL=NUL
     FS="\\"
     BIN=$( cygpath -pw $BIN )
+    CODEBASE=file:///$BIN
     ;;
   * )
     echo "Unrecognized system!"
@@ -62,8 +64,6 @@ cleanup(){
 
 
 killOldJavas
-CODEBASE=file://$BIN
-echo $BIN
 
 $JAVAC -d $BIN $TESTSRC/*.java
 R=$?
