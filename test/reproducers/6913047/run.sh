@@ -45,11 +45,14 @@ if [ "${TESTSRC}" = "" ]; then
   fi
 fi
 
+WIN_NSS_PATH=$TESTSRC/win-nss
+
 if [ $IS_WINDOWS = 'TRUE' ]; then
-  tar -xvf $(cygpath $TESTSRC/win-nss.tar.xz)
-  chmod 777 -R $(cygpath $TESTSRC/win-nss)
+  WIN_NSS_PATH_CYGWIN=$(cygpath $WIN_NSS_PATH)
+  tar -xvf $WIN_NSS_PATH_CYGWIN.tar.xz
+  chmod 777 -R $WIN_NSS_PATH_CYGWIN
   # cygpath has to be exactly in this way
-  export PATH="$(cygpath $TESTSRC/win-nss):$PATH"
+  export PATH="$WIN_NSS_PATH_CYGWIN:$PATH"
 fi
 
 "$JAVAC" -d . $TESTSRC/Bug6913047.java $EXTFLAGS
@@ -60,4 +63,4 @@ if [[ $R -ne 0 ]]; then
 else
   echo "Compilation successful"
 fi
-"$JAVA" "-Dtest.src=$TESTSRC" "-Dtest.nssLibDir=$(cygpath -m $TESTSRC/win-nss)" $EXTFLAGS Bug6913047
+"$JAVA" "-Dtest.src=$TESTSRC" "-Dtest.nssLibDir=$(cygpath -m $WIN_NSS_PATH)" $EXTFLAGS Bug6913047
