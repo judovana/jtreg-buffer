@@ -45,12 +45,12 @@ if [ "${TESTSRC}" = "" ]; then
   fi
 fi
 
-WIN_NSS_PATH=$TESTSRC/win-nss
+WIN_NSS_PATH="$PWD/win-nss"
 
 if [ $IS_WINDOWS = 'TRUE' ]; then
-  WIN_NSS_PATH_CYGWIN=$(cygpath $WIN_NSS_PATH)
-  tar -xvf $WIN_NSS_PATH_CYGWIN.tar.xz
-  chmod 777 -R $WIN_NSS_PATH_CYGWIN
+  WIN_NSS_PATH_CYGWIN=$(cygpath "$WIN_NSS_PATH")
+  tar -xvf $(cygpath $TESTSRC/win-nss.tar.xz)
+  chmod 777 -R "$WIN_NSS_PATH_CYGWIN"
   # cygpath has to be exactly in this way
   export PATH="$WIN_NSS_PATH_CYGWIN:$PATH"
 fi
