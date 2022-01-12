@@ -49,7 +49,7 @@ if [ $IS_WINDOWS = 'TRUE' ]; then
   tar -xvf $(cygpath $TESTSRC/win-nss.tar.xz)
   chmod 777 -R $(cygpath $TESTSRC/win-nss)
   # cygpath has to be exactly in this way
-  export PATH="$PATH:$(cygpath $TESTSRC/win-nss)"
+  export PATH="$(cygpath $TESTSRC/win-nss):$PATH"
 fi
 
 "$JAVAC" -d . $TESTSRC/Bug6913047.java $EXTFLAGS
@@ -60,4 +60,4 @@ if [[ $R -ne 0 ]]; then
 else
   echo "Compilation successful"
 fi
-"$JAVA" "-Dtest.src=$TESTSRC" $EXTFLAGS Bug6913047
+"$JAVA" "-Dtest.src=$TESTSRC" "-Dtest.nssLibDir=$(cygpath -m $TESTSRC/win-nss)" $EXTFLAGS Bug6913047

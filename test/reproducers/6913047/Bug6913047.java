@@ -64,7 +64,7 @@ public class Bug6913047 {
         String nssLibDir = null;
 
         if (isWindows) {
-            nssLibDir =  "C:\\Program Files\\Mozilla Firefox";
+            nssLibDir = System.getProperty("test.nssLibDir", "nssLibDir_NOT_DEFINED");
         } else {
             boolean x64 = "64".equals(System.getProperty("sun.arch.data.model"));
             boolean aarch64 = "aarch64".equals(System.getProperty("os.arch"));
