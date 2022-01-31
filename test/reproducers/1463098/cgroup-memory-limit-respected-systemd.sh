@@ -19,7 +19,7 @@ fi
 
 ojdkSliceName="ojdk-cg.slice"
 ojdkSliceFile="/etc/systemd/system/${ojdkSliceName}"
-memoryLimit="30"
+memoryLimit="100"
 
 onExit() {
     if [ -e "${ojdkSliceFile}" ] ; then
