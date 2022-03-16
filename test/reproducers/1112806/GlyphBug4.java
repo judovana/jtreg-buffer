@@ -13,7 +13,7 @@ import java.util.Random;
  * @bug 1112806
  * @requires os.arch != "aarch64"
  * @summary  heck that LineBreakMeasurer.nextLayout does not throw ArrayIndexOutOfBoundsException
- * @run main/timeout=600     GlyphBug4
+ * @run main/timeout=60000     GlyphBug4
  */
 public class GlyphBug4 {
 
