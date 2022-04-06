@@ -31,9 +31,15 @@ public class OjdkFips {
     }
 
     static boolean testJSSEisFIPS(Provider p) throws Exception {
-        Method m = p.getClass().getDeclaredMethod("isFIPS");
-        m.setAccessible(true);
-        return (Boolean) m.invoke(p);
+        try {
+            Method m = p.getClass().getDeclaredMethod("isFIPS");
+            m.setAccessible(true);
+            return (Boolean) m.invoke(p);
+        } catch (NoSuchMethodException e) {
+            // skip this check if method does not exist, was removed in jdk 13:
+            // https://bugs.openjdk.java.net/browse/JDK-8217835
+            return true;
+        }
     }
 
     static boolean testProviders() throws Exception  {
