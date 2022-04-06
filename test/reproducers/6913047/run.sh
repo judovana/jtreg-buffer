@@ -4,6 +4,12 @@
 set -x
 set -e
 
+if [ -e /proc/sys/crypto/fips_enabled ] && [ 1 = "$( cat /proc/sys/crypto/fips_enabled )" ] ; then
+    # ignorred on fips since test manually configures and adds pkcs11 provider
+    echo "test ignored"
+    exit 0
+fi
+
 OS=$(uname -s)
 IS_WINDOWS=FALSE
 case "$OS" in
