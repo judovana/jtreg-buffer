@@ -45,17 +45,26 @@ public class OjdkFips {
     static boolean testProviders() throws Exception  {
         boolean failed = false;
 
+        // these must be always present
         Set<String> expectedProviders = new HashSet<String>();
         expectedProviders.add("SunPKCS11-NSS-FIPS");
         expectedProviders.add("SUN");
         expectedProviders.add("SunEC");
         expectedProviders.add("SunJSSE");
 
+        // additional providers added to jdk 17 in rhel-8.6
+        // http://pkgs.devel.redhat.com/cgit/rpms/java-17-openjdk/commit/?h=rhel-8.6.0&id=eb4e206241b838cb5b174790365b05b83848aebd
+        Set<String> expectedProviders2 = new HashSet<String>();
+        expectedProviders2.add("SunJCE");
+        expectedProviders2.add("SunRsaSign");
+
         for (Provider p: Security.getProviders()) {
             String name = p.getName();
             if (! expectedProviders.remove(name)) {
-                System.err.println("ERR: unexpected provider: " + name);
-                failed = true;
+                if (! expectedProviders2.remove(name)) {
+                    System.err.println("ERR: unexpected provider: " + name);
+                    failed = true;
+                }
             }
             if (name.equals("SunJSSE")) {
                 if (!testJSSEisFIPS(p)) {
