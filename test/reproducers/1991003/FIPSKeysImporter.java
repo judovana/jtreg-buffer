@@ -400,7 +400,7 @@ public final class FIPSKeysImporter {
                 throws Throwable {
             SSLEngine[][] enginesToTest = new SSLEngine[1][2];
             String[][] preferredSuites = new String[][]{ new String[] {
-                    "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384"
+                    "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
             }};
             for (int i = 0; i < enginesToTest.length; i++) {
                 enginesToTest[i][0] = createSSLEngine(ks, true);
