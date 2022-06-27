@@ -3,9 +3,17 @@
 set -e
 set -x
 
-${TESTJAVA}/bin/javac TestTrustStore.java
+FS="/"
+JAVAC=${TESTJAVA}${FS}bin${FS}javac
+JAVA=${TESTJAVA}${FS}bin${FS}java
+
+if [ "x$TESTSRC" == x ] ; then
+  TESTSRC=.
+fi
+
+${JAVAC} -d . ${TESTSRC}/TestScript.java
 TEMPFILE=$(mktemp)
-${TESTJAVA}/bin/java -Djavax.net.debug=trustmanager TestTrustStore 2> $TEMPFILE
+${JAVA} -cp . -Djavax.net.debug=trustmanager TestTrustStore 2> $TEMPFILE
 
 # Debug output sometimes features multiple duplicities with unexpanded variables,
 # the regex [^$]* should rule those out.

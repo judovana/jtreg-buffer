@@ -1,7 +1,7 @@
 import javax.net.ssl.SSLContext;
 
 /*
- @test TestTrustStore.sh
+ @test TestTrustStore
  @bug 2055274
  @summary test whether default cacert location is set correctly
  @run shell TestTrustStore.sh
