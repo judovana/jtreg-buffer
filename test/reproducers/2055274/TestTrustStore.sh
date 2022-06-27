@@ -11,7 +11,7 @@ if [ "x$TESTSRC" == x ] ; then
   TESTSRC=.
 fi
 
-${JAVAC} -d . ${TESTSRC}/TestScript.java
+${JAVAC} -d . ${TESTSRC}/TestTrustStore.java
 TEMPFILE=$(mktemp)
 ${JAVA} -cp . -Djavax.net.debug=trustmanager TestTrustStore 2> $TEMPFILE
 
