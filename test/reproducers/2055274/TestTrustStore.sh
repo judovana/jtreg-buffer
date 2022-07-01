@@ -18,12 +18,12 @@ ${JAVA} -cp . -Djavax.net.debug=trustmanager TestTrustStore 2> $TEMPFILE
 # Debug output sometimes features multiple duplicities with unexpanded variables,
 # the regex [^$]* should rule those out.
 if [ "x$OTOOL_OS_NAME" == "xwin" ]; then
-  ICH="[A-Z]:\\"
+  ICH="[A-Z]:\\\\"
 else
   ICH="/"
 fi
-  CACERTS=$(     grep "javax[^$]*$" $TEMPFILE | grep -o "$ICH[-_\./\\/0-9a-zA-Z]\+/cacerts$" )
-  JSSECACERTS=$( grep "javax[^$]*$" $TEMPFILE | grep -o "$ICH[-_\./\\/0-9a-zA-Z]\+/jssecacerts$" )
+  CACERTS=$(     grep "javax[^$]*$" $TEMPFILE | grep -o "$ICH[-_\./\\\\0-9a-zA-Z]\+[/\\\\]cacerts$" )
+  JSSECACERTS=$( grep "javax[^$]*$" $TEMPFILE | grep -o "$ICH[-_\./\\\\0-9a-zA-Z]\+[/\\\\]jssecacerts$" )
 
 CACERTSPATH="${TESTJAVA}/lib/security/"
 # with ojdk8 rpms/portables, the resultant path is a little different, featuring "jre" substring
