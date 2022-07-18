@@ -14,7 +14,7 @@ fi
 FLAGS="--add-modules jdk.crypto.cryptoki --add-exports jdk.crypto.cryptoki/sun.security.pkcs11.wrapper=ALL-UNNAMED"
 
 # removing the above for ojdk lower than 16
-if [ 16 -gt $OTOOL_JDK_VERSION ]; then
+if [ 9 -gt $OTOOL_JDK_VERSION ]; then
     FLAGS=""
 fi
 
