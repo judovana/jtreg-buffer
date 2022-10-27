@@ -82,12 +82,27 @@ public class ResumeTLS13withSNI {
     private static final SNIMatcher SNI_MATCHER =
             SNIHostName.createSNIMatcher("arf\\.yak\\.foo");
 
+    public static boolean supportsTls1_3() throws Exception {
+        try (SSLSocket socket = (SSLSocket) SSLSocketFactory.getDefault().createSocket()) {
+            for (String proto : socket.getSupportedProtocols()) {
+                if ("TLSv1.3".equals(proto)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /*
      * Main entry point for this test.
      */
     public static void main(String args[]) throws Exception {
         if (debug) {
             System.setProperty("javax.net.debug", "ssl:handshake");
+        }
+        if (!supportsTls1_3()) {
+            System.out.println("JDK does not support TLSv1.3, skipping...");
+            return;
         }
 
         KeyManagerFactory kmf = makeKeyManagerFactory(keyFilename,
