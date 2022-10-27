@@ -9,6 +9,25 @@ set -eux
 
 if ! type systemctl &> /dev/null ; then
     # OS does not have systemd, skip (rhel-6)
+    printf '%s\n' "OS does not have systemd, skipping..."
+    exit 0
+fi
+
+if cat /proc/cmdline | grep -q 'cgroup_disable=memory' ; then
+    # Some beaker machines have memory cgroups disabled by kernel params
+    # causing random failures
+    printf '%s\n' "Memory cgroup disabled by kernel params, skipping..."
+    exit 0
+fi
+
+if mount | grep -q 'cgroup2' ; then
+    # Container code in JDK does not work correctly with systemd slices + cgroups v2
+    # This is known for a long time (reported), It will probably not be
+    # fixed in near future so skipping, can be enabled, when fixed ...
+    # See:
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1649796
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1599387
+    printf '%s\n' "Detected cgroup v2, openjdk does not work with systemd slices + cgroups v2, skipping..."
     exit 0
 fi
 
