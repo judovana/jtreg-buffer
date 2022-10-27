@@ -55,6 +55,24 @@ popd
 
 ${JSVC_NATIVE_BIN} -java-home ${TESTJAVA} -debug -outfile /dev/stdout -errfile /dev/stderr -pidfile ${PIDFILE} -cp ${TESTSRCPATH}/${JSVC_JAR}:${TESTCLASSES} HelloWorld
 
+# wait for PIDFILE file to appear (necessary?)
+t=0
+while [ "$t" -lt 30  ] ; do
+    [ -e "${PIDFILE}" ] && break
+    sleep 1
+    t=$(( ++t ))
+done
+
 sleep 5
 
 kill $( cat $PIDFILE )
+
+# wait for PIDFILE to disappear (fix for problem)
+# jtreg harness sometimes failed on cleanup phase (trying to remove pid file)
+# could not reproduce, but this should hopefully help
+t=0
+while [ "$t" -lt 30  ] ; do
+    ! [ -e "${PIDFILE}" ] && break
+    sleep 1
+    t=$(( ++t ))
+done
