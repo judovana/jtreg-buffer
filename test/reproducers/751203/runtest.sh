@@ -3,6 +3,7 @@
 BIN=$(mktemp -d)
 
 # set platform-dependent variables
+NETSTAT_ARGS="-tln"
 OS=$(uname -s)
 case "$OS" in
 SunOS | Linux)
@@ -15,6 +16,7 @@ Windows_* | CYGWIN_NT*)
   FS="\\"
   BIN=$(cygpath -pw $BIN)
   CODEBASE=file:///$BIN
+  NETSTAT_ARGS="-an"
   ;;
 *)
   echo "Unrecognized system!"
@@ -57,6 +59,8 @@ killOldJavas() {
 cleanup() {
   killOldJavas
   kill -9 $RMIPID $SERVERPID
+  # wait for servers to die
+  wait
   rm -rf $BIN
 }
 
@@ -74,22 +78,30 @@ pushd $BIN
 $RMIREGISTRY "-J-Djava.rmi.server.codebase=$CODEBASE" &
 RMIPID=$!
 popd
-sleep 10
+# wait for rmiregistry to start
+t=0
+while [ "$t" -lt 30  ] ; do
+	netstat ${NETSTAT_ARGS} | grep -q ':1099 ' && break
+    sleep 1
+    t=$(( ++t ))
+done
+
 ps -o cmd= -p $RMIPID
 $JAVA -cp $BIN "-Djava.rmi.server.codebase=$CODEBASE" HelloServer &>server.out &
 SERVERPID=$!
-sleep 10
-grep 'Exception' server.out
-R=$?
-cat client.out
-if [[ $R -eq 0 ]]; then
-  echo "exception during start of rmiserver"
-  cat server.out
-  cleanup
-  exit 35
-fi
-while ! grep -q 'Hello Server is ready.' server.out; do sleep 1; done
-cat server.out
+# wait for Hello server
+t=0
+while [ "$t" -lt 30  ] ; do
+    if grep -q 'Exception' server.out ; then
+        echo "exception during start of rmiserver"
+        cat server.out
+        cleanup
+        exit 35
+    fi
+    grep -q 'Hello Server is ready.' server.out && break
+    sleep 1
+    t=$(( ++t ))
+done
 
 echo "Client"
 $JAVA -cp $BIN "-Djava.rmi.server.codebase=$CODEBASE" HelloClient &>client.out
