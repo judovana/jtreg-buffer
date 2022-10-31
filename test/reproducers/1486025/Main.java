@@ -27,7 +27,7 @@
  * @modules jdk.crypto.ec/sun.security.ec
  * @bug 1486025
  * @summary ECC with NSS concurrency JVM crash
- * @run main/othervm/timeout=120 Main
+ * @run main/othervm/timeout=300 Main
  * @author Martin Balao (mbalao@redhat.com)
  */
 
