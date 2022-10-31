@@ -6,7 +6,8 @@
 set -ex
 
 if [ 8 = "${OTOOL_JDK_VERSION:-}" ] ; then
-    if [ "el" = "${OTOOL_BUILD_OS_NAME:-}" ] && ! [ "7" = "${OTOOL_BUILD_OS_VERSION:-}" ] ; then
+    if [ "el" = "${OTOOL_BUILD_OS_NAME:-}" ] && ! [ "7" = "${OTOOL_BUILD_OS_VERSION:-}" ] \
+    || ! printf '%s\n' "${OTOOL_PROJECT_NAME:-}" | grep -E -q 'ojdk8~(rpms|portable)' ; then
         # Only affects JDK8, fix is only in rhel-7 builds (rpms + portables)
         # in form of rpm patch. See:
         # https://bugzilla.redhat.com/show_bug.cgi?id=1433262
