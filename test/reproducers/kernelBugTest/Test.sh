@@ -15,18 +15,13 @@
 #                 3.10.0-327.55.2 <tel:3.10.0-327.55.2>.el7
 #                 3.10.0-514.21.2 <tel:3.10.0-514.21.2>.el7
 #                 3.10.0-514.26.1 <tel:3.10.0-514.26.1>.el7
-# @requires os.family != "windows"
+# @requires os.family != "windows" & os.simpleArch != "i586"
 # @library commons-daemon-1.1.0.jar
 # @compile  HelloWorld.java
 # @run shell/timeout=120 Test.sh
 
 set -x
 set -e
-
-if [ "x$OTOOL_BUILD_ARCH" == "xi686" ] ; then
-  echo "skipped on i686"
-  exit 0
-fi
 
 #for some reason the build of the native code below pops to "/". Then the jfr cannot write. Movingit to scratch (pwd) while in it
 export JAVA_TOOL_OPTIONS=`echo $JAVA_TOOL_OPTIONS | sed "s;filename=myrecording.jfr;filename=$PWD/myrecording.jfr;"`

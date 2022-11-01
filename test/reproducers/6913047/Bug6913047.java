@@ -26,6 +26,7 @@
  * @test
  * @bug 6913047
  * @summary Native memory exhaustion using SunPKCS11 on 32 bits JVM.
+ * @requires os.simpleArch != "i586"
  * @run shell/timeout=120 run.sh
  * @author Martin Balao (mbalao@redhat.com)
  */
@@ -51,15 +52,6 @@ import sun.security.pkcs11.SunPKCS11;
 public class Bug6913047 {
 
     public static void main(String[] args) throws Exception {
-
-        String otoolBuildArch="OTOOL_BUILD_ARCH";
-        String i686="i686";
-        String otoolBuildArchVal = System.getenv(otoolBuildArch);
-        System.out.println("In search for " + i686 + " in $"+otoolBuildArch + " got " + otoolBuildArchVal);
-        if (i686.equals(otoolBuildArchVal)) {
-           System.out.println("i686 deteced, skipping as pass");
-           return ;
-        }
 
         Security.setProperty("crypto.policy", "unlimited");
 
