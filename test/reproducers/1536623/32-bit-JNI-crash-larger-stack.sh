@@ -7,6 +7,11 @@
 
 set -eu
 
+if [ "x$OTOOL_BUILD_ARCH" == "xi686" ] ; then
+  echo "skipped on i686"
+  exit 0
+fi
+
 FS="/"
 testDir="02007382.loadjvm_test"
 cp -a "${TESTSRC}${FS}${testDir}" .
