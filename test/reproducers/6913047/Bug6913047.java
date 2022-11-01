@@ -52,6 +52,15 @@ public class Bug6913047 {
 
     public static void main(String[] args) throws Exception {
 
+        String otoolBuildArch="OTOOL_BUILD_ARCH";
+        String i686="i686";
+        String otoolBuildArchVal = System.getenv(otoolBuildArch);
+        System.out.println("In search for " + i686 + " in $"+otoolBuildArch + " got " + otoolBuildArchVal);
+        if (i686.equals(otoolBuildArchVal)) {
+           System.out.println("i686 deteced, skipping as pass");
+           return ;
+        }
+
         Security.setProperty("crypto.policy", "unlimited");
 
         Boolean isWindows = false;
