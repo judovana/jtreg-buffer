@@ -454,6 +454,14 @@ public class MemoryAllocatorTest {
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
+        String otoolBuildArch="OTOOL_BUILD_ARCH";
+        String i686="i686";
+        String otoolBuildArchVal = System.getenv(otoolBuildArch);
+        System.out.println("In search for " + i686 + " in $"+otoolBuildArch + " got " + otoolBuildArchVal);
+        if (i686.equals(otoolBuildArchVal)) {
+           System.out.println("i686 deteced, skipping as pass");
+           return ;
+        }
         /*
          * jprt systems on windows and linux seem to have abundant memory
          * therefore can take a very long time to run, and even if it does
