@@ -9,12 +9,11 @@ function findFreePort() {
   local BASE_PORT=9999
   local INCREMENT=1
   local port=$BASE_PORT
-  local isfree=$(netstat -taln | grep $port)
 
-  while [[ -n "$isfree" ]]; do
-      port=$[port+INCREMENT]
-      isfree=$(netstat -taln | grep $port) || echo "found $port" >&2
+  while netstat ${NETSTAT_ARGS:--taln} | grep -q ":$port " ; do
+      port=$((port+INCREMENT))
   done
+  echo "found $port" >&2
   echo $port
 }
 
@@ -50,6 +49,8 @@ case "$OS" in
   Windows_* | CYGWIN_NT* )
     PS=";"
     FS="\\"
+    # netstat on windows has different switches
+    NETSTAT_ARGS="-an"
     ;;
   * )
     echo "Unrecognized system!"
@@ -144,6 +145,14 @@ COPTS="-Djavax.net.ssl.trustStore=$CLIENT_STORE
 serverLog=serverLog
 rm -f pid
 (set -eo pipefail ; $TESTJAVA/bin/java $SOPTS  HTTPSServer 2>&1 & echo $! > pid ) | tee $serverLog &
+i=0
+while [ "$i" -lt 30 ] ; do
+    if [ -f pid ] ; then
+        break
+    fi
+    sleep 1
+    i=$(( ++i ))
+done
 SERVER_PID=$(cat pid)
 rm -f pid
 
