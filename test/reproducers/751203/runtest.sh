@@ -7,12 +7,10 @@ NETSTAT_ARGS="-tln"
 OS=$(uname -s)
 case "$OS" in
 SunOS | Linux)
-  NULL=/dev/null
   FS="/"
   CODEBASE=file://$BIN
   ;;
 Windows_* | CYGWIN_NT*)
-  NULL=NUL
   FS="\\"
   BIN=$(cygpath -pw $BIN)
   CODEBASE=file:///$BIN
@@ -44,8 +42,8 @@ killOldJavas() {
       jp=$(echo $j | sed "s/ .*$//")
       # java pid
       jm=$(echo $j | sed "s/^.* //")
-      if [ $jp -eq $p ] 2>${NULL}; then
-        if [ "$jm" = "HelloServer" -o "$jm" = "RegistryImpl" ] 2>${NULL}; then
+      if [ $jp -eq $p ] 2>/dev/null; then
+        if [ "$jm" = "HelloServer" -o "$jm" = "RegistryImpl" ] 2>/dev/null; then
           t=$(ps -p $p -o etime=)
           echo "$jp/$p named $jm is running $t. Killing"
           kill -9 $p
