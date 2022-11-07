@@ -147,7 +147,7 @@ rm -f pid
 (set -eo pipefail ; $TESTJAVA/bin/java $SOPTS  HTTPSServer 2>&1 & echo $! > pid ) | tee $serverLog &
 i=0
 while [ "$i" -lt 30 ] ; do
-    if [ -f pid ] ; then
+    if [ -f pid ] && grep -q '^[0-9]*$' pid ; then
         break
     fi
     sleep 1
