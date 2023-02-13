@@ -3,6 +3,7 @@
 # @test allowNonCaAnchor-javaSecurity
 # @bug 1433000
 # @summary Add security property (i.e. java.security file) version of jdk.security.allowNonCaAnchor
+# @requires jdk.version.major == 17
 # @run shell ojdk1433.sh
 
 set -exo pipefail
