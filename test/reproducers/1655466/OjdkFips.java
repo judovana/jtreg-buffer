@@ -57,6 +57,7 @@ public class OjdkFips {
         Set<String> expectedProviders2 = new HashSet<String>();
         expectedProviders2.add("SunJCE");
         expectedProviders2.add("SunRsaSign");
+        expectedProviders2.add("XMLDSig");
 
         for (Provider p: Security.getProviders()) {
             String name = p.getName();
