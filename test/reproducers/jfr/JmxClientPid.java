@@ -11,14 +11,18 @@ import jdk.management.jfr.*;
 
 import java.util.*;
 import java.io.*;
-import com.sun.tools.attach.*;
-class JmxClientPort {
+
+import com.sun.tools.attach.VirtualMachine;
+
+class JmxClientPid {
 
 
-  public static void main(String[] port) throws Exception {
+  public static void main(String[] pid) throws Exception {
     
-    String s = "/jndi/rmi://localhost:" + port[0] + "/jmxrmi";
-    JMXServiceURL url = new JMXServiceURL("rmi", "", 0, s);
+    VirtualMachine vm = VirtualMachine.attach(pid[0]);
+    String jmxUrl = vm.startLocalManagementAgent();
+    JMXServiceURL url = new JMXServiceURL(jmxUrl);
+    System.out.println(url);
     JMXConnector jmxConnector = JMXConnectorFactory.connect(url);
     MBeanServerConnection mBeanServerConnection = jmxConnector.getMBeanServerConnection();
     ObjectName objectName = new ObjectName("jdk.management.jfr:type=FlightRecorder");
@@ -37,7 +41,7 @@ class JmxClientPort {
     flightRecorder.stopRecording(recordingId);
 
     long streamId = flightRecorder.openStream(recordingId, null);
-    File f = new File("remotePortFlight.jfr");
+    File f = new File("remotePidFlight.jfr");
     try (var fos = new FileOutputStream(f); var bos = new BufferedOutputStream(fos)) {
       while (true) {
         byte[] data = flightRecorder.readStream(streamId);
