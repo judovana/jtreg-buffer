@@ -20,17 +20,29 @@ if [ "x${TESTSRC}" == "x" ] ; then
   TESTSRC=`pwd`
 fi
 
+JDK8=0
+$JAVA -version 2>&1 | grep 1.8.0 || JDK8=$?
+if  [ $JDK8 -eq 0 ] ; then
+  modArg=""
+  TRESH=500
+  clazz=ClientCmdLike
+  toolsJar="-cp ${TESTJAVA}/lib/tools.jar:."
+else
+  modArg="--add-opens jdk.attach/sun.tools.attach=ALL-UNNAMED --add-exports jdk.attach/sun.tools.attach=ALL-UNNAMED "
+  TRESH=1000
+  clazz=ClientCmdLike
+fi
+
 #hardcoded in ClientCmdLike.java
 FLIGHTFILE=cmdLikeFlight.jfr
 
-modArg="--add-opens jdk.attach/sun.tools.attach=ALL-UNNAMED --add-exports jdk.attach/sun.tools.attach=ALL-UNNAMED "
 ${JAVAC} -d . $TESTSRC/Server.java
-${JAVAC} $modArg -d . $TESTSRC/ClientCmdLike.java
+${JAVAC} $toolsJar $modArg -d . $TESTSRC/$clazz.java
 ${JAVA} Server  8 &
 JPID=$!
-${JAVA} $modArg ClientCmdLike  $JPID
+${JAVA} $toolsJar $modArg $clazz  $JPID
 sleep 4
 ${JFR} print  $FLIGHTFILE | (head; tail)
 parsedLines=`cat $FLIGHTFILE | wc -l`
-test $parsedLines -gt 1000
+test $parsedLines -gt $TRESH
 rm $FLIGHTFILE 

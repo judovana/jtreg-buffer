@@ -22,6 +22,14 @@ if [ "x${TESTSRC}" == "x" ] ; then
   TESTSRC=`pwd`
 fi
 
+JDK8=0
+$JAVA -version 2>&1 | grep 1.8.0 || JDK8=$?
+if  [ $JDK8 -eq 0 ] ; then
+  TRESH=500
+else
+  TRESH=1000
+fi
+
 FLIGHTFILE=flight2.jfr
 
 ${JAVAC} -d . $TESTSRC/Server.java
@@ -31,5 +39,5 @@ ${JCMD} $JPID JFR.start duration=2s filename=$FLIGHTFILE
 sleep 4
 ${JFR} print  $FLIGHTFILE | (head; tail)
 parsedLines=`cat $FLIGHTFILE | wc -l`
-test $parsedLines -gt 1000
+test $parsedLines -gt $TRESH
 rm $FLIGHTFILE 
