@@ -64,6 +64,7 @@ class Self {
     }
     flightRecorder.stopRecording(recordingId);
 
+    //void copyTo​(long recordingId, String outputFile) maybe may be used instead of the stream work
     long streamId = flightRecorder.openStream(recordingId, null);
     File f = new File("flightSelf.jfr");
     try (var fos = new FileOutputStream(f); var bos = new BufferedOutputStream(fos)) {
