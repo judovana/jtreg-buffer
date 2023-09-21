@@ -10,12 +10,10 @@ if [ ! "x${TESTJAVA}" == "x" ] ; then
   JAVAC=${TESTJAVA}${FS}bin${FS}javac
   JAVA=${TESTJAVA}${FS}bin${FS}java
   JFR=${TESTJAVA}${FS}bin${FS}jfr
-  JCMD=${TESTJAVA}${FS}bin${FS}jcmd
 else
   JAVAC=$(readlink -f `which javac`)
   JAVA=$(readlink -f `which java`)
   JFR=$(readlink -f `which jfr`)
-  JCMD=$(readlink -f `which jcmd`)
 fi
 
 if [ "x${TESTSRC}" == "x" ] ; then
