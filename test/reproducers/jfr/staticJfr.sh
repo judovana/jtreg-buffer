@@ -24,5 +24,7 @@ FLIGHTFILE=flight1.jfr
 
 ${JAVAC} -d . $TESTSRC/Server.java
 ${JAVA} -XX:+FlightRecorder  -XX:StartFlightRecording=filename=$FLIGHTFILE,dumponexit=true Server  2
-${JFR} print  $FLIGHTFILE 
+${JFR} print  $FLIGHTFILE | (head; tail)
+parsedLines=`cat $FLIGHTFILE | wc -l`
+test $parsedLines -gt 1000
 rm $FLIGHTFILE 

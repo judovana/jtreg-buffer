@@ -29,5 +29,7 @@ ${JAVA} Server  8 &
 JPID=$!
 ${JCMD} $JPID JFR.start duration=2s filename=$FLIGHTFILE
 sleep 4
-${JFR} print  $FLIGHTFILE 
+${JFR} print  $FLIGHTFILE | (head; tail)
+parsedLines=`cat $FLIGHTFILE | wc -l`
+test $parsedLines -gt 1000
 rm $FLIGHTFILE 

@@ -31,5 +31,7 @@ ${JCMD} $JPID JFR.start filename=$FLIGHTFILE
 sleep 2
 ${JCMD} $JPID JFR.dump name=1
 ${JCMD} $JPID JFR.stop name=1
-${JFR} print  $FLIGHTFILE 
+${JFR} print  $FLIGHTFILE | (head; tail)
+parsedLines=`cat $FLIGHTFILE | wc -l`
+test $parsedLines -gt 1000
 rm $FLIGHTFILE 
