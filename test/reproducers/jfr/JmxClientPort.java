@@ -28,7 +28,7 @@ class JmxClientPort {
     long recordingId = flightRecorder.newRecording();
     Map<String,String> settings = new HashMap();
     //enabel all settings
-    for (EventTypeInfo event : flightRecorder.getEventTypes()) {
+    for (EventType event : FlightRecorder.getFlightRecorder().getEventTypes()) {
        settings.put(event.getName()+"#enabled", "true");
     }
     flightRecorder.setRecordingSettings(recordingId, settings);

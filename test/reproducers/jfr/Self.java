@@ -38,7 +38,7 @@ class Self {
       System.out.println("All available events:");
       //FlightRecorder.getFlightRecorder().getEventTypes() returns same items, as THIS(client) VM sees them
       //here we monitor ourselves so it does nto metter, but the flightRecorder.getEventTypes() should be preffered way
-      //as target VM may be different
+      //as target VM may be different. However, it needs more filtering
       //all are disabled by default
       for (EventType event : FlightRecorder.getFlightRecorder().getEventTypes()) {
         System.out.println(event.getName());
