@@ -33,8 +33,13 @@ class Self {
 
     FlightRecorderMXBean flightRecorder = ManagementFactory.getPlatformMXBean(FlightRecorderMXBean.class);
     if (debug) {
-      //flightRecorder.getEventTypes() returns same items, only under different type, all are disabled by default
+      //flightRecorder.getEventTypes() returns same items, as REMOTE VM sees them
+      //all are disabled by default
       System.out.println("All available events:");
+      //FlightRecorder.getFlightRecorder().getEventTypes() returns same items, as THIS(client) VM sees them
+      //here we monitor ourselves so it does nto metter, but the flightRecorder.getEventTypes() should be preffered way
+      //as target VM may be different
+      //all are disabled by default
       for (EventType event : FlightRecorder.getFlightRecorder().getEventTypes()) {
         System.out.println(event.getName());
         for (ValueDescriptor value: event.getFields()) {

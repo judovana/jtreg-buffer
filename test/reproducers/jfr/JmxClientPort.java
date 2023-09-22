@@ -28,7 +28,7 @@ class JmxClientPort {
     long recordingId = flightRecorder.newRecording();
     Map<String,String> settings = new HashMap();
     //enabel all settings
-    for (EventType event : FlightRecorder.getFlightRecorder().getEventTypes()) {
+    for (EventTypeInfo event : flightRecorder.getEventTypes()) {
        settings.put(event.getName()+"#enabled", "true");
     }
     flightRecorder.setRecordingSettings(recordingId, settings);
@@ -36,6 +36,7 @@ class JmxClientPort {
     Thread.sleep(2000);
     flightRecorder.stopRecording(recordingId);
 
+    //void copyTo​(long recordingId, String outputFile) maybe may be used instead of the stream work
     long streamId = flightRecorder.openStream(recordingId, null);
     File f = new File("remotePortFlight.jfr");
     try (var fos = new FileOutputStream(f); var bos = new BufferedOutputStream(fos)) {

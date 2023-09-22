@@ -15,6 +15,7 @@ class ClientCmdLike {
         // Cast to HotSpotVirtualMachine as this is an
         // implementation specific method.
         HotSpotVirtualMachine hvm = (HotSpotVirtualMachine) vm;
+            //this is launching recording on REMOTE jvm, file is in its cwd.
             String line="JFR.start duration=2s filename=cmdLikeFlight.jfr";
             try (InputStream in = hvm.executeJCmd(line);) {
                 // read to EOF and just print output
