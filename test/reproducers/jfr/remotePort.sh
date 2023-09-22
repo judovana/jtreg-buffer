@@ -24,14 +24,24 @@ fi
 #hardcoded in ClientCmdLike.java
 FLIGHTFILE=remotePortFlight.jfr
 PORT=64686
+rm -rf workdir1 ; mkdir workdir1
+rm -rf workdir2 ; mkdir workdir2
+expectedDir=workdir2;
+
 ${JAVAC} -d . $TESTSRC/Server.java
 ${JAVAC} -d . $TESTSRC/JmxClientPort.java
-${JAVA} Server  8 &
-sleep 1
-JMX_ARGS="-Dcom.sun.management.jmxremote  -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=$PORT -Djava.rmi.server.hostname=localhost"
-${JAVA} $JMX_ARGS JmxClientPort  $PORT
-sleep 4
-${JFR} print  $FLIGHTFILE | (head; tail)
-parsedLines=`cat $FLIGHTFILE | wc -l`
+pushd workdir1
+  ${JAVA} -cp .. Server  8 &
+  sleep 1
+popd
+pushd workdir2
+  JMX_ARGS="-Dcom.sun.management.jmxremote  -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=$PORT -Djava.rmi.server.hostname=localhost"
+  ${JAVA} -cp .. $JMX_ARGS JmxClientPort  $PORT
+  sleep 4
+popd
+${JFR} print  $expectedDir/$FLIGHTFILE | (head; tail)
+parsedLines=`cat $expectedDir/$FLIGHTFILE | wc -l`
 test $parsedLines -gt 1000
-rm $FLIGHTFILE 
+rm $expectedDir/$FLIGHTFILE 
+rm -rf workdir1
+rm -rf workdir2

@@ -23,15 +23,24 @@ if [ "x${TESTSRC}" == "x" ] ; then
 fi
 
 FLIGHTFILE=flight3.jfr
+rm -rf workdir1 ; mkdir workdir1
+rm -rf workdir2 ; mkdir workdir2
+expectedDir=workdir1;
 
 ${JAVAC} -d . $TESTSRC/Server.java
-${JAVA} Server  8 &
-JPID=$!
-${JCMD} $JPID JFR.start filename=$FLIGHTFILE
-sleep 2
-${JCMD} $JPID JFR.dump name=1
-${JCMD} $JPID JFR.stop name=1
-${JFR} print  $FLIGHTFILE | (head; tail)
-parsedLines=`cat $FLIGHTFILE | wc -l`
+pushd workdir1
+  ${JAVA} -cp .. Server  8 &
+  JPID=$!
+popd
+pushd workdir2
+  ${JCMD} $JPID JFR.start filename=$FLIGHTFILE
+  sleep 2
+  ${JCMD} $JPID JFR.dump name=1
+  ${JCMD} $JPID JFR.stop name=1
+popd
+${JFR} print  $expectedDir/$FLIGHTFILE | (head; tail)
+parsedLines=`cat $expectedDir/$FLIGHTFILE | wc -l`
 test $parsedLines -gt 1000
-rm $FLIGHTFILE 
+rm $expectedDir/$FLIGHTFILE 
+rm -rf workdir1
+rm -rf workdir2

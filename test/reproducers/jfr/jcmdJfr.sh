@@ -31,13 +31,22 @@ else
 fi
 
 FLIGHTFILE=flight2.jfr
+rm -rf workdir1 ; mkdir workdir1
+rm -rf workdir2 ; mkdir workdir2
+expectedDir=workdir1;
 
 ${JAVAC} -d . $TESTSRC/Server.java
-${JAVA} Server  8 &
-JPID=$!
-${JCMD} $JPID JFR.start duration=2s filename=$FLIGHTFILE
-sleep 4
-${JFR} print  $FLIGHTFILE | (head; tail)
-parsedLines=`cat $FLIGHTFILE | wc -l`
+pushd workdir1
+  ${JAVA} -cp .. Server  8 &
+  JPID=$!
+popd
+pushd workdir2
+  ${JCMD} $JPID JFR.start duration=2s filename=$FLIGHTFILE
+  sleep 4
+popd
+${JFR} print  $expectedDir/$FLIGHTFILE | (head; tail)
+parsedLines=`cat $expectedDir/$FLIGHTFILE | wc -l`
 test $parsedLines -gt $TRESH
-rm $FLIGHTFILE 
+rm $expectedDir/$FLIGHTFILE 
+rm -rf workdir1
+rm -rf workdir2

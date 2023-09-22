@@ -26,23 +26,33 @@ if  [ $JDK8 -eq 0 ] ; then
   modArg=""
   TRESH=500
   clazz=ClientCmdLike
-  toolsJar="-cp ${TESTJAVA}/lib/tools.jar:."
+  toolsJar="-cp ${TESTJAVA}/lib/tools.jar:.."
 else
   modArg="--add-opens jdk.attach/sun.tools.attach=ALL-UNNAMED --add-exports jdk.attach/sun.tools.attach=ALL-UNNAMED "
   TRESH=1000
   clazz=ClientCmdLike
+  toolsJar="-cp .."
 fi
 
 #hardcoded in ClientCmdLike.java
 FLIGHTFILE=cmdLikeFlight.jfr
+rm -rf workdir1 ; mkdir workdir1
+rm -rf workdir2 ; mkdir workdir2
+expectedDir=workdir1;
 
 ${JAVAC} -d . $TESTSRC/Server.java
 ${JAVAC} $toolsJar $modArg -d . $TESTSRC/$clazz.java
-${JAVA} Server  8 &
-JPID=$!
-${JAVA} $toolsJar $modArg $clazz  $JPID
-sleep 4
-${JFR} print  $FLIGHTFILE | (head; tail)
-parsedLines=`cat $FLIGHTFILE | wc -l`
+pushd workdir1
+  ${JAVA} -cp .. Server  8 &
+  JPID=$!
+popd
+pushd workdir2
+  ${JAVA} $toolsJar $modArg $clazz  $JPID
+  sleep 4
+popd
+${JFR} print  $expectedDir/$FLIGHTFILE | (head; tail)
+parsedLines=`cat $expectedDir/$FLIGHTFILE | wc -l`
 test $parsedLines -gt $TRESH
-rm $FLIGHTFILE 
+rm $expectedDir/$FLIGHTFILE
+rm -rf workdir1
+rm -rf workdir2
