@@ -27,4 +27,9 @@ ${JAVA} -XX:+FlightRecorder  -XX:StartFlightRecording=filename=$FLIGHTFILE,dumpo
 ${JFR} print  $FLIGHTFILE | (head; tail)
 parsedLines=`cat $FLIGHTFILE | wc -l`
 test $parsedLines -gt 1000
+
+sleep=`${JFR} summary  $FLIGHTFILE | grep ThreadSleep`
+count=`echo "$sleep"   | sed "s/ \+/ /g"  |  cut -d ' ' -f 3`
+#??test $count -gt 100
+
 rm $FLIGHTFILE 

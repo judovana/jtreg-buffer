@@ -42,6 +42,11 @@ popd
 ${JFR} print  $expectedDir/$FLIGHTFILE | (head; tail)
 parsedLines=`cat $expectedDir/$FLIGHTFILE | wc -l`
 test $parsedLines -gt 1000
+
+sleep=`${JFR} summary  $expectedDir/$FLIGHTFILE | grep ThreadSleep`
+count=`echo "$sleep"   | sed "s/ \+/ /g"  |  cut -d ' ' -f 3`
+#??test $count -gt 100
+
 rm $expectedDir/$FLIGHTFILE 
 rm -rf workdir1
 rm -rf workdir2
