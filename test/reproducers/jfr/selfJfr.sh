@@ -4,6 +4,11 @@
 ## @bug 1444666
 ## @summary check if java class can flight record itself
 
+if [ "x$OTOOL_jfr" == "xjfron" ] ; then
+  echo "ignored in OTOOL_jfr=jfron"
+  exit 0
+fi
+
 set -exo pipefail
 
 if [ ! "x${TESTJAVA}" == "x" ] ; then

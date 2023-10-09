@@ -3,6 +3,11 @@
 ## @bug 1444666
 ## @summary check if jfr can be stopped in runtime via jcmd, write file, and that file is readable
 
+if [ "x$OTOOL_jfr" == "xjfron" ] ; then
+  echo "ignored in OTOOL_jfr=jfron"
+  exit 0
+fi
+
 set -exo pipefail
 
 if [ ! "x${TESTJAVA}" == "x" ] ; then
