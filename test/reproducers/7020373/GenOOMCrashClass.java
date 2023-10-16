@@ -126,7 +126,7 @@ public class GenOOMCrashClass {
 
             gototail.setTarget(ih);
 
-            mg.setMaxStack(Integer.MAX_VALUE); // Needed stack size
+            mg.setMaxStack(Character.MAX_VALUE); // Needed stack size
 
             mg.setMaxLocals();
             cg.addMethod(mg.getMethod());
