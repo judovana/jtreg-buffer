@@ -1,3 +1,11 @@
+/**
+ * some of the jtreg classes are pretty huge, with 30G some similarity search failed. Try:
+ * java -Xmx60G  FindDupes  ./test/reproducers/1098399/GlyphBug.java /home/jvanek/git/jdk/test/jdk/java/lang/String/concat/ImplicitStringConcatShapes.java  --verbose 
+ * with less mem. On 30 failed after minute. ON 60 passes in 6 minutes for me
+ * I had tried also (ImplicitStringConcatShapes have 17000lines):
+ * java -Xmx60G  FindDupes  /home/jvanek/git/jdk/test/jdk/java/lang/String/concat/ImplicitStringConcatShapes.java  /home/jvanek/git/jdk/test/jdk/java/lang/String/concat/ImplicitStringConcatShapes.java  --verbose 
+ * but it faiks after few seconds...
+ */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
