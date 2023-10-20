@@ -225,14 +225,13 @@ public class FindDupes {
             if (verbose) {
                 System.err.println("    Finished:"  + from.toFile().getAbsolutePath());
                 System.err.println("        hits:"  + localhits);
-                System.err.println("   bestmatch:"  + lmaxmin);
-                System.err.println(" bestmatchws:"  + lmaxminws);
+                System.err.println("   bestmatch:"  + lmaxmin[0]);
+                System.err.println(" bestmatchws:"  + lmaxminws[0]);
                 System.err.println("       skips:"  + lskips);
                 System.err.println("                   hits total: "  + hits);
                 System.err.println("                  skips total: "  + skips);
-                System.err.println("   bestmatch all over session: "  + maxmin);
-                System.err.println(" bestmatchws all over session: "  + maxminws);
-                System.err.println(" bestmatchws all over session: "  + maxminws);
+                System.err.println("   bestmatch all over session: "  + maxmin[0]);
+                System.err.println(" bestmatchws all over session: "  + maxminws[0]);
             }
         }
     }
