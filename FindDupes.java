@@ -1,4 +1,8 @@
 /**
+ *
+ * Check names first if possible:
+ * for x in `find test -type f | grep -v -e /Main.java -e /Test.java ` ; do y=`basename $x` ; echo $x ; find /home/jvanek/git/jdk/test/ | grep /$y$; done
+ *
  * TODO - for big files, repalce current 2D-array fast solution, by recursive slow solution :D
  * some of the jtreg classes are pretty huge, with 30G some similarity search failed. Try:
  * java -Xmx46G  FindDupes  ./test/reproducers/1098399/GlyphBug.java /home/jvanek/git/jdk/test/jdk/java/lang/String/concat/ImplicitStringConcatShapes.java  --verbose 
