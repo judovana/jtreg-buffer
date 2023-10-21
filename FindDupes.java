@@ -1,7 +1,7 @@
 /**
  *
  * Check names first if possible:
- * for x in `find test -type f | grep -v -e /Main.java -e /Test.java ` ; do y=`basename $x` ; echo $x ; find /home/jvanek/git/jdk/test/ | grep /$y$; done
+ * for x in `find test -type f | grep -v -e /Main.java -e /Test.java ` ; do y=`basename $x` ; echo $x ; find /home/jvanek/git/jdk/test/ | grep "/$y$"; done
  *
  * TODO - for big files, repalce current 2D-array fast solution, by recursive slow solution :D
  * some of the jtreg classes are pretty huge, with 30G some similarity search failed. Try:
@@ -35,6 +35,8 @@ import java.util.regex.Matcher;
 
 public class FindDupes {
 
+ private static final String DEFAULT_COMMENTS="\\s*[/*\\*#].*";
+
  public static void main(String... args) throws IOException {
         if (args.length == 0) {
             System.err.println("At least one argument necessary - directory/dir to comapre CWD agasint");
@@ -42,11 +44,15 @@ public class FindDupes {
             System.err.println("  minimal similarity in percent --min=NUMB");
             System.err.println("  minimal similarity in percent with whitechars removed"
                              + "                                --minws=NUMB");
+            System.err.println("Note, that min/minws should be 0-100 inclusive. Bigger/higher will effectively exclude the method.");
             System.err.println("  file path filter regex        --fitler=EXPRES");
+            System.err.println("  remove comment lines          --eraser[=EXPRES]");
+            System.err.println("    if enabled, default is " + DEFAULT_COMMENTS);
             System.err.println("  verbose mode                  --verbose");
             System.err.println("  maximum filesize in KB        --maxsize=NUMBER");
             System.err.println("    Default is 100 (100kb), which eats about 46GB ram and taks 5-8 minutes. Biggrer files ");
-            System.err.println("Note, that min/minws should be 0-100 inclusive. Bigger/higher will effectively exclude the method.");
+             System.err.println("  maximum filesize diff ratio  --maxratio=DOUBLE");
+            System.err.println("    Default is 10. Unless target/n < source < target*N then comparison will be skipped. Happens after comment removal");
             System.err.println("everything not `-` starting  is considered as dir/file which  the CWD/first file/dir should be compared against");
             throw new RuntimeException(" one ore more args expected, got zero");
         }
@@ -54,8 +60,10 @@ public class FindDupes {
         List<File> compares = new ArrayList<>(args.length + 1);
         double min = 80;
         double minws = 90;
+        double maxratio = 10;
         boolean verbose = false;
         long maxsize = 100*1024;    //100kb
+        Pattern eraser = null;
         Pattern filter = Pattern.compile(".*");
         for (String arg : args) {
             if (arg.startsWith("-")) {
@@ -73,6 +81,16 @@ public class FindDupes {
                         break;
                     case "-filter":
                         filter = Pattern.compile(arg.split("=")[1]);
+                        break;
+                    case "-eraser":
+                        if (arg.contains("=")) {
+                            eraser = Pattern.compile(arg.split("=")[1]);
+                        } else {
+                            eraser = Pattern.compile(DEFAULT_COMMENTS);
+                        }
+                        break;
+                    case "-maxratio":
+                        maxratio = Double.parseDouble(arg.split("=")[1]);
                         break;
                     case "-verbose":
                         verbose = true;
@@ -157,6 +175,10 @@ public class FindDupes {
                     throw new IOException("File do not match fitlering " + filter.toString());
                 }
                 content1 = Files.readString(from);
+                if (eraser!=null) {
+                    Matcher matcher = eraser.matcher(content1);
+                    content1 = matcher.replaceAll("");
+                }
             } catch(Exception ex) {
                 skips++;
                 if (verbose) {
@@ -185,6 +207,16 @@ public class FindDupes {
                             throw new IOException("File do not match fitlering " + filter.toString());
                         }
                         content2 = Files.readString(to);
+                        if (eraser!=null) {
+                            Matcher matcher = eraser.matcher(content2);
+                            content2 = matcher.replaceAll("");
+                        }
+                        if ((double)(content2.length())/maxratio > (double)(content1.length())) {
+                            throw new IOException("content2 to big -  " + content2.length() + ">>"+content1.length());
+                        }
+                        if ((double)(content2.length())*maxratio < (double)(content1.length())) {
+                            throw new IOException("content2 to small -  " + content2.length() + ">>"+content1.length());
+                        }
                     } catch(Exception ex) {
                         lskips++;
                         if (verbose) {
