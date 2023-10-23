@@ -265,7 +265,7 @@ public class FindDupes {
                             throw new IOException("content2 to big -  " + content2.length() + ">>"+content1.length());
                         }
                         if ((double)(content2.length())*maxratio < (double)(content1.length())) {
-                            throw new IOException("content2 to small -  " + content2.length() + ">>"+content1.length());
+                            throw new IOException("content2 to small -  " + content2.length() + "<<"+content1.length());
                         }
                     } catch(Exception ex) {
                         lskips++;
