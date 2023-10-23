@@ -1,7 +1,5 @@
 /**
  *
- * Check names first if possible:
- * for x in `find test -type f | grep -v -e /Main.java -e /Test.java ` ; do y=`basename $x` ; echo $x ; find /home/jvanek/git/jdk/test/ | grep "/$y$"; done
  *
  * TODO - for big files, repalce current 2D-array fast solution, by recursive slow solution :D
  * some of the jtreg classes are pretty huge, with 30G some similarity search failed. Try:
@@ -41,11 +39,16 @@ public class FindDupes {
         if (args.length == 0) {
             System.err.println("At least one argument necessary - directory/dir to comapre CWD agasint");
             System.err.println("Other understood args:");
+            System.err.println("  will comapre only if filenames are same/similar\n"
+                             + "                                --names=false/true/icase/NUMBER/");
+            System.err.println("    false - not used, comapre all. true filenames must be same before comaprison. icase - like true, only9 case insensitive. NUMBER - names must be similar (percentages) ");
             System.err.println("  minimal similarity in percent --min=NUMB");
-            System.err.println("  minimal similarity in percent with whitechars removed"
+            System.err.println("  minimal similarity in percent with whitechars removed\n"
                              + "                                --minws=NUMB");
             System.err.println("Note, that min/minws should be 0-100 inclusive. Bigger/higher will effectively exclude the method.");
             System.err.println("  file path filter regex        --fitler=EXPRES");
+            System.err.println("  sources blackslist            --exclude=EXPRES");
+            System.err.println("    exclude matching source files form run. Eg \".*/(Main|Test|A)\\.java$\"");
             System.err.println("  remove comment lines          --eraser[=EXPRES]");
             System.err.println("    if enabled, default is " + DEFAULT_COMMENTS);
             System.err.println("  verbose mode                  --verbose");
@@ -58,6 +61,7 @@ public class FindDupes {
         }
         File src = null;
         List<File> compares = new ArrayList<>(args.length + 1);
+        double names = -100;  //-100 off, --10  same, -1 sameignorecase, 0-100 levenstain
         double min = 80;
         double minws = 90;
         double maxratio = 10;
@@ -65,6 +69,7 @@ public class FindDupes {
         long maxsize = 100*1024;    //100kb
         Pattern eraser = null;
         Pattern filter = Pattern.compile(".*");
+        Pattern blacklist = null;
         for (String arg : args) {
             if (arg.startsWith("-")) {
                 arg = arg.replaceAll("^-+", "-");
@@ -82,11 +87,26 @@ public class FindDupes {
                     case "-filter":
                         filter = Pattern.compile(arg.split("=")[1]);
                         break;
+                    case "-exclude":
+                        blacklist = Pattern.compile(arg.split("=")[1]);
+                        break;
                     case "-eraser":
                         if (arg.contains("=")) {
                             eraser = Pattern.compile(arg.split("=")[1]);
                         } else {
                             eraser = Pattern.compile(DEFAULT_COMMENTS);
+                        }
+                        break;
+                    case "-names":
+                        String value=arg.split("=")[1];
+                        if (value.equals("false")) {
+                            names=-100d;
+                        } else if (value.equals("true")) {
+                            names=-10d;
+                        } else if (value.equals("icase")) {
+                            names=-1d;
+                        } else {
+                            names = Double.parseDouble(value);
                         }
                         break;
                     case "-maxratio":
@@ -122,6 +142,11 @@ public class FindDupes {
             System.err.println("min: " + min);
             System.err.println("minws: " + minws);
             System.err.println("maxsize: " + maxsize);
+            System.err.println("names: " + names);
+            System.err.println("maxratio: " + maxratio);
+            System.err.println("eraser: " + eraser);
+            System.err.println("filter: " + filter);
+            System.err.println("blacklist: " + blacklist);
         }
         for (int i = 0; i < compares.size(); i++) {
             File comp = compares.get(i);
@@ -174,6 +199,9 @@ public class FindDupes {
                 if (!filter.matcher(from.toFile().getAbsolutePath()).matches()) {
                     throw new IOException("File do not match fitlering " + filter.toString());
                 }
+                if (blacklist !=null && blacklist.matcher(from.toFile().getAbsolutePath()).matches()) {
+                    throw new IOException("Input is excluded by " + blacklist.toString());
+                }
                 content1 = Files.readString(from);
                 if (eraser!=null) {
                     Matcher matcher = eraser.matcher(content1);
@@ -182,7 +210,7 @@ public class FindDupes {
             } catch(Exception ex) {
                 skips++;
                 if (verbose) {
-                    System.err.println("skipping " + from.toFile().getAbsolutePath() + " binary? " + ex.getMessage());
+                    System.err.println("skipping " + from.toFile().getAbsolutePath() + " from binary? " + ex.getMessage());
                 }
             }
             if (content1 == null) {
@@ -206,6 +234,23 @@ public class FindDupes {
                         if (!filter.matcher(to.toFile().getAbsolutePath()).matches()) {
                             throw new IOException("File do not match fitlering " + filter.toString());
                         }
+                        if (names > -50d && names < -5d) {
+                            //-10 same
+                            if (!from.getFileName().toString().equals(to.getFileName().toString())) {
+                                throw new IOException("filenames are different");
+                            }
+                        } else if (names > -5d && names < 0d) {
+                            //-1 sameignorecase
+                            if (!from.getFileName().toString().equalsIgnoreCase(to.getFileName().toString())) {
+                                throw new IOException("filenames are case-insensitive different");
+                            }
+                        } else if (names > 0d) {
+                            //0-100 levenstain
+                            boolean filenamecompare = LevenshteinDistance.isDifferenceTolerable(from.getFileName().toString(), to.getFileName().toString(), names/100d, verbose, null);
+                            if (!filenamecompare) {
+                                throw new IOException("only similar filenames are supposed to be comapred by content. Limit is " + names);
+                            }
+                        }
                         content2 = Files.readString(to);
                         if (eraser!=null) {
                             Matcher matcher = eraser.matcher(content2);
@@ -220,7 +265,7 @@ public class FindDupes {
                     } catch(Exception ex) {
                         lskips++;
                         if (verbose) {
-                            System.err.println("skipping " + to.toFile().getAbsolutePath() + " binary? " + ex.getMessage());
+                            System.err.println("skipping " + to.toFile().getAbsolutePath() + " to binary? " + ex.getMessage());
                         }
                     }
                     if (content2 == null) {
@@ -351,13 +396,24 @@ public class FindDupes {
                     boolean verbose, int[] recorder) {
                 double changesAllowed = (1.0 - samenessPercentage) * totalSize;
                 int percent=100-((actualChanges*100)/totalSize);
-                if (percent>recorder[0]) {
+                if (recorder!=null && percent>recorder[0]) {
                     recorder[0]=percent;
                 }
                 if (verbose) {
-                    System.err.println(percent+"% <? "+samenessPercentage*100 + "% (max:" + recorder[0] + ")");
+                    if (recorder!=null) {
+                        System.err.println(percent+"% ?> "+samenessPercentage*100 + "% (max:" + recorder[0] + ")");
+                    } else {
+                        System.err.println(percent+"% ?> "+samenessPercentage*100);
+                    }
                 }
-                return actualChanges <= changesAllowed;
+                boolean result = actualChanges <= changesAllowed;
+                if (recorder!=null) {
+                    System.out.println("  " + percent+"%: ");
+                } else {
+                    //nasty hack
+                    System.err.println(" name similarity " + percent+"%: ");
+                }
+                return result;
             }
         }
 
