@@ -34,6 +34,7 @@ import java.util.regex.Matcher;
 public class FindDupes {
 
  private static final String DEFAULT_COMMENTS="\\s*[/*\\*#].*";
+ private static final String DEFAULT_EXCLUDES=".*/(Main|Test|Test1|Test2|PURPOSE|TEST.ROOT|A)\\.java$";
 
  public static void main(String... args) throws IOException {
         if (args.length == 0) {
@@ -48,7 +49,7 @@ public class FindDupes {
             System.err.println("Note, that min/minws should be 0-100 inclusive. Bigger/higher will effectively exclude the method.");
             System.err.println("  file path filter regex        --fitler=EXPRES");
             System.err.println("  sources blackslist            --exclude=EXPRES");
-            System.err.println("    exclude matching source files form run. Eg \".*/(Main|Test|A)\\.java$\"");
+            System.err.println("    exclude matching source files form run. Eg \""+DEFAULT_EXCLUDES+"\"");
             System.err.println("  remove comment lines          --eraser[=EXPRES]");
             System.err.println("    if enabled, default is " + DEFAULT_COMMENTS);
             System.err.println("  verbose mode                  --verbose");
@@ -88,7 +89,11 @@ public class FindDupes {
                         filter = Pattern.compile(arg.split("=")[1]);
                         break;
                     case "-exclude":
-                        blacklist = Pattern.compile(arg.split("=")[1]);
+                        if (arg.contains("=")) {
+                            blacklist = Pattern.compile(arg.split("=")[1]);
+                        } else {
+                            blacklist = Pattern.compile(DEFAULT_EXCLUDES);
+                        }
                         break;
                     case "-eraser":
                         if (arg.contains("=")) {
@@ -408,8 +413,13 @@ public class FindDupes {
                 }
                 boolean result = actualChanges <= changesAllowed;
                 if (recorder!=null) {
-                    System.out.println("  " + percent+"%: ");
-                } else {
+                    if (result) {
+                        System.out.println("  " + percent+"%: ");
+                    }
+                    if (verbose){
+                        System.err.println("  " + percent+"%: ");
+                    }
+                } else if (verbose) {
                     //nasty hack
                     System.err.println(" name similarity " + percent+"%: ");
                 }
