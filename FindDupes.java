@@ -68,6 +68,7 @@ public class FindDupes {
         double maxratio = 10;
         boolean verbose = false;
         long maxsize = 100*1024;    //100kb
+        long minsize = 10;
         Pattern eraser = null;
         Pattern filter = Pattern.compile(".*");
         Pattern blacklist = null;
@@ -187,8 +188,10 @@ public class FindDupes {
         long hits = 0;
         int skips = 0;
         long totalttoal = (long) (finalSrcs.size()) * total;
+        boolean firstPrinted;
         Date started=new Date();
         for (Path from:  finalSrcs) {
+            firstPrinted = false;
             if (verbose) {
                 System.err.println("Started " + from.toFile().getAbsolutePath());
             }
@@ -198,8 +201,11 @@ public class FindDupes {
             int lskips = 0;
             String content1 = null;
             try {
+                if (from.toFile().length() <= minsize) {
+                    throw new IOException("File too small,  limit is " + minsize + "bytes");
+                }
                 if (from.toFile().length() > maxsize) {
-                    throw new IOException("File too big,  limit is " + maxsize);
+                    throw new IOException("File too big,  limit is " + maxsize + "bytes");
                 }
                 if (!filter.matcher(from.toFile().getAbsolutePath()).matches()) {
                     throw new IOException("File do not match fitlering " + filter.toString());
@@ -233,8 +239,11 @@ public class FindDupes {
                     }
                     String content2 = null;
                     try {
+                        if (to.toFile().length() <= minsize) {
+                            throw new IOException("File too small,  limit is " + minsize + "bytes");
+                        }
                         if (to.toFile().length() > maxsize) {
-                            throw new IOException("File too big,  limit is " + maxsize);
+                            throw new IOException("File too big,  limit is " + maxsize + "bytes");
                         }
                         if (!filter.matcher(to.toFile().getAbsolutePath()).matches()) {
                             throw new IOException("File do not match fitlering " + filter.toString());
@@ -251,8 +260,8 @@ public class FindDupes {
                             }
                         } else if (names > 0d) {
                             //0-100 levenstain
-                            boolean filenamecompare = LevenshteinDistance.isDifferenceTolerable(from.getFileName().toString(), to.getFileName().toString(), names/100d, verbose, null);
-                            if (!filenamecompare) {
+                            PassWithResult filenamecompare = LevenshteinDistance.isDifferenceTolerable(from.getFileName().toString(), to.getFileName().toString(), names/100d, verbose, null);
+                            if (!filenamecompare.pass) {
                                 throw new IOException("only similar filenames are supposed to be comapred by content. Limit is " + names);
                             }
                         }
@@ -279,30 +288,40 @@ public class FindDupes {
                     if (verbose) {
                         System.err.print(" similarity: ");
                     }
-                    boolean compare1 = LevenshteinDistance.isDifferenceTolerable(content1, content2, min, verbose, lmaxmin);
+                    PassWithResult compare1 = LevenshteinDistance.isDifferenceTolerable(content1, content2, min, verbose, lmaxmin);
                     if (lmaxmin[0] > maxmin[0]) {
                         maxmin[0]=lmaxmin[0];
                     }
-                    if (compare1) {
+                    if (compare1.pass) {
+                        if (!firstPrinted) {
+                            firstPrinted = true;
+                            System.out.println(from.toFile().getAbsolutePath());
+                        }
+                        System.out.print("  " + compare1.percent+"%: ");
+                        System.out.println(" " + to.toFile().getAbsolutePath());
                         hits++;
                         localhits++;
-                        System.out.println(from.toFile().getAbsolutePath() + " == " + to.toFile().getAbsolutePath());
                         System.err.println(from.toFile().getAbsolutePath() + " == " + to.toFile().getAbsolutePath() + " hits: "+localhits+"|"+hits);
                     } else {
                         if (verbose) {
                             System.err.print(" similarity without spaces: ");
                         }
-                        boolean compare2 = LevenshteinDistance.isDifferenceTolerable(
+                        PassWithResult compare2 = LevenshteinDistance.isDifferenceTolerable(
                                 content1.replaceAll("\\s+", ""),
                                 content2.replaceAll("\\s+", ""),
                                 minws,verbose, lmaxminws);
                         if (lmaxminws[0] > maxminws[0]) {
                             maxminws[0]=lmaxminws[0];
                         }
-                        if (compare2) {
+                        if (compare2.pass) {
+                            if (!firstPrinted) {
+                                firstPrinted = true;
+                                System.out.println(from.toFile().getAbsolutePath());
+                            }
+                            System.out.print("  " + compare2.percent+"%: ");
+                            System.out.println(" " + to.toFile().getAbsolutePath());
                             hits++;
                             localhits++;
-                            System.out.println(from.toFile().getAbsolutePath() + " == " + to.toFile().getAbsolutePath());
                             System.err.println(from.toFile().getAbsolutePath() + " == " + to.toFile().getAbsolutePath() + " hits: "+localhits+"|"+hits);
                         }
                     }
@@ -391,13 +410,13 @@ public class FindDupes {
                 return Math.min(a, Math.min(b, c));
             }
 
-            public static boolean isDifferenceTolerable(String s1, String s2, double samenessPercentage,
+            public static PassWithResult isDifferenceTolerable(String s1, String s2, double samenessPercentage,
                     boolean verbose, int[] recorder) {
                 return isDifferenceTolerableImpl(samenessPercentage, LevenshteinDistance.calculate(s1, s2),
                         Math.max(s1.length(), s2.length()), verbose, recorder);
             }
 
-            public static boolean isDifferenceTolerableImpl(double samenessPercentage, int actualChanges, int totalSize,
+            public static PassWithResult isDifferenceTolerableImpl(double samenessPercentage, int actualChanges, int totalSize,
                     boolean verbose, int[] recorder) {
                 double changesAllowed = (1.0 - samenessPercentage) * totalSize;
                 int percent=100-((actualChanges*100)/totalSize);
@@ -413,9 +432,6 @@ public class FindDupes {
                 }
                 boolean result = actualChanges <= changesAllowed;
                 if (recorder!=null) {
-                    if (result) {
-                        System.out.println("  " + percent+"%: ");
-                    }
                     if (verbose){
                         System.err.println("  " + percent+"%: ");
                     }
@@ -423,7 +439,16 @@ public class FindDupes {
                     //nasty hack
                     System.err.println(" name similarity " + percent+"%: ");
                 }
-                return result;
+                return new PassWithResult(percent,result);
+            }
+        }
+
+		public static class PassWithResult {
+            final int percent;
+            final boolean pass;
+            PassWithResult(int percent,boolean pass) {
+                this.percent=percent;
+                this.pass=pass;
             }
         }
 
