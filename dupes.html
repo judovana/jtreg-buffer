@@ -11,7 +11,7 @@ table, th, td {
 <h3>First round:</h3>
 <pre>java -Xmx50G FindDupes  -verbose -names=70  -exclude   -filter=".*\.java$"  test/ /home/jvanek/git/jdk8u-dev/  /home/jvanek/git/jdk11u-usptream/test  /home/jvanek/git/jdk17u/test/  /home/jvanek/git/jdk/test/  2>log 1>results &</pre>
 <pre>Where invisible defaults in that time were:  -min=80 -minws=90; -maxratio=10; -maxsize=100*1024</pre>
-<pre>Uluckily run witout comment removals, luckily run with defautl exclusion of ".*/(Main|Test|Test1|Test2|PURPOSE|TEST.ROOT|A)\\.java$"</pre>
+<pre>Uluckily run witout comment removals, luckily run with defautl exclusion of ".*/(Main|Test|Test1|Test2|PURPOSE|TEST.ROOT|A)\.java$"</pre>
 <table>
 <tr>
 <td>reproducer</td><td>jdk8</td><td>jdk11</td><td>jdk17</td><td>jdk/jdk</td>
