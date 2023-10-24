@@ -53,6 +53,7 @@ public class FindDupes {
             System.err.println("  remove comment lines          --eraser[=EXPRES]");
             System.err.println("    if enabled, default is " + DEFAULT_COMMENTS);
             System.err.println("  verbose mode                  --verbose");
+            System.err.println("  will add html table to stdout --html");
             System.err.println("  maximum filesize in KB        --maxsize=NUMBER");
             System.err.println("    Default is 100 (100kb), which eats about 46GB ram and taks 5-8 minutes. Biggrer files ");
              System.err.println("  maximum filesize diff ratio  --maxratio=DOUBLE");
@@ -67,6 +68,7 @@ public class FindDupes {
         double minws = 90;
         double maxratio = 10;
         boolean verbose = false;
+        boolean html = false;
         long maxsize = 100*1024;    //100kb
         long minsize = 10;
         Pattern eraser = null;
@@ -121,6 +123,9 @@ public class FindDupes {
                     case "-verbose":
                         verbose = true;
                         break;
+                    case "-html":
+                        html = true;
+                        break;
                     default:
                         throw new RuntimeException("Uknown arg: " + arg);
                 }
@@ -145,14 +150,7 @@ public class FindDupes {
         long total = 0;
         List<Path> finalSrcs = new ArrayList<>();
         if (verbose) {
-            System.err.println("min: " + min);
-            System.err.println("minws: " + minws);
-            System.err.println("maxsize: " + maxsize);
-            System.err.println("names: " + names);
-            System.err.println("maxratio: " + maxratio);
-            System.err.println("eraser: " + eraser);
-            System.err.println("filter: " + filter);
-            System.err.println("blacklist: " + blacklist);
+            info(System.err, min, minws, maxsize, minsize, names, maxratio, eraser, filter, blacklist);
         }
         for (int i = 0; i < compares.size(); i++) {
             File comp = compares.get(i);
@@ -188,7 +186,25 @@ public class FindDupes {
         long hits = 0;
         int skips = 0;
         long totalttoal = (long) (finalSrcs.size()) * total;
-        boolean firstPrinted;
+        boolean firstPrinted = false;
+        boolean closeTd = false;
+        if (html) {
+            System.out.println("<html><head><style>");
+            System.out.println("table, th, td {  border: 1px solid black;  border-collapse: collapse;}");
+            System.out.println("</style></head><body><h3>"+new Date()+"</h3><pre>");
+            info(System.out, min, minws, maxsize, minsize, names, maxratio, eraser, filter, blacklist);
+            System.out.println("</pre><table><tr><td>");
+            System.out.println(src.getAbsolutePath()+"("+finalSrcs.size()+")");
+            System.out.println("</td>");
+            for (int x = 0; x < compares.size(); x++) {
+                File toinfo = compares.get(x);
+                finalCompares.get(x);
+                System.out.println("<td>");
+                System.out.println(toinfo.getAbsolutePath()+"("+finalCompares.get(x).size()+")");
+                System.out.println("</td>");
+            }
+            System.out.println("</tr>");
+        }
         Date started=new Date();
         for (Path from:  finalSrcs) {
             firstPrinted = false;
@@ -294,11 +310,24 @@ public class FindDupes {
                     }
                     if (compare1.pass) {
                         if (!firstPrinted) {
-                            firstPrinted = true;
-                            System.out.println(from.toFile().getAbsolutePath());
+                           firstPrinted = true;
+                           if (html) {
+                               System.out.println("<tr><td>");
+                           }
+                           System.out.println(from.toFile().getAbsolutePath());
+                           if (html) {
+                               System.out.println("</td>");
+                           }
+                        }
+                        if (html && !closeTd) {
+                            System.out.println("<td>");
+                            closeTd = true;
                         }
                         System.out.print("  " + compare1.percent+"%: ");
                         System.out.println(" " + to.toFile().getAbsolutePath());
+                        if (html) {
+                            System.out.println("<br/>");
+                        }
                         hits++;
                         localhits++;
                         System.err.println(from.toFile().getAbsolutePath() + " == " + to.toFile().getAbsolutePath() + " hits: "+localhits+"|"+hits);
@@ -316,14 +345,35 @@ public class FindDupes {
                         if (compare2.pass) {
                             if (!firstPrinted) {
                                 firstPrinted = true;
+                                if (html) {
+                                    System.out.println("<tr><td>");
+                                }
                                 System.out.println(from.toFile().getAbsolutePath());
+                                if (html) {
+                                    System.out.println("</td>");
+                                }
+                            }
+                            if (html && !closeTd) {
+                                System.out.println("<td>");
+                                closeTd = true;
                             }
                             System.out.print("  " + compare2.percent+"%: ");
                             System.out.println(" " + to.toFile().getAbsolutePath());
+                            if (html) {
+                                System.out.println("<br/>");
+                            }
                             hits++;
                             localhits++;
                             System.err.println(from.toFile().getAbsolutePath() + " == " + to.toFile().getAbsolutePath() + " hits: "+localhits+"|"+hits);
                         }
+                    }
+                }
+                if (closeTd) {
+                    if (html) { System.out.println("</td>"); }
+                    closeTd=false;
+                } else {
+                    if (firstPrinted && html) {
+                        System.out.println("<td></td>");
                     }
                 }
             }
@@ -338,6 +388,14 @@ public class FindDupes {
                 System.err.println("   bestmatch all over session: "  + maxmin[0]);
                 System.err.println(" bestmatchws all over session: "  + maxminws[0]);
             }
+            if (firstPrinted && html) {
+                System.out.println("</tr>");
+            }
+        }
+        if (html) {
+            System.out.println("</table>");
+            System.out.println("<pre>"+new Date()+"</pre>");
+            System.out.println("</body></html>");
         }
     }
 
@@ -457,5 +515,17 @@ public class FindDupes {
             long tookTime = now.getTime() - start.getTime();
             double deta = (double)total/(double)counter*(double)tookTime;
             return "(run " + tookTime/1000/60+"m/eta " + (int)(deta/1000/60)+"m)";
+        }
+
+        public static void info(PrintStream err, double min, double minws, long maxsize, long minsize, double names, double maxratio, Pattern eraser, Pattern filter, Pattern blacklist )  {
+            err.println("min: " + min);
+            err.println("minws: " + minws);
+            err.println("maxsize: " + maxsize);
+            err.println("minsize: " + minsize);
+            err.println("names: " + names);
+            err.println("maxratio: " + maxratio);
+            err.println("eraser: " + eraser);
+            err.println("filter: " + filter);
+            err.println("blacklist: " + blacklist);
         }
 }
