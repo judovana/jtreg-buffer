@@ -1,0 +1,116 @@
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+</style>
+</head>
+<body>
+<h3>First round:</h3>
+<pre>java -Xmx50G FindDupes  -verbose -names=70  -exclude   -filter=".*\.java$"  test/ /home/jvanek/git/jdk8u-dev/  /home/jvanek/git/jdk11u-usptream/test  /home/jvanek/git/jdk17u/test/  /home/jvanek/git/jdk/test/  2>log 1>results &</pre>
+<pre>Where invisible defaults in that time were:  -min=80 -minws=90; -maxratio=10; -maxsize=100*1024</pre>
+<pre>Uluckily run witout comment removals, luckily run with defautl exclusion of ".*/(Main|Test|Test1|Test2|PURPOSE|TEST.ROOT|A)\\.java$"</pre>
+<table>
+<tr>
+<td>reproducer</td><td>jdk8</td><td>jdk11</td><td>jdk17</td><td>jdk/jdk</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/6588003/Test6588003.java</td>
+<td> 94%: jdk8u-dev/jdk/test/javax/swing/text/LayoutQueue/Test6588003.java</td>
+<td> 92%: jdk11u-usptream/test/jdk/javax/swing/text/LayoutQueue/Test6588003.java</td>
+<td> 92%:jdk17u/test/jdk/javax/swing/text/LayoutQueue/Test6588003.java</td>
+<td> 92%:  jdk/test/jdk/javax/swing/text/LayoutQueue/Test6588003.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/6824440/TruncateHMAC.java</td> 
+<td> 83% jdk8u-dev/jdk/test/com/sun/org/apache/xml/internal/security/TruncateHMAC.java</td>
+<td> 81% jdk11u-usptream/test/jdk/com/sun/org/apache/xml/internal/security/TruncateHMAC.java</td>
+<td> 81%: jdk17u/test/jdk/com/sun/org/apache/xml/internal/security/TruncateHMAC.java</td>
+<td> 81%: jdk/test/jdk/com/sun/org/apache/xml/internal/security/TruncateHMAC.java</td>
+<tr>
+<td> reproducers-regular/test/reproducers/789299/ExpectedStackTrace.java </td>
+<td> 100%: jdk8u-dev/jdk/test/java/io/Serializable/expectedStackTrace/ExpectedStackTrace.java</td>
+<td> 100%: jdk11u-usptream/test/jdk/java/io/Serializable/expectedStackTrace/ExpectedStackTrace.java</td>
+<td> 96%: jdk17u/test/jdk/java/io/Serializable/expectedStackTrace/ExpectedStackTrace.java</td>
+<td> 96%:jdk/test/jdk/java/io/Serializable/expectedStackTrace/ExpectedStackTrace.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/6904691/Test6277266.java</td>
+<td> 93%: jdk8u-dev/jdk/test/java/beans/EventHandler/Test6277266.java</td>
+<td> 93%: jdk11u-usptream/test/jdk/java/beans/EventHandler/Test6277266.java</td>
+<td> 92%: jdk17u/test/jdk/java/beans/EventHandler/Test6277266.java</td>
+<td> 92%: jdk/test/jdk/java/beans/EventHandler/Test6277266.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/6904691/Test6277246.java</td>
+<td> 94%:jdk8u-dev/jdk/test/java/beans/EventHandler/Test6277246.java</td>
+<td> 93%: jdk11u-usptream/test/jdk/java/beans/EventHandler/Test6277246.java</td>
+<td> 93%: jdk17u/test/jdk/java/beans/EventHandler/Test6277246.java</td>
+<td> 93%: jdk/test/jdk/java/beans/EventHandler/Test6277246.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/789295/DataLine_ArrayIndexOutOfBounds.java</td>
+<td> 88%: jdk8u-dev/jdk/test/javax/sound/sampled/DataLine/DataLine_ArrayIndexOutOfBounds.java</td>
+<td> 88%: jdk11u-usptream/test/jdk/javax/sound/sampled/DataLine/DataLine_ArrayIndexOutOfBounds.java</td>
+<td> 88%: jdk17u/test/jdk/javax/sound/sampled/DataLine/DataLine_ArrayIndexOutOfBounds.java</td>
+<td> 88%: jdk/test/jdk/javax/sound/sampled/DataLine/DataLine_ArrayIndexOutOfBounds.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/1659143/ResumeTLS13withSNI.java
+<td> 98%: jdk8u-dev/jdk/test/javax/net/ssl/SSLSession/ResumeTLS13withSNI.java
+<td> 98%: jdk11u-usptream/test/jdk/javax/net/ssl/SSLSession/ResumeTLS13withSNI.java
+<td> 98%: jdk17u/test/jdk/javax/net/ssl/SSLSession/ResumeTLS13withSNI.java
+<td> 95%: jdk/test/jdk/javax/net/ssl/SSLSession/ResumeTLS13withSNI.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/729502/UnknownCCEntry.java</td>
+<td> 83%: jdk8u-dev/jdk/test/sun/security/krb5/UnknownCCEntry.java</td>
+<td> 83%: jdk11u-usptream/test/jdk/sun/security/krb5/UnknownCCEntry.java</td>
+<td> 83%: jdk17u/test/jdk/sun/security/krb5/UnknownCCEntry.java</td>
+<td> 83%: jdk/test/jdk/sun/security/krb5/UnknownCCEntry.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/8075942/DashStrokeTest.java</td>
+<td> 99%: jdk8u-dev/jdk/test/java/awt/BasicStroke/DashStrokeTest.java</td>
+<td> 95%: jdk11u-usptream/test/jdk/java/awt/BasicStroke/DashStrokeTest.java</td>
+<td> 95%: jdk17u/test/jdk/java/awt/BasicStroke/DashStrokeTest.java</td>
+<td> 95%: jdk/test/jdk/java/awt/BasicStroke/DashStrokeTest.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/7122142/AnnotationTypeDeadlockTest.java</td>
+<td>  100%: jdk8u-dev/jdk/test/java/lang/annotation/AnnotationType/AnnotationTypeDeadlockTest.java</td>
+<td>  100%: jdk11u-usptream/test/jdk/java/lang/annotation/AnnotationType/AnnotationTypeDeadlockTest.java</td>
+<td>  100%: jdk17u/test/jdk/java/lang/annotation/AnnotationType/AnnotationTypeDeadlockTest.java</td>
+<td>  100%: jdk/test/jdk/java/lang/annotation/AnnotationType/AnnotationTypeDeadlockTest.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/8028623/Test8028623.java
+<td> TODO_BACKPORT! </td>
+<td> 81%: jdk11u-usptream/test/hotspot/jtreg/compiler/jsr292/cr8026328/Test8026328.java</td>
+<td> 81%: jdk17u/test/hotspot/jtreg/compiler/jsr292/cr8026328/Test8026328.java</td>
+<td> 81%: jdk/test/hotspot/jtreg/compiler/jsr292/cr8026328/Test8026328.java</td>
+</tr>
+<tr>
+<td>  reproducers-regular/test/reproducers/6864911/BadValueJDK8.java</td>
+<td>  98%: jdk8u-dev/jdk/test/sun/security/util/DerValue/BadValue.java</td>
+<td>  96%: jdk11u-usptream/test/jdk/sun/security/util/DerValue/BadValue.java</td>
+<td>  96%: jdk17u/test/jdk/sun/security/util/DerValue/BadValue.java</td>
+<td>  96%: jdk/test/jdk/sun/security/util/DerValue/BadValue.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/6864911/BadValueJDK11.java</td>
+<td> 92%: jdk8u-dev/jdk/test/sun/security/util/DerValue/BadValue.java</td>
+<td> 94%: jdk11u-usptream/test/jdk/sun/security/util/DerValue/BadValue.java</td>
+<td> 94%: jdk17u/test/jdk/sun/security/util/DerValue/BadValue.java</td>
+<td> 94%: jdk/test/jdk/sun/security/util/DerValue/BadValue.java</td>
+</tr>
+<tr>
+<td> reproducers-regular/test/reproducers/1146622/PrintSEUmlauts.java</td>
+<td>  86%: jdk8u-dev/jdk/test/javax/print/PrintSEUmlauts/PrintSEUmlauts.java</td>
+<td>  86%: jdk11u-usptream/test/jdk/javax/print/PrintSEUmlauts/PrintSEUmlauts.java</td>
+<td>  86%: jdk17u/test/jdk/javax/print/PrintSEUmlauts/PrintSEUmlauts.java</td>
+<td>  82%: jdk/test/jdk/javax/print/PrintSEUmlauts/PrintSEUmlauts.java</td>
+</tr>
+
