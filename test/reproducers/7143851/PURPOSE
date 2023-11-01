@@ -1,5 +1,0 @@
-PURPOSE of /CoreOS/java/Security/CVE-2012-1719-OpenJDK-mutable-repository-identifiers-in-generated-stub-code-CORBA-7143851
-Description: run reproducer and check the results
-Author: Lukas Zachar <lzachar@redhat.com>
-
-Part of CPU-June-2012
