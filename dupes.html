@@ -96,9 +96,9 @@ table, th, td {
 <td>  100%: jdk/test/jdk/java/lang/annotation/AnnotationType/AnnotationTypeDeadlockTest.java</td>
 </tr>
 <tr>
-<td style="color:red;" >removed; backport to jdk8 missing</td>
+<td style="color:red;" >removed; backport missing</td>
 <td> reproducers-regular/test/reproducers/8028623/Test8028623.java
-<td> TODO_BACKPORT! </td>
+<td style="color:red;" >missing</td>
 <td> 81%: jdk11u-usptream/test/hotspot/jtreg/compiler/jsr292/cr8026328/Test8026328.java</td>
 <td> 81%: jdk17u/test/hotspot/jtreg/compiler/jsr292/cr8026328/Test8026328.java</td>
 <td> 81%: jdk/test/hotspot/jtreg/compiler/jsr292/cr8026328/Test8026328.java</td>
@@ -192,7 +192,6 @@ eraser: \s*[/*\*#].*
 filter: .*\.java$
 blacklist: .*/(PURPOSE|TEST.ROOT).*
 </pre>
-todo!
 <table><tr>
 <td>status</td>
 <td>
@@ -1483,7 +1482,7 @@ blacklist: .*/(PURPOSE|TEST.ROOT).*
 </td>
 </tr>
 <tr>
-<td></td>
+<td style="color:Tomato;" >removed  at Wed Oct 25 11:50:04 CEST 2023</td>
 <td>
 /home/jvanek/git-redhat/reproducers-regular/test/reproducers/751203/HelloInterface.java
 </td>
@@ -1603,4 +1602,214 @@ blacklist: .*/(PURPOSE|TEST.ROOT).*
 </tr>
 </table>
 <pre>Wed Nov 01 04:16:32 CET 2023</pre>
+<h2>tests removable based on @bugID</h2><pre>
+min: 0.01
+minws: 0.01
+maxsize: 102400
+minsize: 10
+names: -100.0
+maxratio: 10.0
+eraser: \s*[/*\*#].*
+filter: .*\.java$
+blacklist: null
+</pre>
+<h3>@bug 8210461</h3>
+<table><tr>td>status</td>
+<td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/8210461/CosGivesIncorrectResult.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk17u/test/hotspot/jtreg/compiler/intrinsics/math/Test8210461.java(1)
+</td>
+</tr>
+<tr><td style="color:red;" >removed, backports missing</td><td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/8210461/CosGivesIncorrectResult.java
+</td>
+<td>
+  28%:  /home/jvanek/git/jdk17u/test/hotspot/jtreg/compiler/intrinsics/math/Test8210461.java
+<br/>
+</td>
+</tr>
+</table>
+
+<blockquote>
+<table><tr><td>
+/home/jvanek/git/jdk17u/test/hotspot/jtreg/compiler/intrinsics/math/Test8210461.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk8u-dev(47844)
+</td>
+<td>
+/home/jvanek/git/jdk11u-usptream/test(41278)
+</td>
+<td>
+/home/jvanek/git/jdk/test(42845)
+</td>
+</tr>
+<tr>
+<td>
+/home/jvanek/git/jdk17u/test/hotspot/jtreg/compiler/intrinsics/math/Test8210461.java
+</td>
+<td style="color:red;" >missing</td>
+<td style="color:red;" >missing</td>
+<td>
+  100%:  /home/jvanek/git/jdk/test/hotspot/jtreg/compiler/intrinsics/math/Test8210461.java
+<br/>
+</td>
+</tr>
+</table>
+</blockquote>
+
+<h3>@bug 7020373</h3><table><tr>
+<td>status</td>
+<td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/7020373/GenOOMCrashClass.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk17u/test/hotspot/jtreg/runtime/ClassFile/JsrRewriting.java(1)
+</td>
+</tr>
+<tr><td style="color:tomato;" >removed</td>
+<td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/7020373/GenOOMCrashClass.java
+</td>
+<td>
+  25%:  /home/jvanek/git/jdk17u/test/hotspot/jtreg/runtime/ClassFile/JsrRewriting.java
+<br/>
+</td>
+</tr>
+</table>
+
+<blockquote>
+<table><tr><td>
+/home/jvanek/git/jdk17u/test/hotspot/jtreg/runtime/ClassFile/JsrRewriting.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk8u-dev(47844)
+</td>
+<td>
+/home/jvanek/git/jdk11u-usptream/test(41278)
+</td>
+<td>
+/home/jvanek/git/jdk/test(42845)
+</td>
+</tr>
+<tr><td>
+/home/jvanek/git/jdk17u/test/hotspot/jtreg/runtime/ClassFile/JsrRewriting.java
+</td>
+<td>
+  93%:  /home/jvanek/git/jdk8u-dev/hotspot/test/runtime/ClassFile/JsrRewriting.java
+<br/>
+</td>
+<td>
+  99%:  /home/jvanek/git/jdk11u-usptream/test/hotspot/jtreg/runtime/ClassFile/JsrRewriting.java
+<br/>
+</td>
+<td>
+  98%:  /home/jvanek/git/jdk/test/hotspot/jtreg/runtime/ClassFile/JsrRewriting.java
+<br/>
+</td>
+</tr>
+</table>
+</blockquote>
+
+<h3>@bug 8078490</h3>
+<table><tr><td>status</td><td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/8078490/ForkJoinPoolThrottling.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk17u/test/jdk/java/util/concurrent/forkjoin/SubmissionTest.java(1)
+</td>
+</tr>8210461
+<tr><td style="color:tomato;" >removed</td><td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/8078490/ForkJoinPoolThrottling.java
+</td>
+<td>
+  48%:  /home/jvanek/git/jdk17u/test/jdk/java/util/concurrent/forkjoin/SubmissionTest.java
+<br/>
+</td>
+</tr>
+</table>
+
+<blockquote>
+<table><tr><td>
+/home/jvanek/git/jdk17u/test/jdk/java/util/concurrent/forkjoin/SubmissionTest.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk8u-dev(47844)
+</td>
+<td>
+/home/jvanek/git/jdk11u-usptream/test(41278)
+</td>
+<td>
+/home/jvanek/git/jdk/test(42845)
+</td>
+</tr>
+<tr><td>
+/home/jvanek/git/jdk17u/test/jdk/java/util/concurrent/forkjoin/SubmissionTest.java
+</td>
+<td>
+  70%:  /home/jvanek/git/jdk8u-dev/jdk/test/java/util/concurrent/forkjoin/SubmissionTest.java
+<br/>
+</td>
+<td>
+  100%:  /home/jvanek/git/jdk11u-usptream/test/jdk/java/util/concurrent/forkjoin/SubmissionTest.java
+<br/>
+</td>
+<td>
+  100%:  /home/jvanek/git/jdk/test/jdk/java/util/concurrent/forkjoin/SubmissionTest.java
+<br/>
+</td>
+</tr>
+</table>
+</blockquote>
+
+<h3>@bug 8218546</h3><table><tr>
+<td>status</td>
+<td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/8218546/ConnectGoogle.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk17u/test/jdk/java/net/httpclient/SpecialHeadersTest.java(1)
+</td>
+</tr>
+<tr><td style="color:red;" >moved to rhqe<br/>backpports missing!</td>
+<td>
+/home/jvanek/git-redhat/reproducers-regular/test/reproducers/8218546/ConnectGoogle.java
+</td>
+<td>
+  12%:  /home/jvanek/git/jdk17u/test/jdk/java/net/httpclient/SpecialHeadersTest.java
+<br/>
+</td>
+</tr>
+</table>
+<blockquote>
+<table><tr><td>
+/home/jvanek/git/jdk17u/test/jdk/java/net/httpclient/SpecialHeadersTest.java(1)
+</td>
+<td>
+/home/jvanek/git/jdk8u-dev(47844)
+</td>
+<td>
+/home/jvanek/git/jdk11u-usptream/test(41278)
+</td>
+<td>
+/home/jvanek/git/jdk/test(42845)
+</td>
+</tr>
+<tr><td>
+/home/jvanek/git/jdk17u/test/jdk/java/net/httpclient/SpecialHeadersTest.java
+</td>
+<td style="color:red;" >missing</td>
+<td>
+  100%:  /home/jvanek/git/jdk11u-usptream/test/jdk/java/net/httpclient/SpecialHeadersTest.java
+<br/>
+</td>
+<td>
+  58%:  /home/jvanek/git/jdk/test/jdk/java/net/httpclient/SpecialHeadersTest.java
+<br/>
+</td>
+</tr>
+</table>
+</blockquote>
 </body></html>
