@@ -2,7 +2,7 @@
 # @test
 # @bug 7023639
 # @summary another exploit of thoger's collection
-# @requires jdk.version.major > 6
+# @requires jdk.version.major > 6 & jdk.version.major < 21
 # @run shell/timeout=100 runtest.sh
 
 if [ "$TESTJAVA" ]; then
