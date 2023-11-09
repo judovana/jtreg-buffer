@@ -1,7 +1,11 @@
 #!/bin/bash
+
+###############################################################################################
 # if you are porting tests to jdk9 there is automatic @modules tag generator in reproducers regular:
-# hg clone ssh://to-openjdk1.usersys.redhat.com//mirrored/internal/regular
 # ( in modules-tag-generator directory )
+# bash run.sh jdk [bug]
+# bash run.sh jdk [dir]
+###############################################################################################
 
 SCRIPT_SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SCRIPT_SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -22,17 +26,24 @@ done
 set -e
 set -o pipefail
 
-JAVA=$1
-
+JAVA=${1}
 if [ "x$JAVA" == "x" ] ; then 
   echo "Jdk is mandatory param (bugid is optional)"
   exit 1
 fi;
 
-TIME=$(date +%s)
-BUGID=$2
+if [ "x$JAVA_HOME" == "x" ] ; then 
+  JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
+fi;
 
-if [ "x$BUGID" != "x" ]; then
+TIME=$(date +%s)
+BUGID=${2}
+
+FOLDER="test"
+if [ "x$BUGID" != "x" -a -e "$BUGID" ] ; then
+    FOLDER="$BUGID"
+    BUGID=""
+elif [ "x$BUGID" != "x" ]; then
   BUGID="-bug:$BUGID"
 fi
 
@@ -53,14 +64,14 @@ fi
 
 echo Running with $JAVA...
 
-r=0;
+r=0
 mkdir -p test.${TIME}/jdk/JTwork test.${TIME}/jdk/JTreport
-java -jar jtreg/lib/jtreg.jar -v1 -a -ignore:quiet \
+${JAVA_HOME}/bin/java -jar jtreg/lib/jtreg.jar -v1 -a -ignore:quiet \
   -w:test.${TIME}/jdk/JTwork -r:test.${TIME}/jdk/JTreport \
   -jdk:$JAVA \
   $BUGID \
   $envVarArg \
-  test |
+  $FOLDER |
   tee test.${TIME}/tests.log || r=$?
 
 
