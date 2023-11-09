@@ -62,6 +62,8 @@ if [ ! -e "$JTREG_HOME" ] ; then
   tar -xf $ball
 fi
 
+JAVA_OPTS="-javaoption:-Djava.security.manager=allow"
+
 echo Running with $JAVA...
 
 r=0
@@ -71,6 +73,7 @@ ${JAVA_HOME}/bin/java -jar $JTREG_HOME/lib/jtreg.jar -v1 -a -ignore:quiet \
   -jdk:$JAVA \
   -xml \
   $BUGID \
+  $JAVA_OPTS \
   $envVarArg \
   $FOLDER | tee test.${TIME}/tests.log || r=$?
 
