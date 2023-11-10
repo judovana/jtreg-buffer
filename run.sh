@@ -62,7 +62,19 @@ if [ ! -e "$JTREG_HOME" ] ; then
   tar -xf $ball
 fi
 
-JAVA_OPTS="-javaoption:-Djava.security.manager=allow"
+JDK_MAJOR=8
+if [[ -e "$JAVA/bin/jshell" || -e "$JAVA/bin/jshell.exe" ]] ; then
+  jshellScript="$(mktemp)"
+  printf "System.out.print(Runtime.version().major())\n/exit" > ${jshellScript}
+  JDK_MAJOR=$( $JAVA/bin/jshell ${jshellScript} 2> /dev/null  | grep -v -e "Started recording"  -e "copy recording data to file"  -e "^$"  -e "\[" )
+  rm ${jshellScript}
+fi
+
+JAVA_OPTS="";
+if [ "0$JDK_MAJOR" -gt 11 ] ; then 
+  JAVA_OPTS="-javaoption:-Djava.security.manager=allow"
+  echo "Allowed security manager!" 
+fi
 
 echo Running with $JAVA...
 
