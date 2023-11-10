@@ -1,5 +1,0 @@
-PURPOSE of /CoreOS/java-1.6.0-openjdk/Regression/bz1098399-Unsynchronized-HashMap-access-causes-endless-loop
-Description: Test for BZ#1098399 (Unsynchronized HashMap access causes endless loop)
-Author: Jan Kejda <jkejda@redhat.com>
-Bug summary: Unsynchronized HashMap access causes endless loop
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1098399

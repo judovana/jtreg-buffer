@@ -15,11 +15,24 @@ import java.util.Random;
  * @summary  heck that LineBreakMeasurer.nextLayout does not throw ArrayIndexOutOfBoundsException
  * @run main/timeout=60000     GlyphBug4
  */
+
+/**
+This is a test for BZ#112806. With some fonts (like STIX General), there have
+been problems with so-called canonical processing, the process of blending
+multiple characters together (in particular, this applies to combining marks
+like various accents). Fonts can have a flag set to opt out of the canonical
+processing, which was not respected by OpenJDK 6, leading to an exception
+(ArrayIndexOutOfBoundsException) being thrown if such an attempt was made. The
+test checks if this does not happen any longer.
+**/
+
 public class GlyphBug4 {
 
-  private static final String[] FONT_NAMES = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+  private static String[] FONT_NAMES;
 
   public static void main(String[] args) throws InterruptedException {
+    try{
+    FONT_NAMES = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
     System.out.println("Iterating over " + FONT_NAMES.length + " font families...");
     for (int r = 0; r < FONT_NAMES.length; r++) {
       RandomStringFactory4 stringFactory = new RandomStringFactory4();
@@ -50,6 +63,9 @@ public class GlyphBug4 {
       }
       System.out.println("Done.");
     }
+  } catch(java.awt.AWTError ex) {
+    System.out.println("headless system? skipped");
+  }
   }
 
   static class RandomStringFactory4 {

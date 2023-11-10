@@ -5,6 +5,10 @@
  * @bug 0567404
  * @summary  verify nashorn minimal functionality
  * @requires jdk.version.major <= 11
+ * @run main/othervm NashornTestScript
+ *
+ * Bug summary: Add Rhino support in OpenJDK
+ * Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=567404
  */
 
 public class NashornTestScript {

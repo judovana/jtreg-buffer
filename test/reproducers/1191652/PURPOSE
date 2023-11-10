@@ -1,7 +1,0 @@
-PURPOSE of /CoreOS/java/Regression/Report-correct-arch
-Description: Java says correct arch
-Author: Lukas Zachar <lzachar@redhat.com>
-Bug summary: OpenJDK on RHEL7.1 / PPC64 LE says that arch is ppc64, not ppc64le, messing up Maven and other tools (java)
-Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1191652
-
-OpenJDK has to report os.arch = ppc64le on ppc64le. Otherwise there is no way to distinguish between ppc64le/be

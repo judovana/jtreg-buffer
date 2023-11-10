@@ -12,9 +12,11 @@ import java.util.Random;
 /*
  * @test
  * @bug 1098399
+ * @author Jan Kejda <jkejda@redhat.com>
  * @requires os.arch != "aarch64" & os.family != "windows"
  * @summary   - Unsynchronized HashMap access causes endless loop
  * @run main/timeout=60000/othervm     GlyphBug
+ * Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1098399
  */
 
 /** timeout is set to 10 minutes.
@@ -42,13 +44,15 @@ public class GlyphBug implements Runnable {
 		return RUNNING;
 	}
 
-	private static String[] FONT_NAMES = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+	private static String[] FONT_NAMES;
 
 	/**
 	 * @param args optional - first is # of threads, second # of iterations per thread.
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
+    try {
+        FONT_NAMES = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 		Thread thread = null;
 		int threads = THREADS;
 		int runs = RUNS;
@@ -71,6 +75,9 @@ public class GlyphBug implements Runnable {
 		}
 
 		System.out.println("Done.");
+    } catch(java.awt.AWTError ex) {
+      System.out.println("headless system? skipped");
+    }
 	}
 
 	private int _runs;

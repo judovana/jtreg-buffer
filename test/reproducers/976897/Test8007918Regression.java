@@ -14,6 +14,8 @@ import javax.imageio.stream.MemoryCacheImageOutputStream;
  * @bug 0976897
  * @summary  tests memory leak in jpeg writer
  * @run main/othervm   -Xms32m -Xmx64m  Test8007918Regression
+ * Bug summary: Excessive Heap Consumption in com.sun.imageio.plugins.jpeg.JPEGImageWriter
+ * Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=976897
  */
 
 

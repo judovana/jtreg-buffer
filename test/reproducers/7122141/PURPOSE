@@ -1,3 +1,0 @@
-PURPOSE of /CoreOS/java-1.6.0-openjdk/Regression/Race-condition-between-isAnnotationPresent-and-getAnnotations
-Description: Race condition between isAnnotationPresent and getAnnotations
-Author: Lukas Zachar <lzachar@redhat.com>

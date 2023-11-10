@@ -15,8 +15,19 @@ import java.util.Random;
  * @run main/timeout=60000     GlyphBug2
  */
 
+/**
+This is a test for BZ#112806. With some fonts (like STIX General), there have
+been problems with so-called canonical processing, the process of blending
+multiple characters together (in particular, this applies to combining marks
+like various accents). Fonts can have a flag set to opt out of the canonical
+processing, which was not respected by OpenJDK 6, leading to an exception
+(ArrayIndexOutOfBoundsException) being thrown if such an attempt was made. The
+test checks if this does not happen any longer.
+**/
+
 public class GlyphBug2 {
   public static void main(String[] args) {
+  try{
     int runs = 1000;
     if (args.length != 0) {
       runs = Integer.parseInt(args[0]);
@@ -42,6 +53,9 @@ public class GlyphBug2 {
     }
 
     System.out.println("Done.");
+  } catch(java.awt.AWTError ex) {
+    System.out.println("headless system? skipped");
+  }
   }
 
   static class RandomStringFactory2 {
