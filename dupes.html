@@ -180,9 +180,7 @@ reproducers-regular/test/reproducers/8132985/FontDisposeTest.java
 </tr>
 </table>
 <pre>Tue Oct 24 13:48:25 CEST 2023</pre>
-<html><head><style>
-table, th, td {  border: 1px solid black;  border-collapse: collapse;}
-</style></head><body><h3>Wed Oct 25 11:50:04 CEST 2023</h3><pre>
+<h3>Wed Oct 25 11:50:04 CEST 2023</h3><pre>
 min: 0.7
 minws: 0.7
 maxsize: 102400
@@ -1460,10 +1458,7 @@ test/reproducers/1536623/02007382.loadjvm_test/foo.java
 </tr>
 </table>
 <pre>Thu Oct 26 18:30:16 CEST 2023</pre>
-</body></html>
-<html><head><style>
-table, th, td {  border: 1px solid black;  border-collapse: collapse;}
-</style></head><body><h3>Tue Oct 31 16:36:13 CET 2023</h3><pre>
+<h3>Tue Oct 31 16:36:13 CET 2023</h3><pre>
 min: 0.8
 minws: 0.8
 maxsize: 102400
@@ -1938,4 +1933,60 @@ server running: 263436@jvanek.usersys.redhat.com:4812
 <pre>Tue Nov 14 19:39:10 CET 2023</pre>
 <h5>as seen, nothing found</h5>
 
+<h1>future moves</h1>
+<h2>fips to rhqe doublecheck</h2>
+<pre>
+test/reproducers/1960024/PBEWithSHA1AndDESedeExists.java
+test/reproducers/1759335/keytool-broken-fips.sh
+test/reproducers/1760838/Test1760838.java
+test/reproducers/1780335/Main.java
+test/reproducers/1780335/fips-load-p11-kit-trust.sh
+test/reproducers/1991003/FIPSKeysImporter.java
+test/reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+test/reproducers/1818881/allowNonCaAnchor-property.sh
+test/reproducers/1894083/test1894083.sh
+test/reproducers/1655466/OjdkFips.java
+test/reproducers/2108712/HmacBackportTest.java
+test/reproducers/1915071/ability_to_avoid_system_crypto.sh
+test/reproducers/1860990/FipsAESNullPtr.java
+test/reproducers/6913047/run.sh
+</pre>
+<h2>otool variable removal needed</h2>
+<pre>
+test/reproducers/2055274/TestTrustStore.sh
+test/reproducers/2036462/runtest.sh
+test/reproducers/1960024/PBEWithSHA1AndDESedeExists.java
+test/reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+test/reproducers/1818881/allowNonCaAnchor-property.sh
+test/reproducers/1894083/test1894083.sh
+test/reproducers/1897602/TestDiagnosticCommandImpl.sh
+test/reproducers/1915071/ability_to_avoid_system_crypto.sh
+test/reproducers/1433262/genericArchive.sh
+test/reproducers/6913047/run.sh
+</pre>
+
+
+<h2>must fix</h2>
+<h3>all jdks</h3>
+<pre>
+FAILED: reproducers/1484079/TestJava1484079.java
+FAILED: reproducers/6804998/Test.java
+FAILED: reproducers/6872357/Test.java
+FAILED: reproducers/6872358/Test.jav
+FAILED: reproducers/6914823/Test.java
+FAILED: reproducers/8218854/FontMetricsTest.java
+</pre>
+<h3>jdk11 only</h3>
+<pre>
+FAILED: reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+FAILED: reproducers/1897602/TestDiagnosticCommandImpl.sh
+</pre>
+<h3>jdk8 only</h3>
+<pre>
+FAILED: reproducers/2036462/Test.java
+</pre>
+<h3>jdk11+jdk21 only</h3>
+<pre>
+FAILED: reproducers/6913047/Bug6913047.java
+</pre>
 </body></html>
