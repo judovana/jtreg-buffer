@@ -1882,4 +1882,60 @@ blacklist: .*/(PURPOSE|TEST.ROOT).*
 </table>
 <pre>Tue Nov 14 07:25:08 CET 2023</pre>
 
+<h2>jsut record abou benevolent check of SH scritps against security reproducers</h2>
+<h3>Tue Nov 14 19:51:53 CET 2023</h3><pre>
+min: 0.7
+minws: 0.7
+maxsize: 102400
+minsize: 10
+names: false - disabled
+maxratio: 10.0
+eraser: \s*[/*\*#].*
+case sensitive: false
+filter: .*\.sh$
+blacklist: .*/(TEST.ROOT).*
+server running: 263674@jvanek.usersys.redhat.com:4812
+</pre><table><tr><td>
+/home/jvanek/git-redhat/reproducers-regular/test(125)
+</td>
+<td>
+/home/jvanek/git-redhat/reproducers-security/test(2281)
+</td>
+</tr>
+</table>
+<pre>Tue Nov 14 19:52:38 CET 2023</pre>
+<h5>as seen, nothing found</h5>
+<h2>jsut record abou benevolent check of SH scritps against jdks</h2>
+<h3>Tue Nov 14 19:24:31 CET 2023</h3><pre>
+min: 0.7
+minws: 0.7
+maxsize: 102400
+minsize: 10
+names: false - disabled
+maxratio: 10.0
+eraser: \s*[/*\*#].*
+case sensitive: false
+filter: .*\.sh$
+blacklist: .*/(TEST.ROOT).*
+server running: 263436@jvanek.usersys.redhat.com:4812
+</pre><table><tr><td>
+/home/jvanek/git-redhat/reproducers-regular/test(125)
+</td>
+<td>
+/home/jvanek/git/jdk21u/test(42639)
+</td>
+<td>
+/home/jvanek/git/jdk17u/test(40935)
+</td>
+<td>
+/home/jvanek/git/jdk11u/test(40968)
+</td>
+<td>
+/home/jvanek/git/jdk8u-dev(47844)
+</td>
+</tr>
+</table>
+<pre>Tue Nov 14 19:39:10 CET 2023</pre>
+<h5>as seen, nothing found</h5>
+
 </body></html>
