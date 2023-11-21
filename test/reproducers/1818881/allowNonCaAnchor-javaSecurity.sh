@@ -60,7 +60,7 @@ esac
 
 set -exo pipefail
 
-JAVA_SECURITY=`find -L $TESTJAVA -name java.security | grep -v 'full_sources'`
+JAVA_SECURITY=`find -L $TESTJAVA -name java.security | grep -v 'full_sources' | tail -n 1`
 JAVA_SECURITY_BACKUP=`mktemp`
 cp -v $JAVA_SECURITY $JAVA_SECURITY_BACKUP
 
