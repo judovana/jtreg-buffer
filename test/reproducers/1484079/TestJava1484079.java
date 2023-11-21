@@ -12,8 +12,13 @@ import java.awt.font.*;
 
 public class TestJava1484079 {
   public static void main(String[] args) {
-
-    String []fontFamilies = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+    String[] fontFamilies = null;
+    try { 
+        fontFamilies = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+    } catch(java.awt.AWTError ex) {
+        System.out.println("headless system? skipped");
+        return;
+    }
     for (String font : fontFamilies) {
       System.err.println(font);
     }

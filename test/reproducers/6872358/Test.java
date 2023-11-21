@@ -20,10 +20,15 @@ import java.awt.image.Raster;
 
 public class Test {
     public static void main(String[] args) {
+       Toolkit tk = null;
+       try {
+          tk = Toolkit.getDefaultToolkit();
+       } catch(java.awt.AWTError ex) {
+           System.out.println("headless system? skipped");
+           return;
+       }
         BufferedImage img = new BufferedImage(100, 100,
                                               BufferedImage.TYPE_BYTE_INDEXED);
-
-        Toolkit tk = Toolkit.getDefaultToolkit();
 
         ImageProducer p = new TestProducer(img);
 

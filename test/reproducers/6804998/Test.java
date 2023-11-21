@@ -13,13 +13,20 @@ public class Test {
     private static final boolean verbose = Boolean.getBoolean("verbose");
 
     public static void main(String[] args) {
+       Toolkit tk = null;
+       try {
+          tk = Toolkit.getDefaultToolkit();
+       } catch(java.awt.AWTError ex) {
+           System.out.println("headless system? skipped");
+           return;
+       }
+
         String fname = "test.gif";
 
         if (args.length > 0) {
             fname = args[0];
         }
 
-        Toolkit tk = Toolkit.getDefaultToolkit();
         Image img = tk.createImage(fname);
 
         Observer o = new Observer();

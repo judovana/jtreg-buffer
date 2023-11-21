@@ -35,7 +35,8 @@ import java.io.File;
 
 public class FontMetricsTest {
 
-    public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
+    try{
         FontMetrics fm;
         Container container = new Container();
         int[] width;
@@ -64,5 +65,9 @@ public class FontMetricsTest {
             }
         }
         System.out.println("OK - TEST PASSED");
+    } catch(java.awt.AWTError ex) {
+        System.out.println("headless system? skipped");
+        return;
     }
+  }
 }

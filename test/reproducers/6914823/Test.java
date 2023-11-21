@@ -20,7 +20,13 @@ public class Test {
     private static Toolkit tk;
 
     public static void main(String[] args) {
-        tk = Toolkit.getDefaultToolkit();
+       Toolkit tk = null;
+       try {
+          tk = Toolkit.getDefaultToolkit();
+       } catch(java.awt.AWTError ex) {
+           System.out.println("headless system? skipped");
+           return;
+       }
 
         doTest(0x1000000);
 
