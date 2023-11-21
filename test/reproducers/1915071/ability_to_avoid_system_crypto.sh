@@ -44,7 +44,7 @@ k2=my.keystore
 
 echo "this should always pass"
 rm -rf $k1 $k2
-if [ "x$OTOOL_JDK_VERSION" = "x8" ] ; then
+if $TESTJAVA/bin/java -version 2>&1 | grep 1.8.0 ; then
   $TESTJAVA/bin/keytool -J-Djava.security.disableSystemPropertiesFile=true -J-Dcom.redhat.fips=false $SHARED_SETUP -storetype PKCS12 -dname "$DNAME"  $KEYS -keystore my3.keystore
 else
   $TESTJAVA/bin/keytool -J-Djava.security.disableSystemPropertiesFile=true -J-Dcom.redhat.fips=false $SHARED_SETUP -storetype jks    -dname "$DNAME"  $KEYS -keystore my.keystore
@@ -53,7 +53,7 @@ fi
 echo "result of below is not known under fips, so removeing -e and if we passed down here, it should be ok"
 set +e
 rm -rf $k1 $k2
-if [ "x$OTOOL_JDK_VERSION" = "x8" ] ; then
+if $TESTJAVA/bin/java -version 2>&1 | grep 1.8.0 ; then
   $TESTJAVA/bin/keytool $SHARED_SETUP -storetype PKCS12 -dname "$DNAME"	  $KEYS -keystore my3.keystore
 else
   $TESTJAVA/bin/keytool $SHARED_SETUP -storetype jks    -dname "$DNAME"  $KEYS -keystore my.keystore 
