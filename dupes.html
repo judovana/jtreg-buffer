@@ -1974,6 +1974,9 @@ fixed: reproducers/8218854/FontMetricsTest.java
 <h3>jdk11 only</h3>
 <pre>
 FAILED: reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+</pre>
+<h3>jdk17+jdk8(!?)</h3>
+<pre>
 FAILED: reproducers/1897602/TestDiagnosticCommandImpl.sh
 </pre>
 <h3>jdk8 only</h3>
@@ -1994,6 +1997,7 @@ minsize: 10
 names: false - disabled
 maxratio: 10.0
 eraser: null
+(second with defualt eraser of \s*[/*\*#].*, same result)
 case sensitive: true
 filter: .*
 blacklist: null
