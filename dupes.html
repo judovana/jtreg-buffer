@@ -5,6 +5,32 @@ table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
+
+.box {
+  box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 20%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+pre.wrap {
+ /*white-space: pre-wrap;       /* css-3 */
+ /*white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ /*white-space: -pre-wrap;      /* Opera 4-6 */
+ /*white-space: -o-pre-wrap;    /* Opera 7 */
+ /*word-wrap: break-word;       /* Internet Explorer 5.5+ */
+ overflow-x: scroll; /* Show horizontal scrollbar */
+}
 </style>
 </head>
 <body>
@@ -2776,4 +2802,310 @@ test/
   </td>
   </tr>
   </table>
+
+  <h1>first github actions run on linux</h1>
+  <div class="row">
+    <div class="column">
+      <h2>jdk8</h2>
+  <pre class="wrap">
+
+    Running with /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/8.0.392-8/x64...
+    XML output  to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182727/jdk/JTwork
+    FAILED: reproducers/1098399/GlyphBug.java
+    Passed: reproducers/1112806/GlyphBug2.java
+    Passed: reproducers/1112806/GlyphBug4.java
+    FAILED: reproducers/1191652/RH1187252.java
+    FAILED: reproducers/1433262/genericArchive.sh
+    Passed: reproducers/1463098/cgroup-memory-limit-respected-systemd.sh
+    Passed: reproducers/1484079/TestJava1484079.java
+    Passed: reproducers/1486025/Main.java
+    Passed: reproducers/1513989/AttemptHttps.java
+    Passed: reproducers/1582253/KeytoolNotGenerateDSA.sh
+    Passed: reproducers/1655466/OjdkFips.java
+    Passed: reproducers/1688571/ReiwaNewEraTest.java
+    Passed: reproducers/1699068/EllipticCurve.java
+    Passed: reproducers/1759335/keytool-broken-fips.sh
+    Passed: reproducers/1760838/Test1760838.java
+    Passed: reproducers/1780335/fips-load-p11-kit-trust.sh
+    FAILED: reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+    FAILED: reproducers/1818881/allowNonCaAnchor-property.sh
+    Passed: reproducers/1860990/FipsAESNullPtr.java
+    Passed: reproducers/1868740/IllegalAccessByPkcs11Provider.java
+    Passed: reproducers/1868754/CiphersRemainInBrokenState.java
+    Passed: reproducers/1883849/IllegalAccessByPkcs11ProviderWithSecurityManager.java
+    FAILED: reproducers/1894083/test1894083.sh
+    Passed: reproducers/1906862/CipherList.java
+    FAILED: reproducers/1915071/ability_to_avoid_system_crypto.sh
+    Passed: reproducers/1960024/GOST3411WITHECGOST3410exists16AndLower.java
+    Passed: reproducers/1960024/PBEWithSHA1AndDESedeExists.java
+    Passed: reproducers/1960024/SHA384WITHDSAexists.java
+    Passed: reproducers/1991003/FIPSKeysImporter.java
+    Passed: reproducers/2021263/Pkcs11Issue.java
+    Passed: reproducers/2036462/Test.java
+    Passed: reproducers/567404/NashornTestScript.java
+    Passed: reproducers/567404/Rhino_1_7_13_TestScript.java
+    Passed: reproducers/6631533/Test.java
+    Passed: reproducers/6633872/WeakPolicyMap.java
+    Passed: reproducers/6656625/Test.java
+    FAILED: reproducers/6657133/Test.java
+    Passed: reproducers/6657625/Test1.java
+    Passed: reproducers/6738524/DefaultProvider.java
+    Passed: reproducers/6804996/Test.java
+    Passed: reproducers/6804998/Test.java
+    Passed: reproducers/6823373/Test.java
+    Passed: reproducers/6845701/ParseXMLFile.java
+    Passed: reproducers/6862968/Test1.java
+    Passed: reproducers/6862968/Test2.java
+    Passed: reproducers/6862970/ICCTestIBM.java
+    Passed: reproducers/6872357/Test.java
+    Passed: reproducers/6872358/Test.java
+    Passed: reproducers/6874643/Test.java
+    Passed: reproducers/6893947/MarshalledObjectGetTest.java
+    Passed: reproducers/6899653/Test.java
+    Passed: reproducers/6909597/Test.java
+    FAILED: reproducers/6913047/Bug6913047.java
+    FAILED: reproducers/6914823/Test.java
+    Passed: reproducers/7013969/Test7013969.java
+    Passed: reproducers/7046823/bug7046823.java
+    Passed: reproducers/7057857/MemoryAllocatorTest.java
+    Passed: reproducers/7122141/Main.java
+    Passed: reproducers/8020190/JDK8020190.java
+    Passed: reproducers/8210858/LogGivesIncorrectResult.java
+    Passed: reproducers/8218854/FontMetricsTest.java
+    Passed: reproducers/8251945/PredefinedClassloaderCyclicBarrierCrash.java
+    Passed: reproducers/976897/Test8007918Regression.java
+    Test results: passed: 53; failed: 10
+    Report written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182727/jdk/JTreport/html/report.html
+    Results written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182727/jdk/JTwork
+    Error: Some tests failed or other problems occurred.
+    Error: Process completed with exit code 1.
+  </pre>
+    </div>
+    <div class="column">
+      <h2>jdk11</h2>
+      <pre class="wrap">
+
+        Running with /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/11.0.21-9/x64...
+        XML output  to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182725/jdk/JTwork
+        FAILED: reproducers/1098399/GlyphBug.java
+        Passed: reproducers/1112806/GlyphBug2.java
+        Passed: reproducers/1112806/GlyphBug4.java
+        FAILED: reproducers/1191652/RH1187252.java
+        Passed: reproducers/1433262/genericArchive.sh
+        Passed: reproducers/1463098/cgroup-memory-limit-respected-systemd.sh
+        Passed: reproducers/1484079/TestJava1484079.java
+        Passed: reproducers/1486025/Main.java
+        Passed: reproducers/1513989/AttemptHttps.java
+        Passed: reproducers/1582253/KeytoolNotGenerateDSA.sh
+        Passed: reproducers/1655466/OjdkFips.java
+        Passed: reproducers/1688571/ReiwaNewEraTest.java
+        Passed: reproducers/1699068/EllipticCurve.java
+        Passed: reproducers/1759335/keytool-broken-fips.sh
+        Passed: reproducers/1760838/Test1760838.java
+        Passed: reproducers/1780335/fips-load-p11-kit-trust.sh
+        FAILED: reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+        FAILED: reproducers/1818881/allowNonCaAnchor-property.sh
+        Passed: reproducers/1860990/FipsAESNullPtr.java
+        Passed: reproducers/1868740/IllegalAccessByPkcs11Provider.java
+        Passed: reproducers/1868754/CiphersRemainInBrokenState.java
+        Passed: reproducers/1870625/Power10SupportEnabled.sh
+        Passed: reproducers/1883849/IllegalAccessByPkcs11ProviderWithSecurityManager.java
+        FAILED: reproducers/1894083/test1894083.sh
+        FAILED: reproducers/1897602/TestDiagnosticCommandImpl.sh
+        Passed: reproducers/1906862/CipherList.java
+        FAILED: reproducers/1915071/ability_to_avoid_system_crypto.sh
+        Passed: reproducers/1960024/GOST3411WITHECGOST3410exists16AndLower.java
+        Passed: reproducers/1960024/PBEWithSHA1AndDESedeExists.java
+        Passed: reproducers/1991003/FIPSKeysImporter.java
+        Passed: reproducers/2021263/Pkcs11Issue.java
+        Passed: reproducers/2036462/Test.java
+        Passed: reproducers/2108712/HmacBackportTest.java
+        Passed: reproducers/567404/NashornTestScript.java
+        Passed: reproducers/567404/Rhino_1_7_13_TestScript.java
+        Passed: reproducers/6631533/Test.java
+        Passed: reproducers/6633872/WeakPolicyMap.java
+        Passed: reproducers/6656625/Test.java
+        FAILED: reproducers/6657133/Test.java
+        Passed: reproducers/6657625/Test1.java
+        Passed: reproducers/6738524/DefaultProvider.java
+        Passed: reproducers/6804996/Test.java
+        Passed: reproducers/6804998/Test.java
+        Passed: reproducers/6823373/Test.java
+        Passed: reproducers/6845701/ParseXMLFile.java
+        Passed: reproducers/6862968/Test1.java
+        Passed: reproducers/6862968/Test2.java
+        Passed: reproducers/6862970/ICCTestIBM.java
+        Passed: reproducers/6872357/Test.java
+        Passed: reproducers/6872358/Test.java
+        Passed: reproducers/6874643/Test.java
+        Passed: reproducers/6893947/MarshalledObjectGetTest.java
+        Passed: reproducers/6899653/Test.java
+        Passed: reproducers/6909597/Test.java
+        FAILED: reproducers/6913047/Bug6913047.java
+        FAILED: reproducers/6914823/Test.java
+        Passed: reproducers/7013969/Test7013969.java
+        Passed: reproducers/7057857/MemoryAllocatorTest.java
+        Passed: reproducers/7122141/Main.java
+        Passed: reproducers/8020190/JDK8020190.java
+        Passed: reproducers/8210858/LogGivesIncorrectResult.java
+        Passed: reproducers/8218854/FontMetricsTest.java
+        Passed: reproducers/8251945/PredefinedClassloaderCyclicBarrierCrash.java
+        Passed: reproducers/976897/Test8007918Regression.java
+        Test results: passed: 54; failed: 10
+        Error: Some tests failed or other problems occurred.
+        Report written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182725/jdk/JTreport/html/report.html
+        Results written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182725/jdk/JTwork
+        Error: Process completed with exit code 1.
+        </pre>
+    </div>
+    <div class="column">
+      <h2>jdk17</h2>
+      <pre class="wrap">
+        Allowed security manager!
+        Running with /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.9-9/x64...
+        XML output  to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182726/jdk/JTwork
+        FAILED: reproducers/1098399/GlyphBug.java
+        Passed: reproducers/1112806/GlyphBug2.java
+        Passed: reproducers/1112806/GlyphBug4.java
+        FAILED: reproducers/1191652/RH1187252.java
+        Passed: reproducers/1433262/genericArchive.sh
+        Passed: reproducers/1463098/cgroup-memory-limit-respected-systemd.sh
+        Passed: reproducers/1484079/TestJava1484079.java
+        Passed: reproducers/1486025/Main.java
+        Passed: reproducers/1513989/AttemptHttps.java
+        Passed: reproducers/1582253/KeytoolNotGenerateDSA.sh
+        Passed: reproducers/1655466/OjdkFips.java
+        Passed: reproducers/1688571/ReiwaNewEraTest.java
+        Passed: reproducers/1759335/keytool-broken-fips.sh
+        Passed: reproducers/1760838/Test1760838.java
+        Passed: reproducers/1780335/fips-load-p11-kit-trust.sh
+        FAILED: reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+        FAILED: reproducers/1818881/allowNonCaAnchor-property.sh
+        Passed: reproducers/1860990/FipsAESNullPtr.java
+        Passed: reproducers/1868740/IllegalAccessByPkcs11Provider.java
+        Passed: reproducers/1868754/CiphersRemainInBrokenState.java
+        Passed: reproducers/1870625/Power10SupportEnabled.sh
+        Passed: reproducers/1883849/IllegalAccessByPkcs11ProviderWithSecurityManager.java
+        FAILED: reproducers/1894083/test1894083.sh
+        FAILED: reproducers/1897602/TestDiagnosticCommandImpl.sh
+        Passed: reproducers/1906862/CipherList.java
+        FAILED: reproducers/1915071/ability_to_avoid_system_crypto.sh
+        Passed: reproducers/1960024/GOST3411WITHECGOST3410exists.java
+        Passed: reproducers/1960024/PBEWithSHA1AndDESedeExists.java
+        Passed: reproducers/1991003/FIPSKeysImporter.java
+        Passed: reproducers/2021263/Pkcs11Issue.java
+        Passed: reproducers/2036462/Test.java
+        Passed: reproducers/2108712/HmacBackportTest.java
+        Passed: reproducers/6631533/Test.java
+        Passed: reproducers/6633872/WeakPolicyMap.java
+        Passed: reproducers/6656625/Test.java
+        FAILED: reproducers/6657133/Test.java
+        Passed: reproducers/6657625/Test1.java
+        Passed: reproducers/6738524/DefaultProvider.java
+        Passed: reproducers/6804996/Test.java
+        Passed: reproducers/6804998/Test.java
+        Passed: reproducers/6823373/Test.java
+        Passed: reproducers/6845701/ParseXMLFile.java
+        Passed: reproducers/6862968/Test1.java
+        Passed: reproducers/6862968/Test2.java
+        Passed: reproducers/6862970/ICCTestIBM.java
+        Passed: reproducers/6872357/Test.java
+        Passed: reproducers/6872358/Test.java
+        Passed: reproducers/6874643/Test.java
+        Passed: reproducers/6893947/MarshalledObjectGetTest.java
+        Passed: reproducers/6899653/Test.java
+        Passed: reproducers/6909597/Test.java
+        FAILED: reproducers/6913047/Bug6913047.java
+        FAILED: reproducers/6914823/Test.java
+        Passed: reproducers/7013969/Test7013969.java
+        Passed: reproducers/7057857/MemoryAllocatorTest.java
+        Passed: reproducers/7122141/Main.java
+        Passed: reproducers/8020190/JDK8020190.java
+        Passed: reproducers/8210858/LogGivesIncorrectResult.java
+        Passed: reproducers/8218854/FontMetricsTest.java
+        Passed: reproducers/8251945/PredefinedClassloaderCyclicBarrierCrash.java
+        Passed: reproducers/976897/Test8007918Regression.java
+        Test results: passed: 51; failed: 10
+        Error: Some tests failed or other problems occurred.
+        Report written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182726/jdk/JTreport/html/report.html
+        Results written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182726/jdk/JTwork
+        Error: Process completed with exit code 1.
+        </pre>
+    </div>
+    <div class="column">
+      <h2>jdk21</h2>
+      <pre class="wrap">
+Allowed security manager!
+Running with /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.1-12/x64...
+XML output  to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182727/jdk/JTwork
+FAILED: reproducers/1098399/GlyphBug.java
+Passed: reproducers/1112806/GlyphBug2.java
+Passed: reproducers/1112806/GlyphBug4.java
+FAILED: reproducers/1191652/RH1187252.java
+Passed: reproducers/1433262/genericArchive.sh
+Passed: reproducers/1463098/cgroup-memory-limit-respected-systemd.sh
+Passed: reproducers/1484079/TestJava1484079.java
+Passed: reproducers/1486025/Main.java
+Passed: reproducers/1513989/AttemptHttps.java
+Passed: reproducers/1582253/KeytoolNotGenerateDSA.sh
+Passed: reproducers/1655466/OjdkFips.java
+Passed: reproducers/1688571/ReiwaNewEraTest.java
+Passed: reproducers/1759335/keytool-broken-fips.sh
+Passed: reproducers/1760838/Test1760838.java
+Passed: reproducers/1780335/fips-load-p11-kit-trust.sh
+FAILED: reproducers/1818881/allowNonCaAnchor-javaSecurity.sh
+FAILED: reproducers/1818881/allowNonCaAnchor-property.sh
+Passed: reproducers/1860990/FipsAESNullPtr.java
+Passed: reproducers/1868740/IllegalAccessByPkcs11Provider.java
+Passed: reproducers/1868754/CiphersRemainInBrokenState.java
+Passed: reproducers/1870625/Power10SupportEnabled.sh
+Passed: reproducers/1883849/IllegalAccessByPkcs11ProviderWithSecurityManager.java
+FAILED: reproducers/1894083/test1894083.sh
+FAILED: reproducers/1897602/TestDiagnosticCommandImpl.sh
+Passed: reproducers/1906862/CipherList.java
+FAILED: reproducers/1915071/ability_to_avoid_system_crypto.sh
+Passed: reproducers/1960024/GOST3411WITHECGOST3410exists.java
+Passed: reproducers/1960024/PBEWithSHA1AndDESedeExists.java
+Passed: reproducers/1991003/FIPSKeysImporter.java
+Passed: reproducers/2021263/Pkcs11Issue.java
+Passed: reproducers/2036462/Test.java
+Passed: reproducers/2108712/HmacBackportTest.java
+Passed: reproducers/6631533/Test.java
+Passed: reproducers/6633872/WeakPolicyMap.java
+Passed: reproducers/6656625/Test.java
+FAILED: reproducers/6657133/Test.java
+Passed: reproducers/6657625/Test1.java
+Passed: reproducers/6738524/DefaultProvider.java
+Passed: reproducers/6804996/Test.java
+Passed: reproducers/6804998/Test.java
+Passed: reproducers/6823373/Test.java
+Passed: reproducers/6845701/ParseXMLFile.java
+Passed: reproducers/6862968/Test1.java
+Passed: reproducers/6862968/Test2.java
+Passed: reproducers/6862970/ICCTestIBM.java
+Passed: reproducers/6872357/Test.java
+Passed: reproducers/6872358/Test.java
+Passed: reproducers/6874643/Test.java
+Passed: reproducers/6893947/MarshalledObjectGetTest.java
+Passed: reproducers/6899653/Test.java
+Passed: reproducers/6909597/Test.java
+FAILED: reproducers/6913047/Bug6913047.java
+FAILED: reproducers/6914823/Test.java
+Passed: reproducers/7013969/Test7013969.java
+Passed: reproducers/7057857/MemoryAllocatorTest.java
+Passed: reproducers/7122141/Main.java
+Passed: reproducers/8020190/JDK8020190.java
+Passed: reproducers/8210858/LogGivesIncorrectResult.java
+Passed: reproducers/8218854/FontMetricsTest.java
+Passed: reproducers/8251945/PredefinedClassloaderCyclicBarrierCrash.java
+Passed: reproducers/976897/Test8007918Regression.java
+Test results: passed: 51; failed: 10
+Report written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182727/jdk/JTreport/html/report.html
+Error: Some tests failed or other problems occurred.
+Results written to /home/runner/work/jtreg-buffer/jtreg-buffer/test.1701182727/jdk/JTwork
+Error: Process completed with exit code 1.
+        </pre>
+    </div>
+    </div>
+  </div>
 </body></html>
