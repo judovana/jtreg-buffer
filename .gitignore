@@ -31,6 +31,7 @@ classes
 
 # Jtreg dirs
 jtreg
-test.*
+test.[0-9]*
+tests.[0-9]*
 
 jtreg*.tar.gz
