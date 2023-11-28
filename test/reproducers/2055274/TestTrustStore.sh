@@ -11,26 +11,13 @@ if [ "x$TESTSRC" == x ] ; then
   TESTSRC=.
 fi
 
-OS=$(uname -s)
-IS_WINDOWS=FALSE
-case "$OS" in
-  Windows_* | CYGWIN_NT* )
-    IS_WINDOWS=TRUE
-    ;;
-esac
-
-JDK8=FALSE
-if $TESTJAVA/bin/java -version 2>&1 | grep 1.8.0 ; then
-  JDK8=TRUE
-fi
-
 ${JAVAC} -d . ${TESTSRC}/TestTrustStore.java
 TEMPFILE=$(mktemp)
 ${JAVA} -cp . -Djavax.net.debug=trustmanager TestTrustStore 2> $TEMPFILE
 
 # Debug output sometimes features multiple duplicities with unexpanded variables,
 # the regex [^$]* should rule those out.
-if [ "x$IS_WINDOWS" == "xTRUE" ]; then
+if [ "x$OTOOL_OS_NAME" == "xwin" ]; then
   ICH="[A-Z]:\\\\"
 else
   ICH="/"
@@ -40,7 +27,7 @@ fi
 
 CACERTSPATH="${TESTJAVA}/lib/security/"
 # with ojdk8 rpms/portables, the resultant path is a little different, featuring "jre" substring
-if [ "x$JDK8" == "xTRUE" ]; then
+if [ $OTOOL_JDK_VERSION == 8 ]; then
     CACERTSPATH="${TESTJAVA}/jre/lib/security/"
 fi
 

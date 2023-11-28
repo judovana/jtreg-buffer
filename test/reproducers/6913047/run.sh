@@ -13,9 +13,9 @@ fi
 OS=$(uname -s)
 IS_WINDOWS=FALSE
 case "$OS" in
-  Windows_* | CYGWIN_NT* )
-    IS_WINDOWS=TRUE
-    ;;
+CYGWIN*)
+  IS_WINDOWS=TRUE
+  ;;
 esac
 
 if [ "${TESTJAVA}" = "" ]; then
