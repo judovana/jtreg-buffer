@@ -43,7 +43,7 @@ jobs:
         run: ./run.sh "${JAVA_HOME}"
 
   test-macos:
-    name: "MacOS"
+    name: "MacOS Jtreg"
     runs-on: "macos-latest"
     strategy:
       fail-fast: false
@@ -53,7 +53,6 @@ jobs:
           - JDK 11
           - JDK 17
           - JDK 21
-          - JDK Latest
         include:
           - jdkconf: JDK 8
             jdkver: "8"
@@ -63,8 +62,6 @@ jobs:
             jdkver: "17"
           - jdkconf: JDK 21
             jdkver: "21"
-          - jdkconf: JDK Latest
-            jdkver: "21"
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -73,5 +70,35 @@ jobs:
           distribution: 'temurin'
           java-version: ${{ matrix.jdkver}}
       - name: Run
+        run: ./run.sh "${JAVA_HOME}"
+
+  test-windows:
+    name: "Windows Jtreg"
+    runs-on: "windows-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        jdkconf:
+          - JDK 8
+          - JDK 11
+          - JDK 17
+          - JDK 21
+        include:
+          - jdkconf: JDK 8
+            jdkver: "8"
+          - jdkconf: JDK 11
+            jdkver: "11"
+          - jdkconf: JDK 17
+            jdkver: "17"
+          - jdkconf: JDK 21
+            jdkver: "21"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: wget tar
+      - name: Prepare env
+        shell: msys2 {0}
         run: ./run.sh "${JAVA_HOME}"
 
