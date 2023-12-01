@@ -41,6 +41,11 @@ jobs:
           java-version: ${{ matrix.jdkver}}
       - name: Run
         run: ./run.sh "${JAVA_HOME}"
+      - name: Upload results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          path: "test.*.tar.gz"
 
   test-macos:
     name: "MacOS Jtreg"
@@ -71,6 +76,11 @@ jobs:
           java-version: ${{ matrix.jdkver}}
       - name: Run
         run: ./run.sh "${JAVA_HOME}"
+      - name: Upload results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          path: "test.*.tar.gz"
 
   test-windows:
     name: "Windows Jtreg"
@@ -101,4 +111,9 @@ jobs:
       - name: Prepare env
         shell: msys2 {0}
         run: ./run.sh "${JAVA_HOME}"
+      - name: Upload results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          path: "test.*.tar.gz"
 
