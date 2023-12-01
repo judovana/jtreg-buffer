@@ -17,10 +17,9 @@ import java.util.Arrays;
 
 public class Test {
 
-    private static Toolkit tk;
+    private static Toolkit tk = null;
 
     public static void main(String[] args) {
-       Toolkit tk = null;
        try {
           tk = Toolkit.getDefaultToolkit();
        } catch(java.awt.AWTError ex) {
