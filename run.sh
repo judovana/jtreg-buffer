@@ -62,13 +62,16 @@ if [ ! -e "$JTREG_HOME" ] ; then
   tar -xf $ball
 fi
 
-JDK_MAJOR=8
-if [[ -e "$JAVA/bin/jshell" || -e "$JAVA/bin/jshell.exe" ]] ; then
-  jshellScript="$(mktemp)"
-  printf "System.out.print(Runtime.version().major())\n/exit" > ${jshellScript}
-  JDK_MAJOR=$( $JAVA/bin/jshell ${jshellScript} 2> /dev/null  | grep -v -e "Started recording"  -e "copy recording data to file"  -e "^$"  -e "\[" )
-  rm ${jshellScript}
+if [ "x$JDK_MAJOR" == "x" ] ; then 
+  JDK_MAJOR=8
+  if [[ -e "$JAVA/bin/jshell" || -e "$JAVA/bin/jshell.exe" ]] ; then
+    jshellScript="$(mktemp)"
+    printf "System.out.print(Runtime.version().major())\n/exit" > ${jshellScript}
+    JDK_MAJOR=$( $JAVA/bin/jshell ${jshellScript} 2> /dev/null  | grep -v -e "Started recording"  -e "copy recording data to file"  -e "^$"  -e "\[" )
+    rm ${jshellScript}
+  fi
 fi
+echo "treating jdk as: $JDK_MAJOR"
 
 JAVA_OPTS="";
 if [ "0$JDK_MAJOR" -gt 11 ] ; then 
