@@ -1,6 +1,7 @@
 ##
 ## @test genericArchive.sh
 ## @bug 1433262
+## @requires (jdk.version.major > 8)
 ## @summary generic archive of input >4gb fails
 
 set -ex
