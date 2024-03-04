@@ -1,6 +1,7 @@
 import java.net.URL;
 import java.io.*;
 import javax.net.ssl.*;
+import java.security.NoSuchAlgorithmException;
 
 /*
  * @test
@@ -14,15 +15,19 @@ public class CipherList
   public static void main(String[] args)
   throws Exception
   {
-    SSLContext context = SSLContext.getDefault();
     int i;
-    SSLSocketFactory sf = context.getSocketFactory();
-    String[] cipherSuites = sf.getDefaultCipherSuites();
+    String[] cipherSuites = getCipherList();
 
     for (i=0;i<cipherSuites.length;i++)
     {
       System.out.println(cipherSuites[i]);
     }
+  }
+
+  public static String[] getCipherList() throws NoSuchAlgorithmException{
+    SSLContext context = SSLContext.getDefault();
+    SSLSocketFactory sf = context.getSocketFactory();
+    return sf.getDefaultCipherSuites();
   }
 }
 
