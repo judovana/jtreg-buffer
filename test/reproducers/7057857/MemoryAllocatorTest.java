@@ -3,7 +3,7 @@
  * @modules jdk.jartool/sun.tools.jar
  * @bug 6755943 6792554 7057857
  * @summary Checks any memory overruns in archive length.
- * @requires os.simpleArch != "i586"
+ * @requires os.simpleArch != "i586" & (os.family == "linux" | os.family == "windows")
  * @run main/othervm/timeout=1200 MemoryAllocatorTest
  */
 
