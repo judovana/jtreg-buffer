@@ -1,3 +1,5 @@
+package com.sun.imageio.plugins.jpeg;
+
 import java.security.AccessControlException;
 
 public
