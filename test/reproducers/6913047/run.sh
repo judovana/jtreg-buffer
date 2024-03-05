@@ -65,7 +65,7 @@ fi
 
 "$JAVAC" -d . $TESTSRC/Bug6913047.java $EXTFLAGS
 R=$?
-if [[ $R -ne 0 ]]; then
+if [ "0$R" -ne "0" ]; then
   echo "Compilation failed"
   exit $R
 else
