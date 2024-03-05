@@ -26,7 +26,7 @@
  * @test
  * @bug 6913047
  * @summary Native memory exhaustion using SunPKCS11 on 32 bits JVM.
- * @requires os.simpleArch != "i586"
+ * @requires os.simpleArch != "i586" & var.rh.jdk == "true"
  * @run shell/timeout=120 run.sh
  * @author Martin Balao (mbalao@redhat.com)
  */

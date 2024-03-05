@@ -2,6 +2,7 @@
 /*
  * Test delegated to shell to make the assert more direct
  * test
+ * requires var.rh.jdk == "true"
  * bug 1897602
  * summary Warnings when using ManagementFactory.getPlatformMBeanServer with -Xcheck:jni VM argument
  * run main/othervm -Xcheck:jni TestDiagnosticCommandImpl

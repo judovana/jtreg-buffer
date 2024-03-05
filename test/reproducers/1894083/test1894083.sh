@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # @test
+# @requires var.rh.jdk == "true"
 # @bug 1894083
 # @summary ojdk was not depending on nss package -> failing in fips mode
 # @run shell test1894083.sh
