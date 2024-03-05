@@ -1,5 +1,3 @@
-
-
 import org.mozilla.javascript.NativeCall;
 
 /**
