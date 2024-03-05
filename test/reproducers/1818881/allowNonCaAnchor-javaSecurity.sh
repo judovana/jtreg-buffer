@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # @test allowNonCaAnchor-javaSecurity
+# @requires var.rh.jdk == "true"
 # @bug 1818881
 # @summary Add security property (i.e. java.security file) version of jdk.security.allowNonCaAnchor
 # @run shell allowNonCaAnchor-javaSecurity.sh

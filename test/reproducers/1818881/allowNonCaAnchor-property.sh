@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # @test jdk.security.allowNonCaAnchor-property
+# @requires var.rh.jdk == "true"
 # @bug 1818881
 # @summary security property jdk.security.allowNonCaAnchor works
 # @run shell allowNonCaAnchor-property.sh
