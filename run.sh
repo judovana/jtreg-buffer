@@ -56,12 +56,6 @@ else
   fi
 fi
 
-if [ ! -e "$JTREG_HOME" ] ; then
-  ball=jtreg5.1-b01.tar.gz
-  wget https://ci.adoptopenjdk.net/view/Dependencies/job/dependency_pipeline/lastSuccessfulBuild/artifact/jtreg/$ball
-  tar -xf $ball
-fi
-
 if [ "x$JDK_MAJOR" == "x" ] ; then 
   JDK_MAJOR=8
   if [[ -e "$JAVA/bin/jshell" || -e "$JAVA/bin/jshell.exe" ]] ; then
@@ -72,6 +66,18 @@ if [ "x$JDK_MAJOR" == "x" ] ; then
   fi
 fi
 echo "treating jdk as: $JDK_MAJOR"
+
+if [ ! -e "$JTREG_HOME" ] ; then
+  if [ "0$JDK_MAJOR" -le "8" ] ; then
+    ball=jtreg-6+1-jtrfix+crashonly.tar.gz
+    wget "https://github.com/andrlos/jtreg/releases/download/6.1-jtrfix%2Bcrashonly-V01.0/$ball"
+  else
+    ball=jtreg-7.3.1+1-crashonly.tar.gz
+    wget "https://github.com/andrlos/jtreg/releases/download/7.3.1%2B1-crashonly/$ball"
+  fi
+  tar -xf $ball
+fi
+
 
 JAVA_OPTS="";
 if [ "0$JDK_MAJOR" -gt 11 ] ; then 
