@@ -16,6 +16,19 @@ while [ -h "$SCRIPT_SOURCE" ]; do # resolve $SOURCE until the file is no longer 
 done
 readonly SCRIPT_DIR="$( cd -P "$( dirname "$SCRIPT_SOURCE" )" && pwd )"
 
+OS=`uname -s`
+CYGWIN="false"
+case "$OS" in
+  Windows_* | CYGWIN_NT* )
+    PS=";"
+    FS="\\"
+    CYGWIN="true"
+    ;;
+  * )
+    echo "Non cygwin system!"
+    ;;
+esac
+
 
 envVarArg="-e:CUSTOM_DUMMY_VARIABLE=true,JAVA_TOOL_OPTIONS,OTOOL_BUILD_ARCH,DISPLAY"
 keys=$(env | grep OTOOL_ | sed "s/=.*//")
@@ -26,18 +39,26 @@ done
 set -e
 set -o pipefail
 
-JAVA=${1}
+JAVA="${1}"
 if [ "x$JAVA" == "x" ] ; then 
   echo "Jdk is mandatory param (bugid is optional)"
   exit 1
 fi;
 
+if [ "x$CYGWIN" == "xtrue" ] ; then
+  JAVA="$(cygpath -aw "${JAVA}")"
+fi
+
 if [ "x$JAVA_HOME" == "x" ] ; then 
-  JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
+  JAVA_HOME="$(dirname $(dirname $(readlink -f $(which javac))))"
 fi;
 
+if [ "x$CYGWIN" == "xtrue" ] ; then
+  JAVA_HOME="$(cygpath -aw "${JAVA_HOME}")"
+fi
+
 TIME=$(date +%s)
-BUGID=${2}
+BUGID="${2}"
 
 FOLDER="test"
 if [ "x$BUGID" != "x" -a -e "$BUGID" ] ; then
@@ -60,9 +81,12 @@ if [ "x$JDK_MAJOR" == "x" ] ; then
   JDK_MAJOR=8
   if [[ -e "$JAVA/bin/jshell" || -e "$JAVA/bin/jshell.exe" ]] ; then
     jshellScript="$(mktemp)"
-    printf "System.out.print(Runtime.version().major())\n/exit" > ${jshellScript}
-    JDK_MAJOR=$( $JAVA/bin/jshell ${jshellScript} 2> /dev/null  | grep -v -e "Started recording"  -e "copy recording data to file"  -e "^$"  -e "\[" )
-    rm ${jshellScript}
+    printf "System.out.print(Runtime.version().major())\n/exit" > "${jshellScript}"
+    if [ "x$CYGWIN" == "xtrue" ] ; then
+       jshellScript="$(cygpath -aw "${jshellScript}")"
+    fi
+    JDK_MAJOR=$( "$JAVA/bin/jshell" "${jshellScript}" 2> /dev/null  | grep -v -e "Started recording"  -e "copy recording data to file"  -e "^$"  -e "\[" )
+    rm "${jshellScript}"
   fi
 fi
 echo "treating jdk as: $JDK_MAJOR"
@@ -87,11 +111,17 @@ fi
 
 echo Running with $JAVA...
 
+
+JTREG_JAR="$JTREG_HOME/lib/jtreg.jar"
+if [ "x$CYGWIN" == "xtrue" ] ; then
+  JTREG_JAR="$(cygpath -aw "${JTREG_JAR}")"
+fi
+
 r=0
 mkdir -p test.${TIME}/jdk/JTwork test.${TIME}/jdk/JTreport
-${JAVA_HOME}/bin/java -jar $JTREG_HOME/lib/jtreg.jar -v1 -a -ignore:quiet \
+"${JAVA_HOME}/bin/java" -jar "$JTREG_JAR" -v1 -a -ignore:quiet \
   -w:test.${TIME}/jdk/JTwork -r:test.${TIME}/jdk/JTreport \
-  -jdk:$JAVA \
+  -jdk:"$JAVA" \
   -xml \
   $BUGID \
   $JAVA_OPTS \
