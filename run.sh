@@ -69,11 +69,11 @@ echo "treating jdk as: $JDK_MAJOR"
 
 if [ ! -e "$JTREG_HOME" ] ; then
   if [ "0$JDK_MAJOR" -le "8" ] ; then
-    ball=jtreg-6+1-jtrfix+crashonly.tar.gz
-    wget "https://github.com/andrlos/jtreg/releases/download/6.1-jtrfix%2Bcrashonly-V01.0/$ball"
+    ball=jtreg-6+1.tar.gz
+    wget "https://github.com/andrlos/jtreg/releases/download/6.1-jtrfix-V01.0/$ball"
   else
-    ball=jtreg-7.3.1+1-crashonly.tar.gz
-    wget "https://github.com/andrlos/jtreg/releases/download/7.3.1%2B1-crashonly/$ball"
+    ball=jtreg-7.3+1.tar.gz
+    wget "https://ci.adoptopenjdk.net/view/Dependencies/job/dependency_pipeline/lastSuccessfulBuild/artifact/jtreg/$ball"
   fi
   tar -xf $ball
 fi
