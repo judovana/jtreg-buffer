@@ -110,7 +110,10 @@ jobs:
           install: wget tar
       - name: Prepare env
         shell: msys2 {0}
-        run: ./run.sh "${JAVA_HOME}"
+        run: |
+             pwd
+             ls -l
+             ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
         uses: actions/upload-artifact@v3
