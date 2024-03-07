@@ -40,10 +40,10 @@ set -e
 set -o pipefail
 
 JAVA="${1}"
-if [ "x$JAVA" == "x" ] ; then 
+if [ "x$JAVA" == "x" ] ; then
   echo "Jdk is mandatory param (bugid is optional)"
   exit 1
-fi;
+fi
 
 if [ "x$CYGWIN" == "xtrue" ] ; then
   JAVA="$(cygpath -aw "${JAVA}")"
@@ -51,7 +51,7 @@ fi
 
 if [ "x$JAVA_HOME" == "x" ] ; then 
   JAVA_HOME="$(dirname $(dirname $(readlink -f $(which javac))))"
-fi;
+fi
 
 if [ "x$CYGWIN" == "xtrue" ] ; then
   JAVA_HOME="$(cygpath -aw "${JAVA_HOME}")"
