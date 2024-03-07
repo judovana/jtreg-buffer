@@ -1,6 +1,7 @@
 #!/bin/sh
 # @test
 # @bug 1582253
+# @requires var.msys2.enabled == "false"
 # @summary Do not generate DSA keys by default in keytool
 # @run shell/timeout=100 KeytoolNotGenerateDSA.sh
 

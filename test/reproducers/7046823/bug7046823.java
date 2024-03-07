@@ -3,7 +3,7 @@
   @bug       7046823 
   @summary   Problem with scripting/javascript
   @build     bug7046823
-  @requires  jdk.version.major < 9
+  @requires  jdk.version.major < 9 & var.msys2.enabled == "false"
   @run shell bug7046823.sh
 */
 

@@ -8,6 +8,7 @@ import java.util.Vector;
 /*
  * @test
  * @bug 7013969
+ * @requires var.msys2.enabled == "false"
  * @summary  network interface address scan
  * @run shell 7013969.sh
 */ 

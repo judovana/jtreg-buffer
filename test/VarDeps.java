@@ -16,6 +16,7 @@ public class VarDeps implements Callable<Map<String, String>> {
     public Map<String, String> call() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("var.rh.jdk", checkVar("RH_JDK") ? "true": "false");
+        map.put("var.msys2.enabled", checkVar("MSYS2_ENABLED") ? "true": "false");
         return map;
     }
 

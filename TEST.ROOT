@@ -4,4 +4,5 @@ maxOutputSize=1000000
 # which are known to pass on RH builds, but not on any others
 requires.extraPropDefns = tests/VarDeps.java
 requires.properties = \
-    var.rh.jdk
+    var.rh.jdk \
+    var.msys2.enabled

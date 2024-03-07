@@ -5,6 +5,7 @@ import java.security.AccessControlException;
 public
 /* @test
    @bug 6657133
+   @requires var.msys2.enabled == "false"
    @summary  inaccessibile com.sun.imageio.plugins.jpeg.JPEG.names
    @run shell Test.sh
 */

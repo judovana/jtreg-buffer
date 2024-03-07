@@ -1,6 +1,7 @@
 #!/bin/sh
 # @test
 # @bug 1759335
+# @requires var.msys2.enabled == "false"
 # @summary OpenJDK keytool is broken in FIPS mode
 # @run shell keytool-broken-fips.sh
 

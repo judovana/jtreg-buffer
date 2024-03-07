@@ -82,8 +82,8 @@ jobs:
         with:
           path: "test.*.tar.gz"
 
-  test-windows:
-    name: "Windows Jtreg"
+  test-windows-cygwin:
+    name: "Windows-cygwin Jtreg"
     runs-on: "windows-latest"
     defaults:
       run:
@@ -124,6 +124,41 @@ jobs:
              dos2unix -v run.sh
              find test -type f  -name "*.sh" -exec dos2unix -v {} \;
              bash.exe --login --norc -o igncr -c "cd /cygdrive/d/a/jtreg-buffer/jtreg-buffer && ./run.sh \"${JAVA_HOME}\""
+      - name: Upload results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v3
+        with:
+          path: "test.*.tar.gz"
+
+  test-windows-msys2:
+    name: "Windows-msys2 Jtreg"
+    runs-on: "windows-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        jdkconf:
+          - JDK 8
+          - JDK 11
+          - JDK 17
+          - JDK 21
+        include:
+          - jdkconf: JDK 8
+            jdkver: "8"
+          - jdkconf: JDK 11
+            jdkver: "11"
+          - jdkconf: JDK 17
+            jdkver: "17"
+          - jdkconf: JDK 21
+            jdkver: "21"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: wget tar
+      - name: Prepare env
+        shell: msys2 {0}
+        run: MSYS2_ENABLED=true ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
         uses: actions/upload-artifact@v3

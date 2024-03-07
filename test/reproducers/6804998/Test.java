@@ -5,6 +5,7 @@ import java.awt.image.ImageObserver;
 
 /* @test
    @bug 6804998
+   @requires var.msys2.enabled == "false"
    @summary  invalid gif read issue
    @run shell Test.sh
 */
