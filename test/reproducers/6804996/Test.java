@@ -1,5 +1,6 @@
 /* @test
    @bug 6804996
+   @requires var.msys2.enabled == "false"
    @summary  some splash issue 
    @run shell Test.sh
 */

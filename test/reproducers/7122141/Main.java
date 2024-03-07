@@ -2,6 +2,7 @@
 /*
  * @test
  * @bug 7122141
+ * @requires var.msys2.enabled == "false"
  * @summary race condition between isAnnotationPresent and getAnnotations
  * @author Lukas Zachar <lzachar@redhat.com>
  * @run shell runtest.sh

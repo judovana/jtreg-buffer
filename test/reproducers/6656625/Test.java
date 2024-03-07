@@ -8,6 +8,7 @@ import javax.imageio.stream.ImageInputStream;
 
 /* @test
    @bug 6656625
+   @requires var.msys2.enabled == "false"
    @summary  image stream manipulation 
    @run shell Test.sh
 */

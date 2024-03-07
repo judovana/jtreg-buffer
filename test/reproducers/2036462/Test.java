@@ -2,6 +2,7 @@
 /*
  @test runtest
  @bug 2036462
+ @requires var.msys2.enabled == "false"
  @summary test whether this Test.java file is buildable as is
  @run shell runtest.sh
 */
