@@ -24,11 +24,11 @@
 
 /*
  * @test
- * @modules java.base/sun.security.ec
+ * @modules jdk.crypto.ec/sun.security.ec
  * @bug 1486025
  * @summary ECC with NSS concurrency JVM crash
- * @requires jdk.version.major > 21
- * @run main/othervm/timeout=1600 Main
+ * @requires jdk.version.major <= 21
+ * @run main/othervm/timeout=1600 Main21
  * @author Martin Balao (mbalao@redhat.com)
  */
 
@@ -44,7 +44,7 @@ import java.security.spec.ECPoint;
 
 import sun.security.ec.SunEC;
 
-public class Main extends Impl{
+public class Main21 extends Impl{
 
     public static void main(String[] args) throws Exception {
      Impl.main(args);
