@@ -1,7 +1,7 @@
 #!/bin/sh
 # @test
 # @bug 1463098
-# @requires jdk.version.major >= 7 & var.msys2.enabled == "false"
+# @requires jdk.version.major >= 7 & var.msys2.enabled == "false" & var.rh.jdk == "true"
 # @summary cgroup memory limit not respected when run outside container
 # @run shell/timeout=120 cgroup-memory-limit-respected-systemd.sh
 
