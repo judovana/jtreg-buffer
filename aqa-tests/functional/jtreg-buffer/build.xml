@@ -42,8 +42,11 @@
           </else>
      </if>
      <target name="getJtreg-buffer" depends="jtreg-buffer.check" unless="jtreg-buffer.exists">
+<!--                                                                           We are removing aqa bindings, because user copied them (this:)
+                                                                               from origin before, so they can clone, but keeping them
+                                                                               would result to run the suite twice  -->
           <getFileWithRetry file="jtreg-buffer"
-               command="git clone --depth 1 -q ${GIT_REPO}rh-openjdk/jtreg-buffer.git -b main jtreg-buffer" />
+               command="git clone --depth 1 -q ${GIT_REPO}rh-openjdk/jtreg-buffer.git -b main jtreg-buffer ;  rm -rvf  jtreg-buffer/aqa-tests/" />
           <checkGitRepoSha repoDir="jtreg-buffer" />
      </target>
 
