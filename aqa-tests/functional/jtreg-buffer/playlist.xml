@@ -16,12 +16,12 @@
      xsi:noNamespaceSchemaLocation="../../TKG/resources/playlist.xsd">
      <test>
           <testCaseName>jtreg-buffer</testCaseName>
-          <disables>
+<!--          <disables>
                <disable>
                     <comment>readlink -f is known to misbehave on selected platforms</comment>
                     <platform>^.*(s390x_linux|aarch64_mac).*$</platform>
                </disable>
-          </disables>
+          </disables>-->
           <command>
                JTREG_HOME="$(TEST_RESROOT)$(D)jtreg" \
                $(TEST_ROOT)$(D)functional$(D)jtreg-buffer$(D)jtreg-buffer$(D)run.sh "$(TEST_JDK_HOME)" ; $(TEST_STATUS)
@@ -35,12 +35,12 @@
      </test>
      <test>
           <testCaseName>jtreg-buffer_jtreg</testCaseName>
-          <disables>
+<!--          <disables>
                <disable>
                     <comment>readlink -f is known to misbehave on selected platforms</comment>
                     <platform>^((?!(s390x_linux|aarch64_mac)).)*$</platform>
                </disable>
-          </disables>
+          </disables>-->
           <command>
               $(JAVA_COMMAND) -Xmx512m -jar $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
               -xml -v1 -a -ignore:quiet  -timeoutFactor:2 \
