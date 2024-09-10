@@ -1,7 +1,7 @@
 #!/bin/sh
 # @test
 # @bug 1463098
-# @requires jdk.version.major >= 7 & var.msys2.enabled == "false" & var.rh.jdk == "true"
+# @requires os.family == "linux" & jdk.version.major >= 7
 # @summary cgroup memory limit not respected when run outside container
 # @run shell/timeout=120 cgroup-memory-limit-respected-systemd.sh
 
@@ -57,12 +57,12 @@ checkMaxHeapSize() {
         return 1
     fi
 
-    pattern="^.*MaxHeapSize[[:space:]]*:*=[[:space:]]*\\([0-9]\\+\\).*\$"
-    maxHeapSizeLine="$( cat "${filename}" | grep "${pattern}" | head -n 1 )"
+    pattern='^.*MaxHeapSize[[:space:]]*:*=[[:space:]]*([0-9]+).*$'
+    maxHeapSizeLine="$( cat "${filename}" | grep -E "${pattern}" | head -n 1 )"
     if [ -z "${maxHeapSizeLine}" ] ; then
         printf '%s\n' "Failed to extract maxHeapSize from File: ${filename}" 1>&2
     fi
-    maxHeapSize="$( printf '%s\n' "${maxHeapSizeLine}" | sed "s/${pattern}/\\1/g"  )"
+    maxHeapSize="$( printf '%s\n' "${maxHeapSizeLine}" | sed -E "s/${pattern}/\\1/g"  )"
 
     if [ "${cgroup}" -eq 1 ] ; then
         # heap should be limited by cgroup
@@ -95,9 +95,9 @@ EOF
 sudo -n systemctl daemon-reload
 sudo -n systemctl restart "${ojdkSliceName}"
 # cgroup
-sudo -n systemd-run --slice "${ojdkSliceName}" --scope java -XX:+PrintFlagsFinal -version 2>&1 | tee java-cgroup-no-options.log || :
+sudo -n systemd-run --slice "${ojdkSliceName}" --scope "${TESTJAVA}"/bin/java -XX:+PrintFlagsFinal -version 2>&1 | tee java-cgroup-no-options.log || :
 # non-cgroup
-sudo -n java -XX:+PrintFlagsFinal -version 2>&1 | tee java-direct-no-options.log || :
+sudo -n "${TESTJAVA}"/bin/java -XX:+PrintFlagsFinal -version 2>&1 | tee java-direct-no-options.log || :
 
 checkMaxHeapSize java-cgroup-no-options.log 1 || exit 1
 checkMaxHeapSize java-direct-no-options.log 0 || exit 1
