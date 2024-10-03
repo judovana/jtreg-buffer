@@ -6,14 +6,14 @@ import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.util.List;
 
-public class CheckFips {
+public class CheckAlgorithms {
     public static final String FIPS_PROVIDER = "SunPKCS11-NSS-FIPS";
     public static final String NONFIPS_PROVIDER = "SunPCSC";
     public static final String NONFIPS_ALGORITHM = "TLS_RSA_WITH_AES_128_CBC_SHA";
 
     public static void main(String[] args) throws Exception {
 	if (args.length != 2) {
-            System.err.println("Usage: CheckFips <true|false> <algorithms|providers>");
+            System.err.println("Usage: CheckAlgorithms <true|false> <algorithms|providers>");
             System.exit(1);
         }
 
