@@ -7,11 +7,14 @@ public class CheckAlgorithms {
     public static final String NONFIPS_PROVIDER = "SunPCSC";
     public static final String NONFIPS_ALGORITHM = "TLS_RSA_WITH_AES_128_CBC_SHA";
 
+    private static final List<String> possibleFirstArgs = Arrays.asList("assert", "true", "list", "false");
+    private static final List<String> possibleSecondArgs = Arrays.asList("algorithms", "providers", "both");
+
     public static void main(String[] args) throws Exception {
         if (args.length != 2 || args[0].equals("--help") || args[0].equals("-h")) {
             System.err.println("Test for listing available algorithms and providers and checking their FIPS compatibility");
-            System.err.println("Usage: CheckAlgorithms <true|false|only-algorithms|only-providers> <algorithms|providers|both>");
-            System.err.println("First argument: specify whether (and how) to check FIPS compatibility or not");
+            System.err.println("Usage: CheckAlgorithms " + possibleFirstArgs + " " + possibleSecondArgs);
+            System.err.println("First argument: specify whether to check FIPS compatibility (assert/true) or just list the items (list/false)");
             System.err.println("Second argument: specify what to check - algorithms, providers or both");
             System.exit(1);
         }
@@ -21,28 +24,26 @@ public class CheckAlgorithms {
         String testCategory = args[1].toLowerCase();
 
         // Check if the shouldHonorFips is valid value
-        List<String> possibleFirstArgs = Arrays.asList("true", "false", "only-algorithms", "only-providers");
         if (!possibleFirstArgs.contains(shouldHonorFips)) {
-            System.err.println("Invalid value for the first argument: " + args[0]);
+            System.err.println("Invalid value for the first argument: '" + args[0] + "', use --help for more info.");
             System.exit(1);
         }
 
-        // Check if the test category is "algorithms", "providers" or "both"
-        List<String> possibleSecondArgs = Arrays.asList("algorithms", "providers", "both");
+        // Check if the testCategory is valid value
         if (!possibleSecondArgs.contains(testCategory)) {
-            System.err.println("Invalid test category: " + args[1]);
+            System.err.println("Invalid test category: '" + args[1] + "', use --help for more info.");
             System.exit(1);
         }
 
         System.out.println("Is fips honoring expected? - " + shouldHonorFips);
         System.out.println("This test is set to test " + testCategory + " now.");
 
+        boolean honorFipsHere = shouldHonorFips.equals("assert") || shouldHonorFips.equals("true");
+
         if (testCategory.equals("algorithms") || testCategory.equals("both")){
-            boolean honorFipsHere = shouldHonorFips.equals("true") || shouldHonorFips.equals("only-algorithms");
             checkAlgorithms(honorFipsHere);
         }
         if (testCategory.equals("providers") || testCategory.equals("both")) {
-            boolean honorFipsHere = shouldHonorFips.equals("true") || shouldHonorFips.equals("only-providers");
             checkProviders(honorFipsHere);
         }
     }
@@ -95,5 +96,4 @@ public class CheckAlgorithms {
         return false;
     }
 }
-
 
