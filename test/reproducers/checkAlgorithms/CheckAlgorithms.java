@@ -9,7 +9,7 @@ public class CheckAlgorithms {
     public static final List<String> FIPS_ALGORITHMS = Arrays.asList();
     public static final List<String> NONFIPS_ALGORITHMS = Arrays.asList("TLS_RSA_WITH_AES_128_CBC_SHA");
 
-    private static final List<String> possibleFirstArgs = Arrays.asList("assert", "true", "list", "false");
+    private static final List<String> possibleFirstArgs = Arrays.asList("assert", "true", "silent-assert", "list", "false");
     private static final List<String> possibleSecondArgs = Arrays.asList("algorithms", "providers", "both");
 
     public static void main(String[] args) throws Exception {
@@ -17,6 +17,7 @@ public class CheckAlgorithms {
             System.err.println("Test for listing available algorithms and providers and checking their FIPS compatibility");
             System.err.println("Usage: CheckAlgorithms " + possibleFirstArgs + " " + possibleSecondArgs);
             System.err.println("First argument: specify whether to check FIPS compatibility (assert/true) or just list the items (list/false)");
+            System.err.println("                silent-asserts just asserts, not lists the items");
             System.err.println("Second argument: specify what to check - algorithms, providers or both");
             System.exit(1);
         }
@@ -40,15 +41,16 @@ public class CheckAlgorithms {
         System.out.println("Test type: " + shouldHonorFips);
         System.out.println("What is tested: " + testCategory);
 
-        boolean honorFipsHere = shouldHonorFips.equals("assert") || shouldHonorFips.equals("true");
+        boolean listItems = !shouldHonorFips.equals("silent-assert");
+        boolean honorFipsHere = shouldHonorFips.equals("assert") || shouldHonorFips.equals("true") || shouldHonorFips.equals("silent-assert");
 
         boolean algorithmsOk = true;
         boolean providersOk = true;
         if (testCategory.equals("algorithms") || testCategory.equals("both")){
-            algorithmsOk = checkAlgorithms(honorFipsHere);
+            algorithmsOk = checkAlgorithms(listItems, honorFipsHere);
         }
         if (testCategory.equals("providers") || testCategory.equals("both")) {
-            providersOk = checkProviders(honorFipsHere);
+            providersOk = checkProviders(listItems, honorFipsHere);
         }
 
         // throwing the correct exception based on what failed (even if both failed)
@@ -61,13 +63,15 @@ public class CheckAlgorithms {
         }
     }
 
-    static boolean checkProviders(boolean shouldHonorFips) {
+    static boolean checkProviders(boolean listItems, boolean shouldHonorFips) {
         System.out.println(">>>CHECKING PROVIDERS<<<");
 
         // print all providers
-        System.out.println("LIST OF PROVIDERS:");
-        for(Provider provider : Security.getProviders()){
-            System.out.println("  " + provider);
+        if (listItems) {
+            System.out.println("LIST OF PROVIDERS:");
+            for(Provider provider : Security.getProviders()){
+                System.out.println("  " + provider);
+            }
         }
 
         if (shouldHonorFips) {
@@ -78,13 +82,15 @@ public class CheckAlgorithms {
         return true; // no assertion = everything is ok
     }
 
-    static boolean checkAlgorithms(boolean shouldHonorFips) throws Exception{
+    static boolean checkAlgorithms(boolean listItems, boolean shouldHonorFips) throws Exception{
         System.out.println(">>>CHECKING ALGORITHMS<<<");
 
         // print all algorithms
-        System.out.println("LIST OF ALGORITHMS:");
-        for (String cipher : CipherList.getCipherList()) {
-            System.out.println("  " + cipher);
+        if (listItems) {
+            System.out.println("LIST OF ALGORITHMS:");
+            for (String cipher : CipherList.getCipherList()) {
+                System.out.println("  " + cipher);
+            }
         }
 
         if (shouldHonorFips) {
