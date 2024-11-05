@@ -35,8 +35,8 @@ public class CheckAlgorithms {
             System.exit(1);
         }
 
-        System.out.println("Is fips honoring expected? - " + shouldHonorFips);
-        System.out.println("This test is set to test " + testCategory + " now.");
+        System.out.println("Test type: " + shouldHonorFips);
+        System.out.println("What is tested: " + testCategory);
 
         boolean honorFipsHere = shouldHonorFips.equals("assert") || shouldHonorFips.equals("true");
 
@@ -49,9 +49,11 @@ public class CheckAlgorithms {
     }
 
     static void checkProviders(boolean shouldHonorFips) throws Exception{
-        System.out.println(">>>LIST OF PROVIDERS:<<<");
+        System.out.println(">>>CHECKING PROVIDERS<<<");
+
+        System.out.println("LIST OF PROVIDERS:");
         for(Provider provider : Security.getProviders()){
-            System.out.println(provider);
+            System.out.println("  " + provider);
         }
 
         //checks that if we expect fips provider, there is a fips provider
@@ -66,9 +68,11 @@ public class CheckAlgorithms {
     }
 
     static void checkAlgorithms(boolean shouldHonorFips) throws Exception{
-        System.out.println(">>>LIST OF ALGORITHMS:<<<");
+        System.out.println(">>>CHECKING ALGORITHMS<<<");
+
+        System.out.println("LIST OF ALGORITHMS:");
         for (String cipher : CipherList.getCipherList()) {
-            System.out.println(cipher);
+            System.out.println("  " + cipher);
         }
 
         //if the test found nonfips algorithm, and it should honor FIPS, throw an exception
