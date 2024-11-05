@@ -3,9 +3,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CheckAlgorithms {
-    public static final String FIPS_PROVIDER = "SunPKCS11-NSS-FIPS";
-    public static final String NONFIPS_PROVIDER = "SunPCSC";
-    public static final String NONFIPS_ALGORITHM = "TLS_RSA_WITH_AES_128_CBC_SHA";
+    // for future proofing, any time the algorithms change, just editing these hardcoded lists is enough:
+    public static final List<String> FIPS_PROVIDERS = Arrays.asList("SunPKCS11-NSS-FIPS");
+    public static final List<String> NONFIPS_PROVIDERS = Arrays.asList("SunPCSC");
+    public static final List<String> FIPS_ALGORITHMS = Arrays.asList();
+    public static final List<String> NONFIPS_ALGORITHMS = Arrays.asList("TLS_RSA_WITH_AES_128_CBC_SHA");
 
     private static final List<String> possibleFirstArgs = Arrays.asList("assert", "true", "list", "false");
     private static final List<String> possibleSecondArgs = Arrays.asList("algorithms", "providers", "both");
@@ -40,64 +42,128 @@ public class CheckAlgorithms {
 
         boolean honorFipsHere = shouldHonorFips.equals("assert") || shouldHonorFips.equals("true");
 
+        boolean algorithmsOk = true;
+        boolean providersOk = true;
         if (testCategory.equals("algorithms") || testCategory.equals("both")){
-            checkAlgorithms(honorFipsHere);
+            algorithmsOk = checkAlgorithms(honorFipsHere);
         }
         if (testCategory.equals("providers") || testCategory.equals("both")) {
-            checkProviders(honorFipsHere);
+            providersOk = checkProviders(honorFipsHere);
+        }
+
+        // throwing the correct exception based on what failed (even if both failed)
+        if (!algorithmsOk && !providersOk) {
+            throw new Exception("Both algorithms and providers contain wrong or don't contain correct items.");
+        } else if (!algorithmsOk) {
+            throw new Exception("Algorithms contain wrong or don't contain correct items.");
+        } else if (!providersOk) {
+            throw new Exception("Providers contain wrong or don't contain correct items.");
         }
     }
 
-    static void checkProviders(boolean shouldHonorFips) throws Exception{
+    static boolean checkProviders(boolean shouldHonorFips) {
         System.out.println(">>>CHECKING PROVIDERS<<<");
 
+        // print all providers
         System.out.println("LIST OF PROVIDERS:");
         for(Provider provider : Security.getProviders()){
             System.out.println("  " + provider);
         }
 
-        //checks that if we expect fips provider, there is a fips provider
-        if (shouldHonorFips && !providerFound(FIPS_PROVIDER)) {
-            throw new Exception("Test failed, FIPS provider was not found when honoring FIPS.");
+        if (shouldHonorFips) {
+            System.out.println("ASSERTING FIPS PROVIDERS:");
+            return providerAssert();
         }
 
-        //checks that when we except fips provider, the non-fips provider is not there
-        if(shouldHonorFips && providerFound(NONFIPS_PROVIDER)){
-            throw new Exception("Test failed, found non-FIPS provider when honoring FIPS.");
-        }
+        return true; // no assertion = everything is ok
     }
 
-    static void checkAlgorithms(boolean shouldHonorFips) throws Exception{
+    static boolean checkAlgorithms(boolean shouldHonorFips) throws Exception{
         System.out.println(">>>CHECKING ALGORITHMS<<<");
 
+        // print all algorithms
         System.out.println("LIST OF ALGORITHMS:");
         for (String cipher : CipherList.getCipherList()) {
             System.out.println("  " + cipher);
         }
 
-        //if the test found nonfips algorithm, and it should honor FIPS, throw an exception
-        //otherwise, everything is ok
-        if(shouldHonorFips && algorithmFound(NONFIPS_ALGORITHM)){
-            throw new Exception("Test failed, found non-FIPS algorithm when honoring FIPS.");
+        if (shouldHonorFips) {
+            System.out.println("ASSERTING FIPS ALGORITHMS:");
+            return algorithmAssert();
         }
+
+        return true; // no assertion = everything is ok
     }
 
-    static boolean algorithmFound(String algorithm) throws Exception{
-        for(String cipher : CipherList.getCipherList()){
-            if(cipher.contains(algorithm)){
-                return true;
+    static boolean algorithmAssert() throws Exception {
+        List<String> algorithms = List.of(CipherList.getCipherList());
+        boolean allOk = true;
+
+        // assert that algorithms list contains all FIPS_ALGORITHMS
+        for (String fips : FIPS_ALGORITHMS) {
+            System.out.print("  asserting algorithms contain '" + fips + "' - ");
+            if (algorithms.contains(fips)) {
+                System.out.println("OK");
+            } else {
+                System.out.println("FAIL");
+                allOk = false;
             }
         }
-        return false;
+
+        // assert that algorithms list doesn't contain any NONFIPS_ALGORITHMS
+        for (String nonFips : NONFIPS_ALGORITHMS) {
+            System.out.print("  asserting algorithms don't contain '" + nonFips + "' - ");
+            if (!algorithms.contains(nonFips)) {
+                System.out.println("OK");
+            } else {
+                System.out.println("FAIL");
+                allOk = false;
+            }
+        }
+
+        return allOk;
     }
 
-    static boolean providerFound(String provider){
-        for(Provider p : Security.getProviders()){
-            if(p.contains(provider)){
-                return true;
+    static boolean providerAssert() {
+        Provider[] providers = Security.getProviders();
+        boolean allOk = true;
+
+        // assert that providers list contains all FIPS_PROVIDERS
+        for (String fips : FIPS_PROVIDERS) {
+            System.out.print("  asserting providers contain '" + fips + "' - ");
+
+            allOk = false;
+            for (Provider p : providers) {
+                if (p.contains(fips)) {
+                    System.out.println("OK");
+                    allOk = true;
+                    break;
+                }
+            }
+
+            if (!allOk) {
+                System.out.println("FAIL");
             }
         }
-        return false;
+
+        // assert that providers list doesn't contain any NONFIPS_PROVIDERS
+        for (String nonFips : NONFIPS_PROVIDERS) {
+            System.out.print("  asserting providers don't contain '" + nonFips + "' - ");
+
+            for (Provider p : providers) {
+                if (p.contains(nonFips)) {
+                    System.out.println("FAIL");
+                    allOk = false;
+                    break;
+                }
+            }
+
+            if (allOk) {
+                System.out.println("OK");
+            }
+        }
+
+        return allOk;
     }
 }
 
