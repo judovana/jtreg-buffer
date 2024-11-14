@@ -102,7 +102,7 @@ public class CheckAlgorithms {
     }
 
     static boolean algorithmAssert() throws Exception {
-        List<String> algorithms = List.of(CipherList.getCipherList());
+        List<String> algorithms = Arrays.asList(CipherList.getCipherList());
         boolean allOk = true;
 
         // assert that algorithms list contains all FIPS_ALGORITHMS
@@ -172,4 +172,3 @@ public class CheckAlgorithms {
         return allOk;
     }
 }
-
