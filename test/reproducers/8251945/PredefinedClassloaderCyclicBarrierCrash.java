@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 /*
  * @test
  * @bug 8251945
+ * @requires (os.arch != "s390x" | jdk.version.major > 8)
  * @summary JDK-8251945 SIGSEGV in PackageEntry::purge_qualified_exports()
  * @run main/othervm/fail PredefinedClassloaderCyclicBarrierCrash
  */
