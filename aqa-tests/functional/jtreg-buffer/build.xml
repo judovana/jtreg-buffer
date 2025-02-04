@@ -47,7 +47,6 @@
                                                                                would result to run the suite twice  -->
           <getFileWithRetry file="jtreg-buffer"
                command="git clone --depth 1 -q ${GIT_REPO}rh-openjdk/jtreg-buffer.git -b main jtreg-buffer ;  rm -rvf  jtreg-buffer/aqa-tests/" />
-          <checkGitRepoSha repoDir="jtreg-buffer" />
      </target>
 
      <target name="init">
