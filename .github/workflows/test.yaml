@@ -43,7 +43,7 @@ jobs:
         run: ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: "test.*.tar.gz"
 
@@ -75,7 +75,7 @@ jobs:
         run: ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: "test.*.tar.gz"
 
@@ -123,7 +123,7 @@ jobs:
              bash.exe --login --norc -o igncr -c "cd \"$GITHUB_WORKSPACE\" && ./run.sh \"${JAVA_HOME}\""
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: "test.*.tar.gz"
 
@@ -163,6 +163,6 @@ jobs:
         run: MSYS2_ENABLED=true ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: "test.*.tar.gz"
