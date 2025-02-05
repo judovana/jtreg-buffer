@@ -45,6 +45,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-ubuntu
           path: "test.*.tar.gz"
 
   test-macos:
@@ -77,6 +78,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-macos
           path: "test.*.tar.gz"
 
   test-windows-cygwin:
@@ -125,6 +127,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-cygwin
           path: "test.*.tar.gz"
 
   test-windows-msys2:
@@ -165,4 +168,5 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-msys2
           path: "test.*.tar.gz"
