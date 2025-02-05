@@ -31,7 +31,7 @@ jobs:
           - jdkconf: JDK 21
             jdkver: "21"
           - jdkconf: JDK Latest
-            jdkver: "21"
+            jdkver: "23"
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK
@@ -43,8 +43,9 @@ jobs:
         run: ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-ubuntu
           path: "test.*.tar.gz"
 
   test-macos:
@@ -75,8 +76,9 @@ jobs:
         run: ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-macos
           path: "test.*.tar.gz"
 
   test-windows-cygwin:
@@ -123,8 +125,9 @@ jobs:
              bash.exe --login --norc -o igncr -c "cd \"$GITHUB_WORKSPACE\" && ./run.sh \"${JAVA_HOME}\""
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-cygwin
           path: "test.*.tar.gz"
 
   test-windows-msys2:
@@ -163,6 +166,7 @@ jobs:
         run: MSYS2_ENABLED=true ./run.sh "${JAVA_HOME}"
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
+          name: artifact-${{ matrix.jdkver }}-msys2
           path: "test.*.tar.gz"
