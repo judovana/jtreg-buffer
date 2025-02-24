@@ -3,6 +3,7 @@
  * @bug 6893947
  * @summary Do not call MarshalledObject.get from inside doPrivileged
  * @author Eamonn McManus
+ * @requires jdk.version.major < 24
  * @run  main/othervm MarshalledObjectGetTest
  */
 

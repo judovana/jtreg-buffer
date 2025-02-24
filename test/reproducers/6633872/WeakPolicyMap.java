@@ -2,7 +2,7 @@
  * @test %I%, %E%
  * @bug 6633872
  * @summary Policy/PolicyFile leak dynamic ProtectionDomains
- *
+ * @requires jdk.version.major < 24
  * @run main/othervm/policy=WeakPolicyMap.policy WeakPolicyMap
  */
 
