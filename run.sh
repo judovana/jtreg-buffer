@@ -118,9 +118,11 @@ fi
 
 
 JAVA_OPTS="";
-if [ "0$JDK_MAJOR" -gt 11 ] ; then 
-  JAVA_OPTS="-javaoption:-Djava.security.manager=allow"
-  echo "Allowed security manager!" 
+if [ "0$JDK_MAJOR" -lt 24 ] ; then
+  if [ "0$JDK_MAJOR" -gt 11 ] ; then
+    JAVA_OPTS="-javaoption:-Djava.security.manager=allow"
+    echo "Allowed security manager!"
+  fi
 fi
 
 echo Running with $JAVA...

@@ -1,6 +1,7 @@
 /*
  * @test
  * @bug 1883849
+ * @requires jdk.version.major < 24
  * @run main/othervm/secure=default/java.security.policy=empty.policy IllegalAccessByPkcs11ProviderWithSecurityManager
  */
 
